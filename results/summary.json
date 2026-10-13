@@ -1,0 +1,85 @@
+{
+  "generated_by": "scripts/07_report.py",
+  "figures_built": [
+    "fig1_leakage_by_protocol.png",
+    "fig2a_davis_rmse.png",
+    "fig2b_kiba_rmse.png",
+    "fig2c_davis_ci.png",
+    "fig2d_kiba_ci.png",
+    "fig3_rmse_vs_ci.png",
+    "fig4_label_ties.png",
+    "fig5_conformal_coverage.png",
+    "fig6_docking_vs_pkd.png"
+  ],
+  "best_model_per_protocol": {
+    "davis/cold_drug": {
+      "model": "xgboost",
+      "rmse": 0.7872,
+      "ci_harrell": 0.6924
+    },
+    "davis/cold_target": {
+      "model": "xgboost",
+      "rmse": 1.052,
+      "ci_harrell": 0.7595
+    },
+    "davis/random": {
+      "model": "xgboost",
+      "rmse": 0.5697,
+      "ci_harrell": 0.8727
+    },
+    "davis/scaffold": {
+      "model": "xgboost",
+      "rmse": 0.8104,
+      "ci_harrell": 0.714
+    },
+    "davis/temporal": {
+      "model": "randomforest",
+      "rmse": 0.9458,
+      "ci_harrell": 0.6518
+    },
+    "kiba/cold_drug": {
+      "model": "randomforest",
+      "rmse": 0.5697,
+      "ci_harrell": 0.7564
+    },
+    "kiba/cold_target": {
+      "model": "xgboost",
+      "rmse": 0.7052,
+      "ci_harrell": 0.7274
+    },
+    "kiba/random": {
+      "model": "xgboost",
+      "rmse": 0.5143,
+      "ci_harrell": 0.8147
+    },
+    "kiba/scaffold": {
+      "model": "randomforest",
+      "rmse": 0.6145,
+      "ci_harrell": 0.801
+    },
+    "kiba/temporal": {
+      "model": "randomforest",
+      "rmse": 0.7244,
+      "ci_harrell": 0.6884
+    }
+  },
+  "null_floor": {
+    "davis/random": 0.9224,
+    "davis/scaffold": 0.8522,
+    "davis/cold_drug": 0.9173,
+    "davis/cold_target": 1.2116,
+    "davis/temporal": 1.003,
+    "kiba/random": 0.8343,
+    "kiba/scaffold": 0.8701,
+    "kiba/cold_drug": 0.7225,
+    "kiba/cold_target": 0.9396,
+    "kiba/temporal": 0.8149
+  },
+  "headline_leakage": {
+    "kiba_random_near_duplicate_ge0.7": 0.3498,
+    "kiba_scaffold_near_duplicate_ge0.7": 0.1098,
+    "kiba_cold_drug_scaffold_present_in_train": 0.4879,
+    "davis_cold_target_targets_absent_from_train": 1.0,
+    "davis_label_tie_fraction_mean": 0.9340771898988699
+  }
+}

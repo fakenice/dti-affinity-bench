@@ -1,0 +1,62 @@
+{
+  "script": "scripts/06_docking_analysis.py",
+  "docked_pairs_scored": 140,
+  "panel_targets": 6,
+  "ligands_prepared": 20,
+  "vina_global_ranking_ci": 0.6583,
+  "per_target_ci": {
+    "target:T0004": [
+      0.5429,
+      20
+    ],
+    "target:T0006": [
+      1.0,
+      20
+    ],
+    "target:T0007": [
+      1.0,
+      20
+    ],
+    "target:T0012": [
+      0.4737,
+      20
+    ],
+    "target:T0013": [
+      0.6444,
+      40
+    ],
+    "target:T0015": [
+      0.5135,
+      20
+    ]
+  },
+  "head_to_head_rows": 28,
+  "head_to_head_outcome_counts": {
+    "model": 18,
+    "vina": 9,
+    "tie": 1
+  },
+  "protocols_where_vina_wins_on_ci": [
+    "cold_drug",
+    "random",
+    "temporal"
+  ],
+  "decoy_control": {
+    "n": 10,
+    "n_comparable_pairs": 9,
+    "n_pairs": 45,
+    "mean_onsite": -8.478,
+    "mean_shifted": -6.414,
+    "ci_harrell_shifted": 0.3333,
+    "ci_harrell_onsite": 0.2222,
+    "note": "box translated +30 A along x. The interpretable signal here is the SCORE MAGNITUDE, not the CI: a 10-pair block leaves only 9 comparable pairs of 45, so both CIs are noise-level and are reported as such. The shifted box losing ~2 kcal/mol of fitted strength is the specificity evidence."
+  },
+  "caveats": [
+    "docked poses come from RDKit ETKDG+MMFF of the DAVIS canonical SMILES, not from any crystal structure; single tautomer/protonation state, no pH model",
+    "receptor is rigid (side chains fixed at the co-crystal conformation) and one apo/cryo structure stands in for a whole kinase",
+    "the search box is centred on a DIFFERENT compound (the co-crystal ligand), so a DAVIS ligand that binds elsewhere is scored in the wrong site",
+    "69.6% of DAVIS pKd values sit at the assay ceiling (Kd clipped at 10000 nM), which caps any correlation with a continuous score",
+    "the docked subset is a pKd-stratified sample of 20 compounds on a handful of kinases, so per-target CI is estimated from ~20 points and is noisy by construction",
+    "Vina scores are compared to a trained model that has seen the rest of the assay table; on identical rows that asymmetry is removed, and only ranking quality is compared"
+  ]
+}

@@ -1,0 +1,108 @@
+#!/usr/bin/env python3
+"""One-command reproduction of every number in this repository.
+
+    python run_all.py                      # features -> splits -> models -> intervals -> report
+    python run_all.py --fetch              # also re-download DAVIS/KIBA (needs api.github.com)
+    python run_all.py --with-docking       # adds the AutoDock Vina arm (needs tools/vina.exe)
+    python run_all.py --offline            # no network at all; docking reuses data/raw/docking
+    python run_all.py --quick              # smoke test: davis/random, 2 models, 1 seed
+    python run_all.py --stage report       # re-render tables + figures from results/*.csv
+    python run_all.py --stage notebook     # regenerate and EXECUTE notebook/*.ipynb
+
+Stages run in dependency order and each one is a separate script, so a failure tells you
+exactly which step broke. Wall time on an 8-core laptop: ~4 h for the full grid (03 is
+the bottleneck), ~7 min with --quick.
+"""
+from __future__ import annotations
+
+import argparse
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+
+STAGES = [
+    ("fetch",     "00_fetch_data.py",     "download + hash-pin the raw activity tables"),
+    ("features",  "01_features.py",       "ECFP4 fingerprints, protein composition, scaffolds"),
+    ("splits",    "02_splits.py",         "5 protocols + leakage audit"),
+    ("models",    "03_models.py",         "null baselines + 4 learned models x 3 seeds"),
+    ("intervals", "04_uncertainty.py",    "split-conformal intervals, measured coverage"),
+    ("docking",   "05_docking.py",        "AutoDock Vina arm (panel + decoy control)"),
+    ("dockstats", "06_docking_analysis.py", "Vina vs labels vs the 03 models on identical rows"),
+    ("report",    "07_report.py",         "figures + results/report.md + results/summary.json"),
+    ("notebook",  "08_notebook.py",       "writes and executes notebook/dti_affinity_bench.ipynb"),
+    ("sensitivity", "09_preproc_sensitivity.py", "three standardisation guards x models x protocols"),
+]
+OPTIONAL_STAGE = "docking"
+OPTIONAL_STAGES = (OPTIONAL_STAGE, "dockstats", "sensitivity")
+
+
+def run(script: str, extra: list[str]) -> None:
+    print(f"\n### python scripts/{script} {' '.join(extra)}".rstrip())
+    r = subprocess.run([sys.executable, "-u", f"scripts/{script}", *extra], cwd=str(ROOT))
+    if r.returncode != 0:
+        raise SystemExit(f"{script} failed with exit {r.returncode}")
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--stage", choices=[s[0] for s in STAGES] + ["all"], default="all")
+    ap.add_argument("--fetch", action="store_true", help="include the fetch stage")
+    ap.add_argument("--with-docking", action="store_true",
+                    help=f"include the {OPTIONAL_STAGE} stage (needs tools/vina.exe, see docs/data_sources.md)")
+    ap.add_argument("--with-sensitivity", action="store_true",
+                    help="include 09_preproc_sensitivity.py (re-fits under three standardisation guards)")
+    ap.add_argument("--offline", action="store_true", help="pass --offline to the network scripts")
+    ap.add_argument("--quick", action="store_true", help="small grid, for a smoke test")
+    ap.add_argument("--resume-grid", action="store_true",
+                    help="let 03 keep existing results/metrics.csv rows instead of recomputing "
+                         "the grid (fast, but only correct if the code has not changed)")
+    ap.add_argument("--jobs", type=int, default=4, help="parallel vina jobs")
+    args = ap.parse_args()
+
+    want = args.stage
+    order = list(STAGES) if want == "all" else [s for s in STAGES if s[0] == want]
+    if want == "all" and not args.fetch:
+        order = [s for s in order if s[0] != "fetch"]
+    if want == "all" and not args.with_docking:
+        order = [s for s in order if s[0] not in (OPTIONAL_STAGE, "dockstats")]
+    if want == "all" and not args.with_sensitivity:
+        order = [s for s in order if s[0] != "sensitivity"]
+    # the sensitivity ablation is an audit of the preprocessing decision, not part of the
+    # numbers the README tables are built from -- it re-fits models under three guards.
+    if want == "all" and not args.with_sensitivity:
+        order = [s for s in order if s[0] != "sensitivity"]
+
+    for name, script, _why in order:
+        extra: list[str] = []
+        if name == "fetch":
+            if args.offline:
+                extra.append("--offline")
+        elif name == "models":
+            # `--resume` keeps rows already in results/metrics.csv. That is a real hazard: the
+            # grid once ended up holding cells from two different code versions, which 04's
+            # consistency assert then reported as DIFF. A full run therefore recomputes
+            # everything unless the caller asks to resume.
+            extra += ["--resume"] * args.resume_grid + (["--quick"] if args.quick else [])
+        elif name == "intervals":
+            if args.quick:
+                extra += ["--datasets", "davis", "--protocols", "random"]
+        elif name == "docking":
+            if not (ROOT / "tools" / "vina.exe").exists():
+                raise SystemExit("tools/vina.exe missing -- see docs/data_sources.md "
+                                 "for the version + sha256 to install, or drop --with-docking")
+            extra += (["--offline"] if args.offline else [])
+            extra += (["--jobs", str(args.jobs)] if not args.quick else
+                      ["--max-targets", "1", "--try-limit", "8", "--ligands", "6",
+                       "--decoy", "2", "--jobs", "2", "--resume"])
+        elif name == "notebook" and args.quick:
+            extra.append("--timeout")
+            extra.append("300")
+        run(script, extra)
+    print("\nall requested stages finished")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

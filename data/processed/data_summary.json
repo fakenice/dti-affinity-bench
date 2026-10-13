@@ -1,0 +1,120 @@
+{
+  "davis": {
+    "rows": 30056,
+    "distinct_ligand_smiles": 68,
+    "distinct_target_sequences": 379,
+    "distinct_target_names": 442,
+    "distinct_feature_pairs": 25772,
+    "rows_sharing_features_with_another_row": 4284,
+    "max_within_pair_pKd_spread": 2.6841,
+    "fraction_at_censor_ceiling_pKd_5": 0.6964,
+    "cross_source_rows_aligned": 30056,
+    "cross_source_agree_within_0.02_pKd": 30056,
+    "cross_source_mean_abs_delta_pKd": 0.0,
+    "cross_source_max_abs_delta_pKd": 0.0,
+    "cross_source_disagreeing_rows": 0,
+    "feature_groups_with_any_disagreement": 0,
+    "deposit_date_known_rows": 25194,
+    "sum_of_five_published_files": 30056,
+    "bad_smiles": 0,
+    "caveat": "target_name is recovered by sorting affinity values inside each (SMILES, sequence) group. 69.6% of DAVIS values sit on the censoring ceiling (pKd = 5.0), so within a group of sequence-identical targets the *label* is identical and the two are interchangeable for modelling; only the name attached to such a row is arbitrary. All modelling keys on the sequence (target_id), never on target_name."
+  },
+  "kiba": {
+    "rows": 118254,
+    "distinct_ligand_smiles": 2068,
+    "distinct_ligand_keys": 2111,
+    "distinct_target_sequences": 229,
+    "distinct_target_keys": 229,
+    "distinct_feature_pairs": 117657,
+    "rows_sharing_features_with_another_row": 597,
+    "grid_cells": 473572,
+    "grid_fill_rate": 0.2497,
+    "score_min": 0.0,
+    "score_median": 11.5,
+    "score_max": 17.2002,
+    "rows_at_floor": 1,
+    "published_split_counts": {
+      "train": 94603,
+      "test": 23651
+    },
+    "deposit_date_known_rows": 44702,
+    "deposit_date_known_fraction": 0.378
+  },
+  "cross_dataset": {
+    "shared_ligand_smiles_davis_kiba": 9,
+    "shared_target_sequences_davis_kiba": 179,
+    "davis_targets_total": 379,
+    "note": "the two benchmarks share most of their kinase targets, so train-on-DAVIS / test-on-KIBA is NOT target-disjoint"
+  },
+  "tables": {
+    "davis.csv": 30056,
+    "kiba.csv": 118254,
+    "ligands.csv": 2127,
+    "targets.csv": 429
+  },
+  "manifest": {
+    "davis_train": {
+      "repo": "zihandun/GraphDTA-ColdStart",
+      "path_in_repo": "data/oursplit/davis_train_canonical.csv",
+      "git_blob_sha1": "698be36ac8527b80dc19f4781ae1e687546b8bf0",
+      "file": "data/raw/davis_train_canonical.csv",
+      "bytes": 17009061,
+      "sha256": "bf376e50d68568b8379a943b4b0b2b326d3fad56803f38ab00e8105624c37cdb",
+      "was_cached": true
+    },
+    "davis_val": {
+      "repo": "zihandun/GraphDTA-ColdStart",
+      "path_in_repo": "data/oursplit/davis_val_canonical.csv",
+      "git_blob_sha1": "98d56581c0a94f4c5b8f23906eaec134050a65ac",
+      "file": "data/raw/davis_val_canonical.csv",
+      "bytes": 4417222,
+      "sha256": "1afb863dde386690e1c9eadd2a86417f7b6e42f561f75ab76f24981c308aa5cf",
+      "was_cached": true
+    },
+    "davis_test": {
+      "repo": "zihandun/GraphDTA-ColdStart",
+      "path_in_repo": "data/oursplit/davis_test_canonical.csv",
+      "git_blob_sha1": "f3392841fbee9737784661519c4db0df1597a192",
+      "file": "data/raw/davis_test_canonical.csv",
+      "bytes": 478891,
+      "sha256": "9bcfcce2937e899618edbc7f46ef58f3de1011daeb193d7281832eb6f0e6041c",
+      "was_cached": true
+    },
+    "davis_cold_drug": {
+      "repo": "zihandun/GraphDTA-ColdStart",
+      "path_in_repo": "data/oursplit/davis_test1_canonical.csv",
+      "git_blob_sha1": "f007de43eabad0da737e09a7b7ae01778fb5c0b8",
+      "file": "data/raw/davis_test1_canonical.csv",
+      "bytes": 2078897,
+      "sha256": "4ed0b509a5f8cfcb93cc00e6a8d99fc4a30dc426fae86ed56e867064972f80a8",
+      "was_cached": true
+    },
+    "davis_cold_target": {
+      "repo": "zihandun/GraphDTA-ColdStart",
+      "path_in_repo": "data/oursplit/davis_test2_canonical.csv",
+      "git_blob_sha1": "64900311978825366599362436f6aaa7a5cb8cd8",
+      "file": "data/raw/davis_test2_canonical.csv",
+      "bytes": 1952425,
+      "sha256": "b520db3da356230d86b438858426d2bf6a1096169edf73d944d296d67d2dc87b",
+      "was_cached": true
+    },
+    "kiba_table": {
+      "repo": "swmeyer1979/dti-contamination",
+      "path_in_repo": "data/splits/kiba_temporal_splits.parquet",
+      "git_blob_sha1": "890f6ad19a0f98609e58b9aebdd3fd33e0724286",
+      "file": "data/raw/kiba_temporal_splits.parquet",
+      "bytes": 1157228,
+      "sha256": "0f4004e9e84efb9762186ddd698d9c3efb00cb132ee4572413ee4d6c349effed",
+      "was_cached": true
+    },
+    "davis_kd_table": {
+      "repo": "swmeyer1979/dti-contamination",
+      "path_in_repo": "data/splits/davis_temporal_splits.parquet",
+      "git_blob_sha1": "7c5eac29a77b0660dbd5527a4b77aece321cd32d",
+      "file": "data/raw/davis_temporal_splits.parquet",
+      "bytes": 477417,
+      "sha256": "c5e705cf78b2907f63dd35d38037912c360a3746f761a7ad5ad4ec6257c6b34b",
+      "was_cached": true
+    }
+  }
+}

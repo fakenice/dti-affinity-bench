@@ -1,0 +1,11 @@
+dataset,protocol,n_test,n_distinct_labels,pct_label_pairs_tied,pct_rows_on_modal_label,pct_redundancy_metrics_csv
+davis,random,6011,371,48.65,69.72,93.83
+davis,scaffold,5746,351,47.33,68.76,93.89
+davis,cold_drug,5746,364,41.44,64.32,93.67
+davis,cold_target,5984,432,36.4,60.28,92.78
+davis,temporal,5304,378,42.66,65.27,92.87
+kiba,random,23651,1025,5.61,12.43,95.67
+kiba,scaffold,23651,696,6.18,13.61,97.06
+kiba,cold_drug,23651,602,6.66,13.77,97.45
+kiba,cold_target,23642,1412,5.05,15.19,94.03
+kiba,temporal,9018,333,5.68,11.78,96.31

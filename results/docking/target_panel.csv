@@ -1,0 +1,36 @@
+target_id,gene,davis_names,uniprot_acc,uniprot_source,n_structures_pass_filters,pdb_id,chain,resolution,pdbe_coverage,pdb_seq_len,identity_vs_davis,aln_len_vs_davis,davis_seq_len,identity_vs_uniprot,cocrystal_ligand,cocrystal_smiles,cocrystal_heavy,cocrystal_weight,receptor_pdbqt,meeko_bad_residues_dropped,meeko_tail,reject,box_json
+T0004,CDC2L1,CDC2L1,P21127,uniprot_gene_search,6,7ukz,A,2.6,0.389,296,0.9767,301,542,0.9767,NK3,Cc1cc(c(c-2c1NC(=O)c3c2ccs3)c4ccc(cc4)[C@@H](C)CN(C)C)O,28,392.514,data\raw\docking\rec_T0004_7ukz_A.pdbqt,47,"'A:152', 'A:155', 'A:168', 'A:175', 'A:236', 'A:242', 'A:243', 'A:257', 'A:276', 'A:279', 'A:288', 'A:293', 'A:296', 'A:304', 'A:305', 'A:311', 'A:315', 'A:316', 'A:317', 'A:321', 'A:325', 'A:329', 'A:330', 'A:341', 'A:346', 'A:354', 'A:370', 'A:377', 'A:381', 'A:382'] Ignored due to allow_bad_res.
+",,"{""center"": [28.951, -6.645, 17.275], ""size"": [19.343, 18.572, 19.275]}"
+T0006,ERK2,ERK2|P28482,P28482,accession_in_davis_names,156,8aoj,A,1.12,1.0,340,0.9798,347,360,0.9798,N8L,CCC(=O)N1CCC[C@H]1c2c([nH]nc2c3ccncc3)C,21,284.356,data\raw\docking\rec_T0006_8aoj_A.pdbqt,0,"imeWarning)
+C:\Users\bigcat\AppData\Local\Programs\Python\Python313\Lib\site-packages\meeko\polymer.py:1238: RuntimeWarning: Trying to resolve unknown residues by building chemical templates... 
+  warnings.warn(""Trying to resolve unknown residues by building chemical templates... "", RuntimeWarning)
+",,"{""center"": [9.142, 10.327, 43.258], ""size"": [19.889, 15.897, 17.107]}"
+T0007,ERK1,ERK1|P27361,P27361,accession_in_davis_names,7,4qtb,A,1.4,1.0,351,1.0,351,379,1.0,38Z,c1cnc(nc1)c2ccc(cc2)N3CCN(CC3)C(=O)CN4CC[C@H](C4)C(=O)Nc5ccc6c(c5)c([nH]n6)c7ccncc7,44,587.674,data\raw\docking\rec_T0007_4qtb_A.pdbqt,0,"be used.
+[32m gasteiger charges will be read from template file 
+ [0m
+
+Files written:
+ E:\Desktop\dti-affinity-bench\data\raw\docking\rec_T0007_4qtb_A.json <-- parameterized receptor
+E:\Desktop\dti-affinity-bench\data\raw\docking\rec_T0007_4qtb_A.pdbqt <-- static (i.e., rigid) receptor input file
+",,"{""center"": [36.683, 54.826, 49.926], ""size"": [26.718, 20.38, 24.85]}"
+T0012,ADCK3,ADCK3,Q8NI60,uniprot_gene_search,5,7udq,A,1.9,0.606,369,0.956,386,647,0.956,MVS,COc1cc(cc(c1OC)OC)Nc2ccnc3c2ccc(c3)C#N,25,335.357,data\raw\docking\rec_T0012_7udq_A.pdbqt,0,"be used.
+[32m gasteiger charges will be read from template file 
+ [0m
+
+Files written:
+ E:\Desktop\dti-affinity-bench\data\raw\docking\rec_T0012_7udq_A.json <-- parameterized receptor
+E:\Desktop\dti-affinity-bench\data\raw\docking\rec_T0012_7udq_A.pdbqt <-- static (i.e., rigid) receptor input file
+",,"{""center"": [12.984, 32.234, 62.157], ""size"": [15.742, 18.362, 24.201]}"
+T0013,BRAF,BRAF|BRAF(V600E)|P15056,P15056,accession_in_davis_names,58,8c7x,A,1.65,0.363,274,0.9487,273,766,0.9487,TXV,CC(C)(C#N)c1cccc(c1)C(=O)Nc2ccc(c(c2F)C(=O)c3c[nH]c4c3cc(cn4)Cl)F,34,478.878,data\raw\docking\rec_T0013_8c7x_A.pdbqt,2,"1}
+CHID       heavy_miss=6 heavy_excess=0 H_excess=[] bond_miss=set() bond_excess={1}
+CHIP       heavy_miss=6 heavy_excess=0 H_excess=[] bond_miss=set() bond_excess={1}
+
+matched with excess inter-residue bond(s): A:608
+- Template matching failed for: ['A:607', 'A:608'] Ignored due to allow_bad_res.
+",,"{""center"": [25.899, 110.953, 16.595], ""size"": [21.863, 16.14, 21.973]}"
+T0015,MKK7,MKK7,O14733,uniprot_gene_search,31,6yz4,A,1.7,0.73,290,0.9539,304,419,0.9539,1E8,C=CC(=O)N1CCC[C@H](C1)n2c3c(c(n2)c4ccc(cc4)Oc5ccccc5)c(ncn3)N,33,440.497,data\raw\docking\rec_T0015_6yz4_A.pdbqt,8,"bond_miss=set() bond_excess={4}
+CSER       heavy_miss=2 heavy_excess=0 H_excess=[] bond_miss=set() bond_excess={1}
+
+matched with excess inter-residue bond(s): A:419
+- Template matching failed for: ['A:117', 'A:283', 'A:284', 'A:311', 'A:312', 'A:314', 'A:418', 'A:419'] Ignored due to allow_bad_res.
+",,"{""center"": [-6.71, 36.554, -0.63], ""size"": [19.655, 20.222, 19.319]}"

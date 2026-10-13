@@ -1,0 +1,340 @@
+{
+  "generated_by": "scripts/07_report.py",
+  "best_learned_per_protocol": {
+    "davis/cold_drug": {
+      "model": "xgboost",
+      "rmse": 0.7872,
+      "ci_harrell": 0.6924,
+      "ci_sklearn_like": 0.6127,
+      "null_rmse": 0.9173,
+      "beats_null": true
+    },
+    "davis/cold_target": {
+      "model": "xgboost",
+      "rmse": 1.052,
+      "ci_harrell": 0.7595,
+      "ci_sklearn_like": 0.6651,
+      "null_rmse": 1.2116,
+      "beats_null": true
+    },
+    "davis/random": {
+      "model": "xgboost",
+      "rmse": 0.5697,
+      "ci_harrell": 0.8727,
+      "ci_sklearn_like": 0.6914,
+      "null_rmse": 0.9224,
+      "beats_null": true
+    },
+    "davis/scaffold": {
+      "model": "xgboost",
+      "rmse": 0.8104,
+      "ci_harrell": 0.714,
+      "ci_sklearn_like": 0.6127,
+      "null_rmse": 0.8522,
+      "beats_null": true
+    },
+    "davis/temporal": {
+      "model": "randomforest",
+      "rmse": 0.9458,
+      "ci_harrell": 0.6518,
+      "ci_sklearn_like": 0.5871,
+      "null_rmse": 1.003,
+      "beats_null": true
+    },
+    "kiba/cold_drug": {
+      "model": "randomforest",
+      "rmse": 0.5697,
+      "ci_harrell": 0.7564,
+      "ci_sklearn_like": 0.7394,
+      "null_rmse": 0.7225,
+      "beats_null": true
+    },
+    "kiba/cold_target": {
+      "model": "xgboost",
+      "rmse": 0.7052,
+      "ci_harrell": 0.7274,
+      "ci_sklearn_like": 0.716,
+      "null_rmse": 0.9396,
+      "beats_null": true
+    },
+    "kiba/random": {
+      "model": "xgboost",
+      "rmse": 0.5143,
+      "ci_harrell": 0.8147,
+      "ci_sklearn_like": 0.797,
+      "null_rmse": 0.8343,
+      "beats_null": true
+    },
+    "kiba/scaffold": {
+      "model": "randomforest",
+      "rmse": 0.6145,
+      "ci_harrell": 0.801,
+      "ci_sklearn_like": 0.7824,
+      "null_rmse": 0.8701,
+      "beats_null": true
+    },
+    "kiba/temporal": {
+      "model": "randomforest",
+      "rmse": 0.7244,
+      "ci_harrell": 0.6884,
+      "ci_sklearn_like": 0.6777,
+      "null_rmse": 0.8149,
+      "beats_null": true
+    }
+  },
+  "protocol_spread_of_the_best_model": {
+    "davis": {
+      "best_of": 0.5697,
+      "worst_of": 1.052,
+      "range": 0.4823,
+      "easiest": "random",
+      "hardest": "cold_target"
+    },
+    "kiba": {
+      "best_of": 0.5143,
+      "worst_of": 0.7244,
+      "range": 0.2101,
+      "easiest": "random",
+      "hardest": "temporal"
+    }
+  },
+  "model_spread_within_protocol": {
+    "davis/cold_drug": 0.6942,
+    "davis/cold_target": 0.1541,
+    "davis/random": 0.1864,
+    "davis/scaffold": 0.802,
+    "davis/temporal": 1.1364,
+    "kiba/cold_drug": 0.3901,
+    "kiba/cold_target": 0.4095,
+    "kiba/random": 0.2487,
+    "kiba/scaffold": 0.324,
+    "kiba/temporal": 1.0588
+  },
+  "ci_caliber_gap_max": {
+    "abs_diff": 0.1819,
+    "row": "davis/random/xgboost/seed0",
+    "ci_harrell": 0.8738,
+    "ci_sklearn_like": 0.6919
+  },
+  "learned_models_worse_than_the_global_mean": [
+    {
+      "dataset": "davis",
+      "protocol": "cold_drug",
+      "model": "mlp",
+      "rmse": 1.4814,
+      "null": 0.9173
+    },
+    {
+      "dataset": "davis",
+      "protocol": "scaffold",
+      "model": "mlp",
+      "rmse": 1.6124,
+      "null": 0.8522
+    },
+    {
+      "dataset": "davis",
+      "protocol": "scaffold",
+      "model": "ridge",
+      "rmse": 0.8786,
+      "null": 0.8522
+    },
+    {
+      "dataset": "davis",
+      "protocol": "temporal",
+      "model": "mlp",
+      "rmse": 2.0822,
+      "null": 1.003
+    },
+    {
+      "dataset": "davis",
+      "protocol": "temporal",
+      "model": "ridge",
+      "rmse": 1.0442,
+      "null": 1.003
+    },
+    {
+      "dataset": "kiba",
+      "protocol": "cold_drug",
+      "model": "mlp",
+      "rmse": 0.9598,
+      "null": 0.7225
+    },
+    {
+      "dataset": "kiba",
+      "protocol": "cold_target",
+      "model": "mlp",
+      "rmse": 1.1147,
+      "null": 0.9396
+    },
+    {
+      "dataset": "kiba",
+      "protocol": "scaffold",
+      "model": "mlp",
+      "rmse": 0.9385,
+      "null": 0.8701
+    },
+    {
+      "dataset": "kiba",
+      "protocol": "temporal",
+      "model": "mlp",
+      "rmse": 1.7832,
+      "null": 0.8149
+    },
+    {
+      "dataset": "kiba",
+      "protocol": "temporal",
+      "model": "ridge",
+      "rmse": 0.9798,
+      "null": 0.8149
+    }
+  ],
+  "conformal": {
+    "rows": 20,
+    "rmse_all_match_03": true,
+    "cov90_min_mean_max": [
+      0.7911,
+      0.8768,
+      0.9257
+    ],
+    "coverage_error_mean": 0.0484,
+    "width90_over_label_sd_mean": 2.6836,
+    "worst_row": "davis/temporal/xgboost",
+    "normalised_vs_constant_mean_width90": [
+      2.6754,
+      2.3255
+    ],
+    "normalised_vs_constant_mean_cov90": [
+      0.8268,
+      0.8768
+    ]
+  },
+  "docking": {
+    "global_ranking": {
+      "ci_harrell": 0.6583,
+      "n_comparable_pairs": 2590
+    },
+    "per_target": [
+      {
+        "target": "target:T0004",
+        "n": 20,
+        "n_comparable_pairs": 70,
+        "ci_harrell": 0.5429
+      },
+      {
+        "target": "target:T0006",
+        "n": 20,
+        "n_comparable_pairs": 19,
+        "ci_harrell": 1.0
+      },
+      {
+        "target": "target:T0007",
+        "n": 20,
+        "n_comparable_pairs": 19,
+        "ci_harrell": 1.0
+      },
+      {
+        "target": "target:T0012",
+        "n": 20,
+        "n_comparable_pairs": 19,
+        "ci_harrell": 0.4737
+      },
+      {
+        "target": "target:T0013",
+        "n": 40,
+        "n_comparable_pairs": 374,
+        "ci_harrell": 0.6444
+      },
+      {
+        "target": "target:T0015",
+        "n": 20,
+        "n_comparable_pairs": 37,
+        "ci_harrell": 0.5135
+      }
+    ],
+    "per_target_with_ge50_comparable_pairs": [
+      {
+        "target": "all_docked_pairs",
+        "n_comparable_pairs": 2590,
+        "ci_harrell": 0.6583
+      },
+      {
+        "target": "target:T0004",
+        "n_comparable_pairs": 70,
+        "ci_harrell": 0.5429
+      },
+      {
+        "target": "target:T0013",
+        "n_comparable_pairs": 374,
+        "ci_harrell": 0.6444
+      }
+    ],
+    "regression": [
+      {
+        "protocol": "random",
+        "n_test": 26,
+        "n_fit": 105,
+        "rmse": 1.0193,
+        "ci_harrell": 0.6383,
+        "n_comparable_pairs": 94
+      },
+      {
+        "protocol": "scaffold",
+        "n_test": 21,
+        "n_fit": 91,
+        "rmse": 1.4604,
+        "ci_harrell": 0.4211,
+        "n_comparable_pairs": 57
+      },
+      {
+        "protocol": "cold_drug",
+        "n_test": 28,
+        "n_fit": 105,
+        "rmse": 0.4822,
+        "ci_harrell": 0.6667,
+        "n_comparable_pairs": 78
+      },
+      {
+        "protocol": "cold_target",
+        "n_test": 80,
+        "n_fit": null,
+        "rmse": null,
+        "ci_harrell": null,
+        "n_comparable_pairs": null
+      },
+      {
+        "protocol": "temporal",
+        "n_test": 28,
+        "n_fit": 70,
+        "rmse": 1.3765,
+        "ci_harrell": 0.5585,
+        "n_comparable_pairs": 188
+      }
+    ],
+    "head_to_head": {
+      "rows": 28,
+      "protocols_where_vina_wins_ci": [
+        "cold_drug",
+        "random",
+        "temporal"
+      ],
+      "min_n_comparable_pairs": 57
+    },
+    "head_to_head_learned_only": {
+      "rows": 16,
+      "outcome_counts": {
+        "model": 11,
+        "vina": 4,
+        "tie": 1
+      },
+      "vina_wins_in": [
+        "cold_drug",
+        "temporal"
+      ]
+    },
+    "decoy": {
+      "mean_onsite_kcal": -8.478,
+      "mean_shifted_kcal": -6.414,
+      "n_comparable_pairs": 9
+    }
+  }
+}

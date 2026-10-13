@@ -1,0 +1,300 @@
+{
+  "script": "scripts/05_docking.py",
+  "generated_utc": "2026-10-13T19:53:56Z",
+  "vina_binary": {
+    "path": "tools/vina.exe",
+    "sha256": "e0c4b2715e0c1a74f6e92d0f3be0328ac97542eafbc111e6b1efad897a73cce5",
+    "bytes": 1233920,
+    "provenance": "AutoDock Vina 1.2.7 Windows exe, GitHub release asset"
+  },
+  "structural_filters": {
+    "xray_only": true,
+    "max_resolution_A": 2.6,
+    "min_sifts_coverage": 0.35,
+    "min_cocrystal_heavy_atoms": 15,
+    "min_local_identity_vs_davis": 0.9,
+    "box_padding_A": 5.0,
+    "max_box_dim_A": 30.0
+  },
+  "docking_settings": {
+    "exhaustiveness": 3,
+    "num_modes": 2,
+    "min_rmsd": 1.0,
+    "seed_base": 42,
+    "cpu_per_job": 1,
+    "parallel_jobs": 4,
+    "grid_spacing_A": 0.375
+  },
+  "targets_examined": 60,
+  "panel": [
+    {
+      "target_id": "T0004",
+      "gene": "CDC2L1",
+      "uniprot": "P21127",
+      "pdb": "7ukz",
+      "chain": "A",
+      "resolution_A": 2.6,
+      "sifts_coverage": 0.389,
+      "identity_vs_davis": 0.9767,
+      "identity_vs_uniprot": 0.9767,
+      "cocrystal_ligand": "NK3",
+      "cocrystal_heavy_atoms": 28,
+      "meeko_bad_residues_dropped": 47,
+      "box_center": [
+        28.951,
+        -6.645,
+        17.275
+      ],
+      "box_size": [
+        19.343,
+        18.572,
+        19.275
+      ]
+    },
+    {
+      "target_id": "T0006",
+      "gene": "ERK2",
+      "uniprot": "P28482",
+      "pdb": "8aoj",
+      "chain": "A",
+      "resolution_A": 1.12,
+      "sifts_coverage": 1.0,
+      "identity_vs_davis": 0.9798,
+      "identity_vs_uniprot": 0.9798,
+      "cocrystal_ligand": "N8L",
+      "cocrystal_heavy_atoms": 21,
+      "meeko_bad_residues_dropped": 0,
+      "box_center": [
+        9.142,
+        10.327,
+        43.258
+      ],
+      "box_size": [
+        19.889,
+        15.897,
+        17.107
+      ]
+    },
+    {
+      "target_id": "T0007",
+      "gene": "ERK1",
+      "uniprot": "P27361",
+      "pdb": "4qtb",
+      "chain": "A",
+      "resolution_A": 1.4,
+      "sifts_coverage": 1.0,
+      "identity_vs_davis": 1.0,
+      "identity_vs_uniprot": 1.0,
+      "cocrystal_ligand": "38Z",
+      "cocrystal_heavy_atoms": 44,
+      "meeko_bad_residues_dropped": 0,
+      "box_center": [
+        36.683,
+        54.826,
+        49.926
+      ],
+      "box_size": [
+        26.718,
+        20.38,
+        24.85
+      ]
+    },
+    {
+      "target_id": "T0012",
+      "gene": "ADCK3",
+      "uniprot": "Q8NI60",
+      "pdb": "7udq",
+      "chain": "A",
+      "resolution_A": 1.9,
+      "sifts_coverage": 0.606,
+      "identity_vs_davis": 0.956,
+      "identity_vs_uniprot": 0.956,
+      "cocrystal_ligand": "MVS",
+      "cocrystal_heavy_atoms": 25,
+      "meeko_bad_residues_dropped": 0,
+      "box_center": [
+        12.984,
+        32.234,
+        62.157
+      ],
+      "box_size": [
+        15.742,
+        18.362,
+        24.201
+      ]
+    },
+    {
+      "target_id": "T0013",
+      "gene": "BRAF",
+      "uniprot": "P15056",
+      "pdb": "8c7x",
+      "chain": "A",
+      "resolution_A": 1.65,
+      "sifts_coverage": 0.363,
+      "identity_vs_davis": 0.9487,
+      "identity_vs_uniprot": 0.9487,
+      "cocrystal_ligand": "TXV",
+      "cocrystal_heavy_atoms": 34,
+      "meeko_bad_residues_dropped": 2,
+      "box_center": [
+        25.899,
+        110.953,
+        16.595
+      ],
+      "box_size": [
+        21.863,
+        16.14,
+        21.973
+      ]
+    },
+    {
+      "target_id": "T0015",
+      "gene": "MKK7",
+      "uniprot": "O14733",
+      "pdb": "6yz4",
+      "chain": "A",
+      "resolution_A": 1.7,
+      "sifts_coverage": 0.73,
+      "identity_vs_davis": 0.9539,
+      "identity_vs_uniprot": 0.9539,
+      "cocrystal_ligand": "1E8",
+      "cocrystal_heavy_atoms": 33,
+      "meeko_bad_residues_dropped": 8,
+      "box_center": [
+        -6.71,
+        36.554,
+        -0.63
+      ],
+      "box_size": [
+        19.655,
+        20.222,
+        19.319
+      ]
+    }
+  ],
+  "rejected": [
+    {
+      "target_id": "T0000",
+      "gene": "EPHA5",
+      "davis_names": "EPHA5",
+      "uniprot_acc": "P54756",
+      "uniprot_source": "uniprot_gene_search",
+      "n_structures_pass_filters": 0,
+      "reject": "no_usable_structure"
+    },
+    {
+      "target_id": "T0001",
+      "gene": "PDGFRB",
+      "davis_names": "PDGFRB",
+      "uniprot_acc": "P09619",
+      "uniprot_source": "uniprot_gene_search",
+      "n_structures_pass_filters": 1,
+      "reject": "error:RuntimeError:GET https://files.rcsb.org/download/11UE.pdb failed: HTTP Error 404: Not Found"
+    },
+    {
+      "target_id": "T0002",
+      "gene": "TIE2",
+      "davis_names": "TIE2",
+      "uniprot_acc": "Q02763",
+      "uniprot_source": "uniprot_gene_search",
+      "n_structures_pass_filters": 0,
+      "reject": "no_usable_structure"
+    },
+    {
+      "target_id": "T0003",
+      "gene": "CDC2L2",
+      "davis_names": "CDC2L2",
+      "uniprot_acc": "Q9UQ88",
+      "uniprot_source": "uniprot_gene_search",
+      "reject": "error:RuntimeError:GET https://www.ebi.ac.uk/pdbe/api/mappings/best_structures/Q9UQ88 failed: HTTP Error 404: Not Found"
+    },
+    {
+      "target_id": "T0005",
+      "gene": "TESK1",
+      "davis_names": "TESK1",
+      "uniprot_acc": "Q15569",
+      "uniprot_source": "uniprot_gene_search",
+      "reject": "error:RuntimeError:GET https://www.ebi.ac.uk/pdbe/api/mappings/best_structures/Q15569 failed: HTTP Error 404: Not Found"
+    },
+    {
+      "target_id": "T0008",
+      "gene": "MAP3K1",
+      "davis_names": "MAP3K1",
+      "uniprot_acc": "Q13233",
+      "uniprot_source": "uniprot_gene_search",
+      "n_structures_pass_filters": 0,
+      "reject": "no_usable_structure"
+    },
+    {
+      "target_id": "T0009",
+      "gene": "PRP4",
+      "davis_names": "PRP4",
+      "uniprot_acc": "O43172",
+      "uniprot_source": "uniprot_gene_search",
+      "n_structures_pass_filters": 0,
+      "reject": "no_usable_structure"
+    },
+    {
+      "target_id": "T0011",
+      "gene": "ANKK1",
+      "davis_names": "ANKK1",
+      "uniprot_acc": "Q8NFD2",
+      "uniprot_source": "uniprot_gene_search",
+      "reject": "error:RuntimeError:GET https://www.ebi.ac.uk/pdbe/api/mappings/best_structures/Q8NFD2 failed: HTTP Error 404: Not Found"
+    },
+    {
+      "target_id": "T0014",
+      "gene": "MEK4",
+      "davis_names": "MEK4",
+      "uniprot_acc": "P45985",
+      "uniprot_source": "uniprot_gene_search",
+      "n_structures_pass_filters": 5,
+      "pdb_id": "3aln",
+      "chain": "A",
+      "resolution": 2.3,
+      "pdbe_coverage": 0.802,
+      "pdb_seq_len": 270,
+      "identity_vs_davis": 0.8795,
+      "aln_len_vs_davis": 307,
+      "davis_seq_len": 399,
+      "identity_vs_uniprot": 0.8795,
+      "cocrystal_ligand": "ANP",
+      "cocrystal_smiles": "c1nc(c2c(n1)n(cn2)[C@H]3[C@@H]([C@@H]([C@H](O3)CO[P@](=O)(O)O[P@@](=O)(NP(=O)(O)O)O)O)O)N",
+      "cocrystal_heavy": 31,
+      "cocrystal_weight": 506.196,
+      "receptor_pdbqt": "data\\raw\\docking\\rec_T0014_3aln_A.pdbqt",
+      "box": {
+        "center": [
+          17.554,
+          -1.17,
+          -25.446
+        ],
+        "size": [
+          20.944,
+          17.712,
+          19.192
+        ]
+      },
+      "meeko_bad_residues_dropped": 15,
+      "meeko_tail": "0} bond_excess={4}\nCPRO       heavy_miss=2 heavy_excess=0 H_excess=[] bond_miss=set() bond_excess=set()\n\n- Template matching failed for: ['A:83', 'A:86', 'A:88', 'A:105', 'A:138', 'A:148', 'A:253', 'A:284', 'A:308', 'A:309', 'A:320', 'A:321', 'A:322', 'A:327', 'A:389'] Ignored due to allow_bad_res.\n",
+      "reject": "identity_vs_davis<0.9"
+    }
+  ],
+  "counts": {
+    "panel_targets": 6,
+    "ligands_requested": 20,
+    "ligands_prepared": 20,
+    "pairs": 140,
+    "pairs_scored": 140,
+    "vina_failures": 0,
+    "decoy_pairs": 10
+  },
+  "wallclock_dock_seconds": 3480.1,
+  "offline": false,
+  "caveats": [
+    "docked poses come from RDKit ETKDG+MMFF of the DAVIS canonical SMILES, not from any crystal structure; single tautomer/protonation state, no pH model",
+    "receptor is rigid (side chains fixed at the co-crystal conformation) and one apo/cryo structure stands in for a whole kinase",
+    "the search box is centred on a DIFFERENT compound (the co-crystal ligand), so a DAVIS ligand that binds elsewhere is scored in the wrong site",
+    "69.6% of DAVIS pKd values sit at the assay ceiling (Kd clipped at 10000 nM), which caps any correlation with a continuous score"
+  ]
+}

@@ -1,0 +1,64 @@
+[
+ {
+  "check": "identical",
+  "ok": true,
+  "value": [
+   1.0,
+   73.0
+  ]
+ },
+ {
+  "check": "substring",
+  "ok": true,
+  "value": [
+   1.0,
+   50.0
+  ]
+ },
+ {
+  "check": "one_mismatch",
+  "ok": true,
+  "value": [
+   0.9863,
+   73.0
+  ]
+ },
+ {
+  "check": "disjoint_low",
+  "ok": true,
+  "value": [
+   0.0,
+   0.0
+  ]
+ }
+]
+[selftest] sw_align PASS
+[skip] T0000 EPHA5: no_usable_structure
+[skip] T0001 PDGFRB: error:RuntimeError:GET https://files.rcsb.org/download/11UE.pdb failed: HTTP Error 404: Not Found
+[skip] T0002 TIE2: no_usable_structure
+[skip] T0003 CDC2L2: error:RuntimeError:GET https://www.ebi.ac.uk/pdbe/api/mappings/best_structures/Q9UQ88 failed: HTTP Error 404: Not Found
+[panel] T0004 CDC2L1 -> 7ukz_A 2.6A cov=0.389 id_davis=0.9767 id_uniprot=0.9767 lig=NK3 box=[19.343, 18.572, 19.275] (1/6)
+[skip] T0005 TESK1: error:RuntimeError:GET https://www.ebi.ac.uk/pdbe/api/mappings/best_structures/Q15569 failed: HTTP Error 404: Not Found
+[panel] T0006 ERK2 -> 8aoj_A 1.12A cov=1.0 id_davis=0.9798 id_uniprot=0.9798 lig=N8L box=[19.889, 15.897, 17.107] (2/6)
+[panel] T0007 ERK1 -> 4qtb_A 1.4A cov=1.0 id_davis=1.0 id_uniprot=1.0 lig=38Z box=[26.718, 20.38, 24.85] (3/6)
+[skip] T0008 MAP3K1: no_usable_structure
+[skip] T0009 PRP4: no_usable_structure
+[skip] T0011 ANKK1: error:RuntimeError:GET https://www.ebi.ac.uk/pdbe/api/mappings/best_structures/Q8NFD2 failed: HTTP Error 404: Not Found
+[panel] T0012 ADCK3 -> 7udq_A 1.9A cov=0.606 id_davis=0.956 id_uniprot=0.956 lig=MVS box=[15.742, 18.362, 24.201] (4/6)
+[panel] T0013 BRAF -> 8c7x_A 1.65A cov=0.363 id_davis=0.9487 id_uniprot=0.9487 lig=TXV box=[21.863, 16.14, 21.973] (5/6)
+[skip] T0014 MEK4: identity_vs_davis<0.9
+[panel] T0015 MKK7 -> 6yz4_A 1.7A cov=0.73 id_davis=0.9539 id_uniprot=0.9539 lig=1E8 box=[19.655, 20.222, 19.319] (6/6)
+[ligands] preparing 20 of 68 DAVIS compounds
+[ligands] 20/20 pdbqt ready
+[dock] 140 pairs (0 already cached), exhaustiveness=3, num_modes=2, jobs=4
+  [dock] 20/140  5.8 min  17.4s/pair
+  [dock] 40/140  13.4 min  20.1s/pair
+  [dock] 60/140  16.2 min  16.2s/pair
+  [dock] 80/140  25.2 min  18.9s/pair
+  [dock] 100/140  33.8 min  20.3s/pair
+  [dock] 120/140  39.1 min  19.6s/pair
+  [dock] 140/140  41.3 min  17.7s/pair
+[dock] E:\Desktop\dti-affinity-bench\results\docking\pairs.csv rows=140 scored=140 failures=0
+[decoy] 10 pairs re-docked with the box shifted +30 A in x
+[decoy] mean shifted score -6.41 vs on-site mean -8.93
+[done] results/docking/{target_panel,ligand_prep,pairs,decoy_control}.csv + manifest.json

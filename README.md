@@ -1,0 +1,576 @@
+# Protein–ligand affinity benchmark: the split protocol moves the number more than the model does
+
+DAVIS (30,056 kinase–inhibitor $K_d$ rows) and KIBA (118,254 rows) scored with
+RDKit ECFP4 fingerprints + amino-acid/dipeptide composition, evaluated under **five
+different split protocols** with RMSE and both concordance calibres, plus an
+AutoDock Vina arm on the same compounds.
+
+Every table and figure here is produced by the code in this repository from committed
+inputs — `results/report.md`, `results/summary.json` and
+`notebook/dti_affinity_bench.ipynb` (executed, with outputs) are the same numbers you see below.
+
+## Headline
+
+Every number below is a key in `results/summary.json` or `results/readme_numbers.json`, so the
+claim and its evidence are one `jq` apart.
+
+1. **The split protocol moves the result more than the model does.** With identical features,
+   code and seeds, the best achievable DAVIS test RMSE runs from **0.5697** (`random`) to
+   **1.0520** (`cold_target`) — a range of **0.4823 pKd**, more than half a label standard
+   deviation — while inside one protocol the three usable models differ by at most **0.1864**
+   (KIBA: range 0.2101, model spread ≤ 0.2554).
+   `readme_numbers.json → protocol_spread_of_the_best_model`, `model_spread_within_protocol`.
+2. **A two-line lookup beats a trained model, in the cell nobody checks.** On DAVIS `scaffold`
+   the *per-target train mean* scores **0.7783** and beats every learned model in the grid,
+   XGBoost by 0.032; Ridge is worse than the global-mean null on DAVIS `scaffold` (0.8786 vs
+   0.8522), DAVIS `temporal` (1.0442 vs 1.0030) and KIBA `temporal` (0.9798 vs 0.8149).
+   `learned_models_worse_than_the_global_mean` lists **10 of 40** learned cells that lose to a
+   mean.
+3. **The neural baseline is the least robust thing here.** A DeepDTA-style MLP is worse than
+   "predict the training mean" on **3 of 5** DAVIS protocols and **4 of 5** KIBA protocols
+   (worst 2.0822 vs 1.0030 pKd) — kept in the tables, not deleted.
+4. **Concordance has to be reported twice or it is inflated.** 69.64 % of DAVIS labels sit on
+   the assay's censoring ceiling, which makes **36.4–48.7 % of the label pairs inside each
+   DAVIS test block exact ties** (KIBA: 5.1–6.7 %) — and the two standard calibres differ by
+   up to **0.1819** on identical predictions. Both are in every table, and the per-block tie
+   counts are their own file.
+   `ci_caliber_gap_max`, `data_summary.json → davis.fraction_at_censor_ceiling_pKd_5`,
+   `results/label_tie_measures.csv`.
+5. **Leakage is measured, not asserted.** **34.98 %** of KIBA `random` test rows have an ECFP4
+   Tanimoto ≥ 0.7 ligand twin already in training; a scaffold split cuts that to **10.98 %**,
+   and `cold_drug` turns out *not* to be a scaffold split — **48.79 %** of its held-out drugs
+   keep a scaffold training already saw. `summary.json → headline_leakage`.
+6. **Uncertainty is measured per protocol and it is ugly.** Split-conformal 90 % intervals
+   cover 0.791–0.926 of the test block (mean 0.877) but are **2.68 training label sds wide** on
+   average; at nominal 50 % the same interval over-covers to **0.700** on DAVIS `scaffold` (the
+   ceiling spike) and under-covers to **0.288** on DAVIS `temporal` (drift). The adaptive
+   variant made calibration worse in half the cells and wider in 15 of 20.
+   `readme_numbers.json → conformal`.
+7. **The physics arm wins only where the learner is not allowed to memorise.** AutoDock Vina on
+   140 docked pairs ranks at CI 0.6583 pooled and beats a learned model in **4 of 16**
+   head-to-head cells — three of them the MLP, and on `scaffold` it falls to 0.421, *below* the
+   constant predictor's 0.500. `readme_numbers.json → docking`.
+
+The audit trail is part of the result: `04_uncertainty.py` recomputes `03_models.py`'s point
+predictions and asserts the RMSE match (40/40 rows pass on the shipped grid), and that assert is
+what caught an incomplete preprocessing fix that had quietly put two code versions in one table
+— §8 tells that story, and `scripts/09_preproc_sensitivity.py` +
+`results/preproc_sensitivity.csv` commit the three-way ablation as evidence.
+
+## 1. What is measured, and against what
+
+Every cell of the grid is scored with the same `evaluate()` in `scripts/dti_core.py`:
+RMSE and MAE in label units (pKd / KIBA score — **not comparable across datasets**),
+Pearson *r*, Spearman ρ, and **two concordance calibres reported side by side**:
+
+| column | denominator | label tie | prediction tie |
+|---|---|---|---|
+| `ci_harrell` | comparable pairs only (unequal labels) | dropped | 0.5 credit |
+| `ci_sklearn_like` | every pair | 0.5 credit | 0.5 credit |
+
+Three different things get called "ties", and conflating them is how a concordance index gets
+mis-read, so all three are measured per test block in `results/label_tie_measures.csv` and
+plotted in `fig4_label_ties.png`:
+
+| measure | what it counts | DAVIS range | KIBA range |
+|---|---|---|---|
+| `% label pairs tied` | the pairs `ci_harrell` throws away | 36.4 – 48.7 % | 5.1 – 6.7 % |
+| `% rows on the modal label` | the censoring share (pKd 5.0) | 60.3 – 69.7 % | 11.8 – 15.2 % |
+| `1 − distinct labels / rows` | pure label redundancy | 92.8 – 93.9 % | 94.0 – 97.5 % |
+
+DAVIS puts roughly two-thirds of its rows on the censoring ceiling, which is enough to make
+nearly half of the pairs inside a test block tied, and the two calibres disagree by up to
+~0.18 on identical predictions. Reporting one of them silently is the single easiest way to
+inflate an affinity benchmark, so both are in `results/metrics.csv` and both appear in every
+table.
+
+Against **three null baselines that learn nothing** (train means only): the global train
+mean, the *per-ligand* train mean, and the *per-target* train mean, falling back to the
+global mean for an unseen entity. On a scaffold split the per-target mean is the number a
+"which kinase is this?" shortcut would achieve, and it is the floor the models have to beat.
+
+Models (3 seeds each; features standardised on **training rows only**, with columns that are
+constant on the training rows dropped and the surviving |z| clipped to 10 — that choice is not
+cosmetic, see §8 and `results/preproc_sensitivity.csv`):
+
+| model | features | notes |
+|---|---|---|
+| Ridge | 693-dim dense block | α ∈ {1, 3, 10, 30, 100, 300} chosen on the **validation** block |
+| XGBoost | same | `hist`, 400 trees, depth 6, lr 0.08, early stopping (40 rounds) on validation |
+| RandomForest | same | 150 trees, min_samples_leaf 20, max_features 0.3 |
+| MLP (DeepDTA-style) | 949-dim dense block | 256/128/64, dropout 0.25, AdamW, cosine schedule, ≤ 25 epochs with validation early stop |
+| mean baselines | — | see above |
+
+The feature block is the conventional one: ECFP4 (Morgan radius 2) counts for the ligand,
+plus 13 RDKit descriptors, and amino-acid + dipeptide composition for the target sequence —
+i.e. deliberately *not* a SOTA architecture, so that the spread in the tables below is
+attributable to the split protocol rather than to model engineering.
+
+## 2. Data
+
+| | DAVIS | KIBA |
+|---|---|---|
+| rows | 30,056 | 118,254 |
+| ligands (distinct canonical SMILES) | 68 | 2,068 |
+| targets by sequence / by name | 379 / 442 | 229 / 229 |
+| label | pKd = 9 − log₁₀(Kd nM), Kd clipped to [0.016, 10 000] | KIBA score, 0 – 17.2 |
+| rows sitting on the censoring ceiling | **69.6 % at pKd 5.0** | 1 row at the floor |
+| grid fill | 68 × 442 complete | 118,254 / 473,572 = 25.0 % |
+
+`00_fetch_data.py` runs 13 explicit PASS/FAIL integrity checks before anything is modelled
+(row count = the exact sum of the five published DAVIS files, every label inside its physical
+range, no unparseable SMILES, ids unique, …). Two of them are worth stating up front:
+
+* **442 DAVIS target names collapse onto 379 sequences.** The same protein features appear
+  under two different names, so a split done on `target_name` leaks by construction. Every
+  split here keys on `target_id` (= sequence), and the label attached to a duplicated
+  sequence is treated as interchangeable — see the caveat recorded in
+  `data/processed/data_summary.json`.
+* **The two benchmarks share 179 of their 379 DAVIS target sequences**, so
+  "train on DAVIS, test on KIBA" is *not* target-disjoint.
+
+Raw downloads are hash-pinned in [`docs/data_sources.md`](docs/data_sources.md); the tidy
+tables and split assignments are committed, so the reported numbers can be re-derived
+without network access.
+
+## 3. Five split protocols, and the leakage each one admits
+
+`02_splits.py` builds the protocols and then measures what they let through — an
+ECFP4 Tanimoto nearest-neighbour search of every test ligand against the whole training
+ligand set, Murcko-scaffold membership, and a 400-dim dipeptide-composition cosine for
+target families:
+
+| protocol | what it holds out | measured contamination |
+|---|---|---|
+| `random` | nothing | KIBA: **35.0 %** of test rows have a ≥0.7 Tanimoto twin in train (0.5 % at ≥0.95); 100 % of test scaffolds already in train |
+| `scaffold` | generic Murcko scaffolds | KIBA: still **11.0 %** near-duplicate ligands ≥ 0.7 — scaffold-disjoint is not ligand-disjoint |
+| `cold_drug` | ligands absent from train | KIBA: 26.2 % near-duplicate ≥ 0.7 and **48.8 % of its test scaffolds are present in train** — a "cold drug" split that is not scaffold-disjoint |
+| `cold_target` | target sequences absent from train | the only protocol where the protein-similarity metric carries information (mean max cosine 0.81 – 0.85, 0 % of pairs ≥ 0.95) |
+| `temporal` | a forward-looking date cut | DAVIS keeps 25,194 of 30,056 dated rows; KIBA keeps 44,691 of 118,254 (**37.8 %**) — the price of a look-ahead protocol is that it silently changes the dataset |
+
+The published DAVIS cold-start blocks are cross-checked against these: in the shipped
+partition `cold_drug` really is ligand-disjoint but every one of its targets is warm, and
+the shipped `val` block is not entity-disjoint at all (100 % of its ligands *and* targets
+also appear in train). A number quoted as "DAVIS cold-drug" therefore depends on which
+shipped block the author used.
+
+## 4. Model × protocol grid
+
+`03_models.py` fits four learned models (Ridge with α searched on the validation block,
+XGBoost 400 trees with early stopping, random forest 150 trees, a DeepDTA-style MLP) under
+all five protocols on both datasets, **3 seeds each = 120 fitted runs**, and every run also
+carries three deterministic nulls that need no learning: the global training mean, the
+per-ligand training mean, and the per-target training mean. Test RMSE, mean of 3 seeds
+(seeds are deterministic; the spread is in §9):
+
+**DAVIS — RMSE in pKd units** (the training block's label sd is 0.79–0.91 depending on
+protocol, so RMSE 0.85 ≈ "predict the mean")
+
+| protocol | global-mean null | Ridge | XGBoost | Rand. forest | MLP | best learned |
+|---|---|---|---|---|---|---|
+| `random` | 0.9224 | 0.7561 | **0.5697** | 0.6558 | 0.7251 | XGBoost 0.5697 |
+| `scaffold` | 0.8522 | 0.8786 | **0.8104** | 0.8110 | 1.6124 | XGBoost 0.8104 |
+| `cold_drug` | 0.9173 | 0.8479 | **0.7872** | 0.7877 | 1.4814 | XGBoost 0.7872 |
+| `cold_target` | 1.2116 | 1.1393 | **1.0520** | 1.0907 | 1.2061 | XGBoost 1.0520 |
+| `temporal` | 1.0030 | 1.0442 | 0.9692 | **0.9458** | 2.0822 | RF 0.9458 |
+
+**KIBA — RMSE in KIBA-score units** (not comparable with the DAVIS column above)
+
+| protocol | global-mean null | Ridge | XGBoost | Rand. forest | MLP | best learned |
+|---|---|---|---|---|---|---|
+| `random` | 0.8343 | 0.6906 | **0.5143** | 0.5854 | 0.7630 | XGBoost 0.5143 |
+| `scaffold` | 0.8701 | 0.7252 | 0.6193 | **0.6145** | 0.9385 | RF 0.6145 |
+| `cold_drug` | 0.7225 | 0.6695 | 0.6025 | **0.5697** | 0.9598 | RF 0.5697 |
+| `cold_target` | 0.9396 | 0.9241 | **0.7052** | 0.8214 | 1.1147 | XGBoost 0.7052 |
+| `temporal` | 0.8149 | 0.9798 | 0.7583 | **0.7244** | 1.7832 | RF 0.7244 |
+
+Four readings, each traceable to `results/metrics_by_protocol.csv` and
+`results/readme_numbers.json`:
+
+1. **The protocol is the biggest single effect.** Follow the `best learned` column: on DAVIS
+   the best achievable RMSE moves from 0.5697 (`random`) to 1.0520 (`cold_target`) — a range
+   of **0.4823 pKd**, i.e. more than half a label standard deviation bought or lost purely by
+   how the rows are partitioned. On KIBA the same column moves **0.2101** (0.5143 → 0.7244,
+   and there the hardest protocol is `temporal`, not `cold_target`).
+2. **Model choice, among models that work, is smaller than that.** Within one protocol the
+   three non-collapsed models differ by at most **0.1864** (DAVIS `random`) and usually by
+   ≲ 0.10; on KIBA by at most 0.2554 (`temporal`). So on DAVIS, *changing the split costs about
+   2.6–7.9× what changing the model buys.* The per-protocol winner also flips, and some flips
+   are not resolvable: XGBoost wins four of five DAVIS protocols, but on `cold_drug` it beats
+   random forest by 0.0005 while its own three seeds span 0.7395–0.8304 — at 3 seeds that
+   "win" is noise. Random forest wins DAVIS `temporal` and three of five KIBA protocols. There
+   is no "best model" row in this table, only best-model-per-protocol rows, and the
+   best-model-per-protocol rows are sometimes ties.
+3. **Two honest negative results.** (a) The **MLP is worse than predicting the training mean**
+   on 3 of 5 DAVIS protocols and 4 of 5 KIBA protocols (DAVIS 1.6124 / 1.4814 / 2.0822 vs
+   nulls 0.8522 / 0.9173 / 1.0030; KIBA 0.9385 / 0.9598 / 1.1147 / 1.7832 vs 0.8701 / 0.7225 /
+   0.9396 / 0.8149) — only `random` rescues it, in both datasets. A DeepDTA-style network on
+   hand-made features is not a free win; it is the least robust entry in the grid, and also
+   the least reproducible one (seed span up to 0.179 vs ≤ 0.013 for random forest, §9).
+   (b) **Ridge loses to the global-mean null** on DAVIS `scaffold` (0.8786 vs 0.8522) and
+   `temporal` (1.0442 vs 1.0030), and on KIBA `temporal` (0.9798 vs 0.8149) — a linear model
+   fitted to the older decade of deposition dates does not extrapolate forward, and the tree
+   models that do beat the null there buy only 0.03–0.09.
+4. **The entity nulls degenerate exactly where the protocols say they should**, which doubles
+   as a check that the splits are what they claim. The per-ligand train mean is bit-identical
+   to the global mean on `scaffold`, `cold_drug` *and* `temporal`, in **both** datasets — 6 of
+   the 10 cells — which is itself a finding: on these two tables a Murcko-scaffold split holds
+   out whole ligands, so "scaffold-disjoint" already implies "drug-unseen" for the test block.
+   The per-target train mean likewise collapses to the global mean on `cold_target` in both
+   datasets (KIBA 0.9396 for both rows). And **several of these nulls are competitive with, or
+   better than, the learned models**: on DAVIS `scaffold` the per-target mean (0.7783) beats
+   *every* learned model in the grid, including the best one by 0.032 — the only cell in 20
+   where a two-line lookup is the state of the art; on KIBA `cold_target` the per-ligand mean
+   (0.7131) beats Ridge, random forest and the MLP and loses to XGBoost by 0.008; on KIBA
+   `cold_drug` the per-target mean (0.6538) beats Ridge (0.6695); on KIBA `random` the
+   per-ligand mean (0.6481) beats Ridge (0.6906). **Knowing which kinase you are assaying — or
+   which drug you are holding — beats a trained linear model.** A paper that reports a
+   protocol number without the matching entity null next to it is hiding the number's most
+   important rival.
+
+Concordance tells the same story with different units (`ci_harrell`, mean of 3 seeds): DAVIS
+`random` peaks at 0.873 (XGBoost) while `temporal` falls to 0.666 and `cold_drug` to 0.692;
+on KIBA, 0.815 → 0.688 from `random` to `temporal`. The nulls make the same point in the other
+direction: the global-mean null is pinned at exactly 0.500 (all predictions identical, so no
+pair can be ordered at all), yet a per-ligand mean reaches 0.755 and a per-target mean 0.656
+on DAVIS `random` with no features fitted whatsoever. Remember §1: those DAVIS columns are
+computed on a label distribution where ~two-thirds of the rows sit on the assay ceiling and
+**41.4–48.7 % of the pairs in the block are exact label ties**, so `ci_sklearn_like` for the
+same cell can sit ~0.18 away, and both are in the table.
+
+
+## 5. Uncertainty: split conformal with measured coverage
+
+RMSE is a property of a table; the question a user asks is how wrong **one** predicted pKd is.
+`04_uncertainty.py` wraps the two cheapest models (Ridge, XGBoost — `--models` also accepts
+random forest and the MLP) in split-conformal intervals: the protocol's validation block
+supplies the nonconformity scores `|y − ŷ|`, the half-width is the `ceil((n+1)·level)`-th
+smallest score (exact split conformal, no normality assumption), and the coverage on the *test*
+block is then **measured**, not asserted. 20 configurations × 2 interval variants = 40 rows in
+`results/uncertainty/conformal.csv`. Every row re-fits through `03`'s own `fit_predict` and its
+test RMSE is checked against `results/metrics.csv`: **40/40 match to 1e-5**
+(`conformal.rmse_all_match_03: true` in `results/readme_numbers.json`) — the same assert that
+caught the §8 preprocessing bug, and the reason §8's story was catchable at all.
+
+Empirical coverage at the middle and the top of the curve, mean absolute coverage error over the
+six nominal levels 0.50–0.95, and the 90 % interval width (constant-width variant, seed 0,
+`ridge / xgboost`):
+
+| dataset × protocol | cov@0.50 Ridge | cov@0.50 XGB | cov@0.90 Ridge | cov@0.90 XGB | coverage error R / X | width90 R / X | width90 / sd R / X |
+|---|---|---|---|---|---|---|---|
+| davis `random` | 0.513 | 0.515 | 0.896 | 0.895 | 0.006 / 0.006 | 2.17 / 1.74 | 2.45 / 1.96 |
+| davis `scaffold` | **0.700** | 0.511 | 0.884 | 0.881 | 0.081 / 0.021 | 2.75 / 2.39 | 3.03 / 2.64 |
+| davis `cold_drug` | **0.366** | 0.438 | 0.878 | 0.905 | 0.098 / 0.052 | 2.43 / 2.78 | 2.73 / 3.12 |
+| davis `cold_target` | 0.497 | **0.464** | **0.830** | **0.791** | 0.046 / 0.077 | 2.48 / 1.94 | 3.09 / 2.41 |
+| davis `temporal` | **0.346** | **0.288** | 0.889 | 0.881 | 0.076 / **0.114** | 3.23 / 3.00 | **4.09** / 3.79 |
+| kiba `random` | 0.491 | 0.497 | 0.897 | 0.900 | 0.005 / **0.002** | 2.13 / 1.58 | 2.55 / 1.89 |
+| kiba `scaffold` | 0.488 | 0.504 | 0.894 | 0.886 | 0.015 / 0.005 | 2.21 / 1.90 | 2.67 / 2.29 |
+| kiba `cold_drug` | 0.435 | **0.401** | **0.831** | **0.819** | 0.071 / 0.091 | 1.61 / 1.35 | 1.80 / 1.50 |
+| kiba `cold_target` | 0.415 | **0.407** | 0.852 | 0.886 | 0.075 / 0.057 | 2.50 / 2.10 | 3.10 / 2.61 |
+| kiba `temporal` | 0.496 | 0.581 | 0.916 | 0.926 | 0.020 / 0.051 | 3.32 / 2.89 | 3.18 / 2.77 |
+
+Bold marks a cell ≥ 0.05 away from its nominal level at 0.50, or < 0.85 at 0.90. Five readings:
+
+1. **The machinery is calibrated exactly where exchangeability holds** — and that is what makes
+   the rest readable as protocol effects rather than implementation bugs. `random` traces the
+   diagonal: KIBA/XGBoost goes 0.50→0.497, 0.80→0.801, 0.90→0.900, 0.95→0.949, coverage error
+   0.0016; DAVIS/Ridge 0.50→0.513 … 0.95→0.945, error 0.0062.
+2. **Over-coverage in the middle is the censoring signature.** On DAVIS `scaffold` a nominal
+   50 % interval covers **70.0 %** of test rows (Ridge). With 68.8 % of this block's rows on the
+   assay ceiling — 47.3 % of its label pairs tied — the residual distribution is a spike near
+   zero plus a tail; one width that must reach the tail covers the spike twice over. The same
+   cell's Ridge curve rises 0.700 → 0.738 → 0.778 → 0.823 → 0.884 → 0.921, i.e. it starts 0.20
+   above nominal and converges to it.
+3. **Under-coverage in the middle is the cold/drift signature.** 8 of 20 cells cover less than
+   0.45 at nominal 0.50, and they are exactly the `cold_drug`, `cold_target` and DAVIS `temporal`
+   cells (worst: DAVIS `temporal`/XGBoost **0.288**). The calibration block's central spread is
+   narrower than the test block's — new targets and later assay batches are harder than the
+   validation rows — so the interval is confident about the wrong middle. Under `temporal` that
+   is not a surprise but a construction: the calibration rows *precede* the test rows in time.
+4. **The 90 % tail mostly holds, and it holds by getting fat.** Mean cov90 is 0.877 (range
+   0.791–0.926); the mean coverage error over all six levels is 0.048, worst cell DAVIS
+   `temporal`/XGBoost 0.114. The cost is width: mean width90 = **2.68 training label sds**
+   (range 1.50–4.09). In pKd units the interval is ±0.87–1.08 on DAVIS `random` (≈ a factor of
+   7–12 in Kd), ±1.24–1.62 under `temporal` (≈ 32–42×), ±0.97–1.24 on DAVIS `cold_target`
+   (≈ 9–17×).
+   **A single affinity prediction from these features is worth a log-unit, not a decimal**, and
+   any downstream use (ranking a compound series, deciding go/no-go) has to survive that.
+5. **The adaptive (normalised) variant did not earn its complexity.** σ̂ = a Ridge on the first
+   half of the calibration residuals, applied to the second half and to the test rows: it
+   improved |cov90 − 0.90| in only **4 of 20** cells, improved the six-level coverage error in
+   exactly **10 of 20** (a coin flip), and cost mean width in **15 of 20** (mean width90 2.68 vs
+   2.33 label units, +15 %). Heteroscedasticity is real — corr(|residual|, |ŷ|) averages 0.32
+   and reaches 0.57 — but σ̂ itself correlates only 0.10–0.40 with the true error, so dividing by
+   it imports more variance than it removes. Worst case KIBA `scaffold`/Ridge collapses to
+   **0.598** coverage at nominal 0.90 (curve 0.426 → 0.661). The shipped recommendation is the
+   constant-width interval, and the width *is* the finding.
+
+Two caveats are recorded in `results/uncertainty/uncertainty_summary.json` rather than hidden:
+the validation block does double duty (`03` uses it for the α search / early stopping, `04` uses
+it for calibration), so the 1−α statement is approximate, not a guarantee; and under `temporal`
+exchangeability fails by construction, so its coverage number is a measurement of drift.
+
+Figures: `results/figures/fig5_conformal_coverage.png` (empirical vs nominal, all 40 curves) and
+`fig4_label_ties.png` (the censoring that produces reading 2).
+
+## 6. The physics arm: AutoDock Vina on the same compounds
+
+`05_docking.py` builds a structural panel from the DAVIS target names — gene → UniProt
+(reviewed, human) → PDBe SIFTS `best_structures` (X-ray, ≤ 2.6 Å, ≥ 0.35 chain coverage) →
+RCSB coordinates → gemmi chain trim → meeko → `vina.exe` (`--exhaustiveness 3`,
+`--num_modes 2`, `--cpu 1`, `--seed 42+pair_id`) — and docks 20 pKd-stratified DAVIS
+compounds prepared with RDKit ETKDGv3 + MMFF. **140/140 pairs scored, 0 failures, 70.4 s
+per pair mean (8.7–353.2), 41.3 min wall-clock on 4 workers.** Every panel receptor passed
+a Smith–Waterman local-identity gate ≥ 0.90 against the *DAVIS* sequence, so the assay's
+own protein is what got docked:
+
+| target | gene | PDB | Å | PDBe cov. | id vs DAVIS | co-crystal | box (Å) | pairs | mean Vina |
+|---|---|---|---|---|---|---|---|---|---|
+| T0004 | CDC2L1 | 7ukz_A | 2.60 | 0.389 | 0.9767 | NK3 (28 heavy) | 19.3×18.6×19.3 | 20 | −8.46 |
+| T0006 | ERK2 | 8aoj_A | 1.12 | 1.000 | 0.9798 | N8L (21) | 19.9×15.9×17.1 | 20 | −7.38 |
+| T0007 | ERK1 | 4qtb_A | 1.40 | 1.000 | 1.0000 | 38Z (44) | 26.7×20.4×24.9 | 20 | −9.56 |
+| T0012 | ADCK3 | 7udq_A | 1.90 | 0.606 | 0.9560 | MVS (25) | 15.7×18.4×24.2 | 20 | −9.78 |
+| T0013 | BRAF | 8c7x_A | 1.65 | 0.363 | 0.9487 | TXV (34) | 21.9×16.1×22.0 | 40 | −9.50 |
+| T0015 | MKK7 | 6yz4_A | 1.70 | 0.730 | 0.9539 | 1E8 (33) | 19.7×20.2×19.3 | 20 | −8.34 |
+
+**Vina as a ranker.** Pooled over all 140 docked rows, `−Vina` gives concordance
+**0.6583** (Harrell) / 0.5421 (all-pairs caliber) on **2,590 comparable pairs** of 9,730.
+Per target the honest reading needs the denominator, which `comparison.csv` now prints:
+four of the six blocks contain only 19–37 comparable pairs, and **ERK1/ERK2 report
+CI = 1.0000 on 19 pairs — because those 20 compounds are 19 ceiling labels plus a single
+detected binder, so the "perfect" ranking is one compound beating 19 undetectable ones.**
+Only CDC2L1 (70 pairs) and BRAF (374 pairs) have enough usable pairs to mean anything, and
+there Vina scores **0.543** and **0.644** — close to chance. The pooled 0.658 is largely a
+*between-target* effect: mean scores per pocket span −7.38 (ERK2) to −9.78 (ADCK3) kcal/mol,
+and a physics score carries no knowledge of the assay's per-protein offset.
+
+**Vina as a regressor** (`pKd ≈ a + b·(−Vina)`, two parameters fitted on the protocol's
+*train* block and evaluated on its *test* block, so no label is used for the fit):
+
+| protocol | test rows | fit rows | slope (pKd / kcal) | intercept | test RMSE | CI | comparable pairs |
+|---|---|---|---|---|---|---|---|
+| random | 26 | 105 | 0.068 | 4.57 | 1.019 | 0.638 | 94 |
+| scaffold | 21 | 91 | 0.120 | 4.10 | 1.460 | 0.421 | 57 |
+| cold_drug | 28 | 105 | 0.044 | 4.84 | 0.482 | 0.667 | 78 |
+| cold_target | 80 | **0** | — | — | — | — | — |
+| temporal | 28 | 70 | 0.093 | 4.30 | 1.377 | 0.559 | 188 |
+
+Two things to read off this table. First the slopes: **0.04–0.12 pKd per kcal/mol**, so even
+a 10 kcal/mol swing in score moves the prediction by less than the label spacing of the
+assay — the map from docking energy to pKd is shallow and unstable across protocols. Second,
+`cold_target` is **not computable**: every panel kinase is held out by construction, so the
+calibration has zero training rows and `comparison.csv` records "too few docked pairs (train
+0, test 80)" rather than inventing a number.
+
+**Head-to-head on identical rows** (`results/docking/comparison.csv`, seed 0, the same pairs
+the trained models predict, and for Vina the same two-parameter map fitted on the same
+train block): of the 16 learned-model comparisons, **the trained model wins 11, Vina wins 4,
+and 1 is an exact tie** — DAVIS `temporal`/Ridge scores CI 0.5585 and so does the two-parameter
+Vina map, to four decimals, which is why `delta_ci_favours` says `tie` instead of rounding a
+verdict. Vina's four wins are three inside `cold_drug` (CI 0.667 vs ridge 0.596, XGBoost 0.660,
+MLP 0.436) and one inside `temporal` (0.559 vs the MLP's 0.436). Two caveats on those wins, both
+of which the table already shows: against XGBoost on `cold_drug` the margin is **0.006 CI on 78
+comparable pairs**, which is not a result and is not presented as one; and three of the four
+wins are against the MLP, so the honest phrasing is *a rigid-pocket physics score beats the
+baseline §4 already flagged as collapsed*, not *physics beats learning*. On `cold_drug` random
+forest (0.801) and even the per-target train mean (0.821) stay clearly ahead of Vina. On
+`random` Vina loses to all four learned models (0.638 vs 0.809–0.979) though it beats the
+global-mean null, and on `scaffold` it lands at **0.421 — below the constant predictor's 0.500**
+on 57 comparable pairs, i.e. the pocket ranking actively inverts the assay order there. What the
+arm does establish is the *pattern*: physics is competitive exactly on the protocol that forbids
+the model from having memorised the drug, and uninformative on the one that removes the scaffold
+class the compounds were docked into.
+
+The pKd-stratified 20-compound docked subset is small by design (26–28 test rows per protocol,
+80 under `cold_target`), so none of these per-protocol CIs carries an error bar here — §9 says
+so explicitly.
+
+**Specificity control.** Re-docking 10 sampled pairs with the search box translated +30 Å
+along x into bulk solvent: mean fitted strength falls from **−8.478 to −6.414 kcal/mol**
+(the shifted box finds nothing comparable), which is the signal that the pocket, not the
+molecule, was doing the work. The CI of that control is *not* reported as evidence: 10
+ceiling-heavy rows leave **9 comparable pairs of 45**, so both the on-site (0.222) and
+shifted (0.333) CIs are noise, and `comparison.csv` says so in its `note` column.
+
+Reproduce: `python run_all.py --with-docking --stage docking` then `--stage dockstats`.
+`vina.exe` is not committed (see `.gitignore`); `docs/data_sources.md` records its version,
+size and sha256, and the script refuses to start without it.
+
+## 7. Layout and how to run it
+
+```
+data/processed/    committed tidy tables (davis.csv, kiba.csv, ligands.csv, targets.csv)
+                   + the five split files per dataset + feature arrays
+results/           committed metrics, leakage audit, docking tables, figures, report.md
+scripts/00…09      one stage per script, run in order
+run_all.py         one-command reproduction
+docs/data_sources.md  endpoints, sha256 of every raw file, vina binary hash, versions
+```
+
+```bash
+pip install -r requirements.txt
+python run_all.py                       # ~2 h on an 8-core laptop; 03 is 70 min of measured
+                                        # fit time (sum of the `seconds` column in metrics.csv)
+python run_all.py --quick               # ~7 min smoke test
+python run_all.py --with-docking        # adds the Vina arm (needs tools/vina.exe)
+python run_all.py --with-sensitivity    # adds 09: the three standardisation guards re-fitted
+python run_all.py --stage report        # re-render tables + figures from committed CSVs
+```
+
+`run_all.py` recomputes the whole grid by default; `--resume-grid` is opt-in, because keeping
+old rows is exactly how `results/metrics.csv` once ended up mixing two code versions (§8).
+
+## 8. What could go wrong, and what catches it
+
+| risk | what the code does about it |
+|---|---|
+| a fast concordance index silently disagreeing with the definition | `dti_core.selftest()` compares the Fenwick-tree CI against an O(n²) brute force on synthetic data (perfect / reversed / ties / random) and `03_models.py` refuses to start until it matches to 1e-9 |
+| mis-assigned protein sequence in the docking panel | `sw_align()` is Smith–Waterman with a sign convention that is unit-tested four ways (identical / substring / one-mismatch / disjoint); the script exits non-zero if any case fails, and every panel target is then rejected unless its **local identity against the DAVIS sequence** is ≥ 0.90 |
+| a search box that is not a binding site | the box is derived from a co-crystal ligand with ≥ 15 heavy atoms, and any dimension outside 10–30 Å rejects the structure; a **decoy control** re-docks sampled pairs with the box translated +30 Å into solvent |
+| labels recovered from feature-only files being wrong | `00_fetch_data.py` cross-aligns the canonical DAVIS tables against the published Kd table row by row and requires agreement (max abs Δ pKd recorded, 0 disagreeing rows) |
+| test information reaching the scaler | `standardize()` computes mean/sd from training rows only, drops the columns that are constant on training rows, and clips the rest — the drop mask and the clip are both train-only |
+| a metric table that silently drifts from the code that made it | `04_uncertainty.py` re-fits the point predictions and asserts its own test RMSE against `results/metrics.csv` to 1e-5; `08_notebook.py` executes the notebook and fails the build on any error output. **The assert has fired for real**: it reported davis/scaffold/ridge as 1.4973 recomputed vs 0.8409 stored, which is how a table holding rows from two code versions was caught — the grid was then re-run from scratch instead of patched with `--resume` |
+| a long grid run dying half-way | `03_models.py` rewrites `results/metrics.csv` after **every** seed and supports `--resume`, so a crash costs one row, not two hours |
+
+Two bugs found this way are documented rather than hidden — and the second one is a
+preprocessing decision that changed a headline number, so it gets its own ablation
+(`scripts/09_preproc_sensitivity.py` → `results/preproc_sensitivity.csv`):
+
+* **Train-constant fingerprint columns destroyed the neural model, and fixing them moved the
+  linear model.** The first version of `standardize()` divided by `max(sd, 1e-6)`. A bit that
+  never appears in the training rows but appears in a test row then gets z ≈ 10⁶ — measured
+  **|z|max = 2,000,000** on the DAVIS `scaffold` / `cold_drug` / `temporal` test blocks (13.2 on
+  `random`, which is why `random` looked fine). The DeepDTA-style MLP "converged" to test RMSE
+  **116,142** on DAVIS `scaffold`. The first fix left such columns at scale 1 and clipped every
+  z to ±10; that repaired the MLP (116,142 → 1.611) but pushed **Ridge from 0.8805 to 1.4973**
+  — worse than the 0.8522 null. The shipped guard instead *drops* columns whose training sd is
+  below 10⁻³ (a column with no training variance carries no training information for a linear
+  or neural model; its test value is pure out-of-support extrapolation), then z-scores and
+  clips what survives: Ridge back to **0.8786**, MLP 1.6165, XGBoost 0.8199. Measured on the
+  same rows, same seed:
+
+  | DAVIS `scaffold`, seed 0 | floor 1e-6 (bug) | clip-only fix | **drop + clip (shipped)** |
+  |---|---|---|---|
+  | Ridge | 0.8805 | **1.4973** | 0.8786 |
+  | XGBoost | 0.7933 | 0.7933 | 0.8199 |
+  | MLP | **116,142** | 1.6110 | 1.6165 |
+  | (global-mean null) | 0.8522 | 0.8522 | 0.8522 |
+
+  Three things follow, and all three are in the repo rather than in a footnote. (i) A bug can be
+  *model-specific*: the 10⁶ blow-up is fatal to an untrained weight times a huge input (the MLP),
+  harmless to a ridge coefficient that is exactly zero on a zero training column, and harmless to
+  a split threshold. Attributing "the linear and neural models were broken" to one cause, as my
+  first version of this section did, was wrong. (ii) The guard is a real decision, not a free
+  repair: dropping columns costs XGBoost 0.0266 RMSE here and buys Ridge 0.62 — so cold-protocol
+  numbers are partly a preprocessing choice, which is why the ablation is a committed script and
+  not a sentence. (iii) The MLP's collapse to ~1.6 against a 0.85 null **survives both repairs**,
+  so §4's negative result about it is a property of the model under cold-drug protocols, not an
+  artifact of my scaling. `03_models.py` also stopped re-standardising its input a second time
+  inside `_mlp()`.
+
+  The ablation is not one cell — it is the whole DAVIS grid (5 protocols × 4 models × 3 guards,
+  seed 0, `results/preproc_sensitivity.csv`), and it puts a number on how much of §4 is a
+  preprocessing decision:
+
+  | arm | largest RMSE swing across the three guards | where |
+  |---|---|---|
+  | RandomForest | 0.0166 | `cold_drug` |
+  | XGBoost | 0.0266 | `scaffold` |
+  | Ridge | 0.6187 | `scaffold` |
+  | MLP | 154,527 | `temporal` (154,529 → 2.13) |
+
+  The trees are the invariance control and they behave like one: a split threshold does not care
+  whether an absent fingerprint bit sits at 10⁶, at 10, or is gone. The two arms that do care are
+  exactly the two whose cold-protocol conclusions §4 draws. One cell flips a conclusion outright
+  — DAVIS `cold_target`/MLP scores 1.1621 (floor), 1.2134 (clip-only) and 1.2020 (shipped)
+  against a 1.2116 null, so "the MLP beats the training mean" is true under two of the three
+  guards and false under the third, and the shipped margin (0.0096) is a fifth of the guard swing
+  on that same cell (`preproc_sensitivity.json → null_flips_caught_by_the_guard`, one entry in
+  60 fits). §4's only MLP win outside `random` should be read as noise, not as a result.
+
+  And the guard is now pinned to the shipped table: `09` recomputes every DAVIS seed-0 cell under
+  `drop_clip10` and compares it against `results/metrics.csv` — **20 of 20 rows agree to 1e-5**
+  (`preproc_sensitivity.json → shipped_guard_reproduces_stored_grid`), so the committed numbers
+  can be regenerated from the committed code instead of taken on trust.
+* **A duplicated keyword argument** (`np.savez_compressed(..., y=…, y=…)`) made
+  `03_models.py` a `SyntaxError` for every *new* process while an already-running process
+  kept working from the pre-edit bytecode — which is how a crash got misread as "stale
+  cache". It is fixed, and it is the reason the per-row `metrics.csv` flush exists.
+
+## 9. Known limitations / next steps
+
+**The label is censored, and nothing here fixes that.** 69.64 % of DAVIS pKd values sit on
+the assay ceiling (pKd 5.0 = "Kd ≥ 10 000 nM, the limit of detection"). A model that
+predicts the ceiling for everything therefore gets a respectable RMSE while having
+concordance 0.5, and the residual distribution is a mixture of "true affinity" and
+"undetected", which is why constant-width conformal intervals over-cover. The statistically
+correct treatment is a censored (Tobit) likelihood or a two-stage classifier-then-regressor;
+this repo uses ordinary squared error and *reports* the consequence (both CI calibers, the three
+separate tie measures in §1 and `results/label_tie_measures.csv`, the ceiling share in §2)
+instead of modelling around it.
+
+**Ligand identity is RDKit canonical SMILES only** (`canonical_smiles()` in
+`00_fetch_data.py`: `MolFromSmiles` → `MolToSmiles`). No tautomer, protonation-state or
+salt-fragment enumeration (no Epik/SaltBreak), so the same compound measured in two
+ionisation states is two ligands, and the ≥0.7 Tanimoto near-duplicate counts in §3 are a
+lower bound on real chemical duplication.
+
+**DAVIS is small, and the protocols are not independent.** 68 ligands against 379 distinct
+target sequences (442 names). Both `scaffold` and `cold_drug` hold out 13 of those 68
+ligands, and only 3 ligands are shared between the two held-out sets, so a one-point RMSE
+difference between the two protocols is a difference between *which* 13 drugs were hidden,
+not a proven property of the split family. Nothing here is bootstrapped across ligand
+subsets, so no per-protocol comparison should be read as significant.
+
+**KIBA is a consensus score, not a physical unit.** Its 0–17.2 scale is a
+kinase-inhibitor activity consensus, not a pKd, and the matrix is only 24.97 % filled. One
+row sits on the score floor. KIBA numbers are comparable to other KIBA numbers and to
+nothing else.
+
+**Conformal coverage is measured, not guaranteed.** `04_uncertainty.py` calibrates on the
+same validation block that `03_models.py` used for the ridge α search and the XGBoost early
+stop, so the 1−α coverage statement does not strictly hold; a fourth split (or a nested
+resample) would be needed for that. The point predictions now come from a *single* fit
+shared by the calibration and test rows — the earlier version of this script fitted twice,
+which made the two sides' scores come from two different models. Under `temporal`,
+exchangeability fails by construction (calibration precedes test in time), so the coverage
+there is a measurement of drift, not a property of the method.
+
+**The docking arm is a handful of rigid pockets.** 6 kinase targets, one X-ray structure
+each, box from a co-crystal ligand, rigid receptor, no induced fit and no explicit solvent;
+`--exhaustiveness 3`, `--num_modes 2`, 70.4 s per pair on average (range 8.7–353.2 s, 4
+workers, 41.3 min wall-clock for all 140 pairs — a production setting would be 8-32
+exhaustiveness and several minutes per pair regardless). Compounds are redocked from
+ETKDG+MMFF conformers, so the reference
+pose is not the crystal pose. Per-target concordance is therefore estimated from ~20
+points. Under `cold_target` the panel targets are *entirely* held out, so the two-parameter
+Vina→pKd calibration has zero training rows there and `comparison.csv` records that as
+"too few docked pairs" rather than inventing a number.
+
+**ML and physics are not information-matched.** The ML arm sees ECFP4 count bits plus
+amino-acid/dipeptide composition: it has no notion of pocket geometry, which is precisely
+what Vina sees, while Vina has no notion of the rest of the assay table, which is what the
+ML arm exploits. §6 compares them on identical *rows* with identical *metrics*, which is
+the fair part; it is not an apples-to-apples information comparison, and no "docking loses
+to ML" conclusion should be drawn from it.
+
+**Seed spread is real only for the stochastic models, and it is not uniform across them.**
+Ridge's three seeds are bit-identical rows in all 10 dataset × protocol cells, so `rmse_sd = 0`
+there is a property of the estimator, not evidence of stability. XGBoost and random forest are
+seeded but not bit-reproducible across environments or code versions, and their seed noise is
+comparable to the differences §4 reads as a winner. Measured on the shipped grid (span =
+max−min RMSE over the 3 seeds within one cell, seed order in parentheses): random forest ≤
+**0.0125** (worst davis `temporal`, 0.9413 / 0.9425 / 0.9538), XGBoost ≤ **0.0909** (worst
+davis `cold_drug`, 0.7916 / 0.7395 / 0.8304 — the spread is 180× the 0.0005 by which XGBoost
+"beats" random forest in that cell), the MLP ≤ **0.1785** (worst davis `temporal`,
+2.0175 / 2.0331 / 2.1961; 0.169 on KIBA `temporal`). Read together with §4: the tree-model
+differences sit at or below their own seed noise, while the MLP's collapse sits far above it,
+so §4's negative result for the MLP is not a seeding artifact. Per-seed rows are in
+`results/metrics.csv`. That file is the record of the run that produced the figures and the
+tables above, on Python 3.13.7 / i7-9700 / 32 GB with the versions in `requirements.txt`.
+
+Next steps that would actually change the conclusions: a censored likelihood for DAVIS; a
+held-out fourth split so the conformal guarantee is real; ≥3 structures per target with
+side-chain ensembles, plus a second chemistry set (pKi, or METLI-style multi-target data)
+so the physics arm is not kinases-only; and pocket-level target features (residue identity
+in the box) so the two arms see comparable information.

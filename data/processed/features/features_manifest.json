@@ -1,0 +1,89 @@
+{
+  "rdkit_version": "2026.03.3",
+  "numpy_version": "2.3.4",
+  "fingerprint": "Morgan radius 2 (ECFP4), folded, counts for 2048 / binary for 1024, 512",
+  "scaffold": "RDKit MurckoScaffoldSmiles, generic (no chirality)",
+  "protein": "amino-acid composition (20) + dipeptide composition (400) + length/entropy/MW/GRAVY",
+  "ligand": {
+    "ligand_ecfp4_counts": {
+      "path": "data/processed/features/ligand_ecfp4_counts.npz",
+      "shape": [
+        2127,
+        2048
+      ],
+      "nnz_per_row_mean": 50.11,
+      "dtype": "uint16",
+      "sha256": "5e6d9d3648458c9eb2fbb843ad0d3cf3628809ae970d94649173ab8eadc93bfe"
+    },
+    "ligand_ecfp4_1024": {
+      "path": "data/processed/features/ligand_ecfp4_1024.npz",
+      "shape": [
+        2127,
+        1024
+      ],
+      "nnz_per_row_mean": 49.5,
+      "dtype": "float32",
+      "sha256": "913455a37f834e73a33553a680d01cf31f9d361c1a76f908cb72b6689ca15860"
+    },
+    "ligand_ecfp4_512": {
+      "path": "data/processed/features/ligand_ecfp4_512.npz",
+      "shape": [
+        2127,
+        512
+      ],
+      "nnz_per_row_mean": 48.31,
+      "dtype": "float32",
+      "sha256": "8447c1a4b26401ebf63ed200e68fc42412a8dce3be40c27fd806c40d28e61554"
+    },
+    "ligand_desc": {
+      "path": "data/processed/features/ligand_desc.csv",
+      "columns": [
+        "MolWt",
+        "MolLogP",
+        "TPSA",
+        "NumHAcceptors",
+        "NumHDonors",
+        "NumRotatableBonds",
+        "NumAromaticRings",
+        "HeavyAtomCount",
+        "FractionCSP3",
+        "FormalCharge",
+        "MolMR",
+        "NumSaturatedRings",
+        "BalabanJ"
+      ],
+      "sha256": "d90e605ccca23bd8850b4e487aabf20731540e30b964ceeeb5d171a6d6baaf59"
+    },
+    "_bad_smiles": []
+  },
+  "protein_features": {
+    "protein_features": {
+      "path": "data/processed/features/protein_features.csv",
+      "shape": [
+        429,
+        425
+      ],
+      "n_aac": 20,
+      "n_dpc": 400,
+      "sha256": "4e1ceb6fa68d4e3f0a9d70e82ab4baa7765e06f6dd4983521aa990887653410a"
+    }
+  },
+  "ligand_tanimoto": {
+    "path": "data/processed/features/ligand_tanimoto.npy",
+    "shape": [
+      2127,
+      2127
+    ],
+    "sha256": "e92a154b494a7f048f0dfa6494f2a573acbcd844e7f5d149f400602c9c92120c"
+  },
+  "ligand_scaffolds": {
+    "path": "data/processed/features/ligand_scaffolds.csv",
+    "n_scaffolds": 1238,
+    "largest_scaffold": {
+      "c1ccc(-c2n[nH]c3ncncc23)cc1": 55,
+      "O=C1NC(=O)c2c1c1c3ccccc3[nH]c1c1c2c2ccccc2n1C1CCCCO1": 33,
+      "O=C(Nc1ccccn1)Nc1ccnc2ccccc12": 21
+    },
+    "sha256": "5df0ab04b104f25a69f33966a60e2bb9cddfc53eb6de97d18064ce991eeb45c2"
+  }
+}

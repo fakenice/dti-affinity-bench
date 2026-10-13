@@ -1,0 +1,25 @@
+# Verified on Python 3.13.7 / Windows 10 (the environment that produced results/).
+# pip install -r requirements.txt
+rdkit==2026.3.3
+numpy==2.3.4
+pandas==3.0.3
+scikit-learn==1.9.1
+scipy==1.18.1
+xgboost==3.4.1
+matplotlib==3.11.0
+pyarrow==25.0.1
+
+# --- split-conformal / notebook (scripts 04, 08)
+nbformat==5.10.4
+nbclient==0.10.2
+ipykernel==7.1.0
+
+# --- optional: DeepDTA-style MLP rows in scripts/03_models.py.
+# Without torch the grid still runs; the "mlp" model is skipped with an error row.
+torch==2.6.0
+
+# --- optional: the AutoDock Vina arm (scripts/05, 06). meeko supplies
+# mk_prepare_receptor / mk_prepare_ligand; vina.exe itself is NOT vendored here,
+# see docs/data_sources.md for the download + sha256 to put in tools/.
+meeko==0.8.0
+gemmi==0.7.5

@@ -1,0 +1,51 @@
+{
+  "script": "scripts/09_preproc_sensitivity.py",
+  "guards": [
+    "floor_1e-6",
+    "keep_clip10",
+    "drop_clip10"
+  ],
+  "n_rows": 60,
+  "shipped_guard_reproduces_stored_grid": {
+    "rows_checked": 20,
+    "rows_mismatched": 0
+  },
+  "null_flips_caught_by_the_guard": [
+    {
+      "dataset": "davis",
+      "protocol": "cold_target",
+      "model": "mlp",
+      "keep_clip10": 1.2134,
+      "drop_clip10": 1.202,
+      "null": 1.2116
+    }
+  ],
+  "worst_cell_per_model": {
+    "ridge": {
+      "dataset": "davis",
+      "protocol": "scaffold",
+      "rmse_range": 0.6187
+    },
+    "xgboost": {
+      "dataset": "davis",
+      "protocol": "scaffold",
+      "rmse_range": 0.0266
+    },
+    "randomforest": {
+      "dataset": "davis",
+      "protocol": "cold_drug",
+      "rmse_range": 0.0166
+    },
+    "mlp": {
+      "dataset": "davis",
+      "protocol": "temporal",
+      "rmse_range": 154527.3684
+    }
+  },
+  "max_rmse_range_across_guards": {
+    "ridge": 0.6187,
+    "trees": 0.0266,
+    "mlp": 154527.3684
+  },
+  "reading": "trees barely move (a split threshold does not care whether an unseen column is at 1e6, 10 or absent), while the linear and neural arms change by up to the range above -- so their cold-protocol numbers are a preprocessing decision as much as a property of the split"
+}

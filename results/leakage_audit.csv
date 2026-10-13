@@ -1,0 +1,11 @@
+dataset,protocol,rows_in_protocol,n_train,n_valid,n_test,test_fraction,test_ligands,test_ligands_absent_from_train,test_targets_absent_from_train,test_scaffold_present_in_train,ecfp4_max_similarity_to_train_ligand_mean,ecfp4_max_similarity_median,test_pairs_with_near_duplicate_ligand_ge0.7,test_pairs_with_near_duplicate_ligand_ge0.95,target_max_dpc_cosine_to_train_target_mean,test_pairs_with_target_family_ge0.95,excluded_rows,temporal_cutoff
+davis,random,30056,21039,3006,6011,0.2,68,0.0,0.0,1.0,0.2836,0.2381,0.013,0.0,1.0,1.0,0,
+davis,scaffold,30056,21658,2652,5746,0.1912,13,1.0,0.0,0.0,0.2346,0.2267,0.0,0.0,1.0,1.0,0,
+davis,cold_drug,30056,21658,2652,5746,0.1912,13,1.0,0.0,0.0,0.349,0.3238,0.0,0.0,1.0,1.0,0,
+davis,cold_target,30056,21080,2992,5984,0.1991,68,0.0,1.0,1.0,0.2847,0.2404,0.0147,0.0,0.8461,0.0,0,
+davis,temporal,25194,17238,2652,5304,0.2105,12,1.0,0.0,0.0,0.2239,0.2017,0.0,0.0,1.0,1.0,4862,2014-01-01
+kiba,random,118254,82778,11825,23651,0.2,2017,0.0,0.0,1.0,0.5621,0.5882,0.3498,0.0052,1.0,1.0,0,
+kiba,scaffold,118254,82778,11825,23651,0.2,296,1.0,0.0,0.0,0.5157,0.5172,0.1098,0.0,1.0,1.0,0,
+kiba,cold_drug,118254,82778,11825,23651,0.2,166,1.0,0.0,0.4879,0.53,0.507,0.2621,0.0,1.0,1.0,0,
+kiba,cold_target,118254,82789,11823,23642,0.1999,2067,0.0,1.0,1.0,0.5657,0.5957,0.3541,0.0074,0.8129,0.0,0,
+kiba,temporal,44691,30297,5376,9018,0.2018,116,1.0,0.0,0.0937,0.337,0.3012,0.0181,0.0,1.0,1.0,73563,2013-01-01
