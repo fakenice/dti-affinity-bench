@@ -296,6 +296,12 @@ def readme_numbers(m, cfwide, comp):
             out["model_spread_within_protocol"] = {
                 f"{ds}/{pr}": round(float(sub.rmse.max() - sub.rmse.min()), 4)
                 for (ds, pr), sub in g.groupby(["dataset", "protocol"])}
+            # The headline's "three usable models" number, kept as its own key so the
+            # all-model spread cannot be quoted as if it were the trained-model spread.
+            g3 = g[g.model.isin(["ridge", "xgboost", "randomforest"])]
+            out["model_spread_within_protocol_trained3"] = {
+                f"{ds}/{pr}": round(float(sub.rmse.max() - sub.rmse.min()), 4)
+                for (ds, pr), sub in g3.groupby(["dataset", "protocol"])}
         d = (m.ci_harrell - m.ci_sklearn_like).abs()
         if len(d.dropna()):
             i = int(d.idxmax())
@@ -381,6 +387,12 @@ def readme_numbers(m, cfwide, comp):
                 "mean_shifted_kcal": float(dc.iloc[0].mean_shifted_kcal),
                 "n_comparable_pairs": None if pd.isna(dc.iloc[0].n_comparable_pairs)
                 else int(dc.iloc[0].n_comparable_pairs)})}
+    # Optional statistical follow-ups (10/11). They are merged here rather than quoted
+    # from their own files so every number in the README remains one key in this JSON.
+    for key, path in [("variance_decomposition", RES / "variance_decomposition.json"),
+                      ("docking_paired", RES / "docking" / "paired_headtohead.json")]:
+        if path.exists():
+            out[key] = json.loads(path.read_text(encoding="utf-8"))
     return out
 
 
@@ -490,6 +502,33 @@ def main() -> int:
         dc = RES / "docking" / "decoy_control.csv"
         if dc.exists():
             L += ["Box-shifted (non-specific) control:", "", md_table(pd.read_csv(dc)), ""]
+    ph = RES / "docking" / "paired_headtohead.csv"
+    vd = RES / "variance_decomposition.json"
+    if ph.exists() or vd.exists():
+        L += ["## 6. Paired and variance-decomposition checks (scripts 10-11)", ""]
+    if ph.exists():
+        p = pd.read_csv(ph)
+        L += ["Vina vs seed-0 models on identical pairs. Both deltas are oriented so positive "
+              "favours the model: `delta_rmse = RMSE_vina - RMSE_model`, "
+              "`delta_ci = CI_model - CI_vina`. Intervals are paired bootstraps over rows "
+              "and over targets.", "", md_table(p[p.learned][[
+                  "protocol", "model", "n_rows", "delta_rmse", "delta_rmse_lo_row",
+                  "delta_rmse_hi_row", "delta_ci", "delta_ci_lo_row", "delta_ci_hi_row",
+                  "sign_test_p"]]), ""]
+    if vd.exists():
+        v = json.loads(vd.read_text(encoding="utf-8"))
+        rows = []
+        for ds, sets in v["datasets"].items():
+            for name, e in sets.items():
+                for metric in ["rmse", "ci_harrell"]:
+                    rows.append({"dataset": ds, "models": name, "metric": metric,
+                                 "eta2_protocol": round(e[metric]["eta2_protocol"], 4),
+                                 "eta2_model": round(e[metric]["eta2_model"], 4),
+                                 "eta2_interaction": round(e[metric]["eta2_interaction"], 4),
+                                 "p_protocol": f"{e[metric]['p_protocol']:.2g}"})
+        L += ["Two-way ANOVA on cell means (protocol x model, interaction = residual; "
+              "seed-only bootstrap intervals are in `results/variance_decomposition.json`).",
+              "", md_table(pd.DataFrame(rows)), ""]
     (RES / "report.md").write_text("\n".join(L), encoding="utf-8")
 
     # ------------------------------------------------------------------ summary.json

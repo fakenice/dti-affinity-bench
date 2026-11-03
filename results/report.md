@@ -227,3 +227,39 @@ Box-shifted (non-specific) control:
 | 19010 | T0004 | L01091 | 6.5376 | -6.5120 | 0 |
 | 21220 | T0004 | L01163 | 5.0000 | -7.7910 | 0 |
 | 24756 | T0004 | L01320 | 5.0000 | -6.5370 | 0 |
+
+## 6. Paired and variance-decomposition checks (scripts 10-11)
+
+Vina vs seed-0 models on identical pairs. Both deltas are oriented so positive favours the model: `delta_rmse = RMSE_vina - RMSE_model`, `delta_ci = CI_model - CI_vina`. Intervals are paired bootstraps over rows and over targets.
+
+| protocol | model | n_rows | delta_rmse | delta_rmse_lo_row | delta_rmse_hi_row | delta_ci | delta_ci_lo_row | delta_ci_hi_row | sign_test_p |
+|---|---|---|---|---|---|---|---|---|---|
+| random | mlp | 26 | 0.3531 | -0.2994 | 0.7012 | 0.2872 | 0.0000 | 0.5714 | 0.0290 |
+| random | randomforest | 26 | 0.1155 | -0.2352 | 0.4397 | 0.2340 | 0.0000 | 0.5471 | 0.5572 |
+| random | ridge | 26 | -0.0017 | -0.3192 | 0.2906 | 0.1702 | -0.0833 | 0.5813 | 0.0005 |
+| random | xgboost | 26 | 0.5384 | -0.1932 | 0.9754 | 0.3404 | 0.0204 | 0.7887 | 0.3269 |
+| scaffold | mlp | 21 | -0.6306 | -0.8870 | -0.4631 | 0.1053 | -0.5000 | 0.5789 | 0.0000 |
+| scaffold | randomforest | 21 | 0.0269 | -0.0530 | 0.0516 | 0.1140 | -0.1964 | 0.4231 | 0.6636 |
+| scaffold | ridge | 21 | -0.1175 | -0.2559 | 0.0043 | 0.0439 | -0.3684 | 0.6000 | 0.0266 |
+| scaffold | xgboost | 21 | -0.0049 | -0.0803 | 0.0525 | 0.1140 | -0.2041 | 0.5263 | 0.6636 |
+| cold_drug | mlp | 28 | -0.9186 | -1.0656 | -0.7858 | -0.2308 | -0.5455 | 0.0909 | 0.0000 |
+| cold_drug | randomforest | 28 | 0.0075 | -0.0192 | 0.0305 | 0.1346 | -0.2222 | 0.4815 | 0.8506 |
+| cold_drug | ridge | 28 | -0.0419 | -0.1104 | 0.0046 | -0.0705 | -0.3290 | 0.2593 | 0.8506 |
+| cold_drug | xgboost | 28 | -0.0196 | -0.0527 | 0.0388 | -0.0064 | -0.3635 | 0.3462 | 0.0872 |
+| temporal | mlp | 28 | -0.7604 | -1.0934 | -0.5757 | -0.1223 | -0.4598 | 0.2176 | 0.0000 |
+| temporal | randomforest | 28 | 0.0671 | -0.0131 | 0.1113 | 0.0851 | -0.1800 | 0.2966 | 0.5716 |
+| temporal | ridge | 28 | 0.0330 | -0.0771 | 0.1093 | 0.0000 | -0.3367 | 0.2849 | 0.8506 |
+| temporal | xgboost | 28 | 0.0398 | -0.0274 | 0.0759 | 0.1489 | -0.0976 | 0.4001 | 0.8506 |
+
+Two-way ANOVA on cell means (protocol x model, interaction = residual; seed-only bootstrap intervals are in `results/variance_decomposition.json`).
+
+| dataset | models | metric | eta2_protocol | eta2_model | eta2_interaction | p_protocol |
+|---|---|---|---|---|---|---|
+| davis | trained3 | rmse | 0.9134 | 0.0684 | 0.0182 | 7.2e-07 |
+| davis | trained3 | ci_harrell | 0.8126 | 0.1148 | 0.0726 | 0.00021 |
+| davis | all4 | rmse | 0.3014 | 0.4572 | 0.2414 | 0.034 |
+| davis | all4 | ci_harrell | 0.7605 | 0.1685 | 0.0710 | 2.5e-06 |
+| kiba | trained3 | rmse | 0.6148 | 0.3071 | 0.0781 | 0.00073 |
+| kiba | trained3 | ci_harrell | 0.6103 | 0.3406 | 0.0492 | 0.00015 |
+| kiba | all4 | rmse | 0.3163 | 0.4727 | 0.2110 | 0.019 |
+| kiba | all4 | ci_harrell | 0.5000 | 0.4531 | 0.0469 | 2.6e-06 |

@@ -30,6 +30,8 @@ STAGES = [
     ("intervals", "04_uncertainty.py",    "split-conformal intervals, measured coverage"),
     ("docking",   "05_docking.py",        "AutoDock Vina arm (panel + decoy control)"),
     ("dockstats", "06_docking_analysis.py", "Vina vs labels vs the 03 models on identical rows"),
+    ("variance",  "11_variance_decomposition.py", "protocol vs model variance shares (ANOVA)"),
+    ("paired",    "10_paired_headtohead.py", "paired bootstraps for the Vina head-to-head"),
     ("report",    "07_report.py",         "figures + results/report.md + results/summary.json"),
     ("notebook",  "08_notebook.py",       "writes and executes notebook/dti_affinity_bench.ipynb"),
     ("sensitivity", "09_preproc_sensitivity.py", "three standardisation guards x models x protocols"),
@@ -66,7 +68,7 @@ def main() -> int:
     if want == "all" and not args.fetch:
         order = [s for s in order if s[0] != "fetch"]
     if want == "all" and not args.with_docking:
-        order = [s for s in order if s[0] not in (OPTIONAL_STAGE, "dockstats")]
+        order = [s for s in order if s[0] not in (OPTIONAL_STAGE, "dockstats", "paired")]
     if want == "all" and not args.with_sensitivity:
         order = [s for s in order if s[0] != "sensitivity"]
     # the sensitivity ablation is an audit of the preprocessing decision, not part of the

@@ -14,12 +14,17 @@ inputs — `results/report.md`, `results/summary.json` and
 Every number below is a key in `results/summary.json` or `results/readme_numbers.json`, so the
 claim and its evidence are one `jq` apart.
 
-1. **The split protocol moves the result more than the model does.** With identical features,
-   code and seeds, the best achievable DAVIS test RMSE runs from **0.5697** (`random`) to
-   **1.0520** (`cold_target`) — a range of **0.4823 pKd**, more than half a label standard
-   deviation — while inside one protocol the three usable models differ by at most **0.1864**
-   (KIBA: range 0.2101, model spread ≤ 0.2554).
-   `readme_numbers.json → protocol_spread_of_the_best_model`, `model_spread_within_protocol`.
+1. **The split protocol moves the result more than the model does — for the models that
+   work.** With identical features, code and seeds, the best achievable DAVIS test RMSE runs
+   from **0.5697** (`random`) to **1.0520** (`cold_target`) — a range of **0.4823 pKd**,
+   more than half a label standard deviation — while inside one protocol the three trained
+   models differ by at most **0.1864** (KIBA: range 0.2101, spread ≤ 0.2554). A two-way
+   variance decomposition puts **91.3 %** of DAVIS RMSE variance on protocol and **6.8 %** on
+   model (KIBA 61.5 % / 30.7 %); adding the collapsed MLP raises the model share to
+   45.7 % / 47.3 %, so the "model matters little" reading is a statement about the trained
+   tabular models, not about architecture in general.
+   `readme_numbers.json → protocol_spread_of_the_best_model`,
+   `model_spread_within_protocol_trained3`, `variance_decomposition`.
 2. **A two-line lookup beats a trained model, in the cell nobody checks.** On DAVIS `scaffold`
    the *per-target train mean* scores **0.7783** and beats every learned model in the grid,
    XGBoost by 0.032; Ridge is worse than the global-mean null on DAVIS `scaffold` (0.8786 vs
@@ -46,10 +51,17 @@ claim and its evidence are one `jq` apart.
    ceiling spike) and under-covers to **0.288** on DAVIS `temporal` (drift). The adaptive
    variant made calibration worse in half the cells and wider in 15 of 20.
    `readme_numbers.json → conformal`.
-7. **The physics arm wins only where the learner is not allowed to memorise.** AutoDock Vina on
-   140 docked pairs ranks at CI 0.6583 pooled and beats a learned model in **4 of 16**
-   head-to-head cells — three of them the MLP, and on `scaffold` it falls to 0.421, *below* the
-   constant predictor's 0.500. `readme_numbers.json → docking`.
+7. **The physics arm beats the collapse, not the learners.** AutoDock Vina on 140 docked
+   pairs ranks at CI 0.6583 pooled. On point estimates the trained model wins **11 of 16**
+   head-to-head cells, Vina **4**, one tie — and **two** of Vina's four wins are against the
+   MLP §4 already flags as collapsed. Paired bootstraps on identical pairs (rows, and targets
+   as clusters) leave **none of the four** Vina ranking wins standing under row resampling;
+   the only ranking difference that survives in Vina's favour is `cold_drug`/MLP, where the
+   model's calibration is broken. In the other direction, on `random` the trained models'
+   ranking advantage does survive (XGBoost ΔCI **+0.34**, cluster CI **[0.15, 0.54]**). Vina's
+   only RMSE wins with an interval excluding zero are against the MLP on `scaffold`,
+   `cold_drug` and `temporal`. On `scaffold` its CI falls to 0.421, *below* the constant
+   predictor's 0.500. `readme_numbers.json → docking`, `docking_paired`.
 
 The audit trail is part of the result: `04_uncertainty.py` recomputes `03_models.py`'s point
 predictions and asserts the RMSE match (40/40 rows pass on the shipped grid), and that assert is
@@ -228,6 +240,18 @@ Four readings, each traceable to `results/metrics_by_protocol.csv` and
    protocol number without the matching entity null next to it is hiding the number's most
    important rival.
 
+**A variance decomposition, not two ranges.** `11_variance_decomposition.py` fits
+`metric ~ protocol + model + protocol×model` on the cell means (interaction as residual,
+seeds as replication) and bootstraps seeds within each cell. For the three trained models,
+protocol accounts for **91.3 %** of DAVIS RMSE variance (seed-bootstrap CI 90.7–91.7) against
+**6.8 %** for model; on KIBA the split is **61.5 % / 30.7 %**. Add the MLP and the model share
+jumps to **45.7 %** on DAVIS and **47.3 %** on KIBA, with a 24.1 % / 21.1 % interaction —
+i.e. the "model hardly matters" claim is true of the tabular learners and false once a
+collapsed architecture is allowed to interact with protocol. The intervals are seed-only: they
+say how stable these 20 cells are to refitting, not how they would move under a different test
+sample. `results/variance_decomposition.json`; the all-model spread and the trained-three
+spread are separate keys so the two cannot be quoted interchangeably.
+
 Concordance tells the same story with different units (`ci_harrell`, mean of 3 seeds): DAVIS
 `random` peaks at 0.873 (XGBoost) while `temporal` falls to 0.666 and `cold_drug` to 0.692;
 on KIBA, 0.815 → 0.688 from `random` to `temporal`. The nulls make the same point in the other
@@ -370,7 +394,7 @@ Vina map, to four decimals, which is why `delta_ci_favours` says `tie` instead o
 verdict. Vina's four wins are three inside `cold_drug` (CI 0.667 vs ridge 0.596, XGBoost 0.660,
 MLP 0.436) and one inside `temporal` (0.559 vs the MLP's 0.436). Two caveats on those wins, both
 of which the table already shows: against XGBoost on `cold_drug` the margin is **0.006 CI on 78
-comparable pairs**, which is not a result and is not presented as one; and three of the four
+comparable pairs**, which is not a result and is not presented as one; and two of the four
 wins are against the MLP, so the honest phrasing is *a rigid-pocket physics score beats the
 baseline §4 already flagged as collapsed*, not *physics beats learning*. On `cold_drug` random
 forest (0.801) and even the per-target train mean (0.821) stay clearly ahead of Vina. On
@@ -381,9 +405,27 @@ arm does establish is the *pattern*: physics is competitive exactly on the proto
 the model from having memorised the drug, and uninformative on the one that removes the scaffold
 class the compounds were docked into.
 
+**The point estimates above are not a test.** `10_paired_headtohead.py` keeps the identical
+pairing (same test `pair_id`s, same Vina map fitted on the same train block, same seed-0
+predictions) and puts a paired interval on both differences, resampling rows and — separately —
+kinase targets, because pairs inside one target are not independent. The result is narrower
+than the table suggests: **none of Vina's four ranking wins survives the row bootstrap**; the
+target-cluster bootstrap keeps only `cold_drug`/MLP (ΔCI −0.231, [−0.478, −0.038]), which is a
+cell where the MLP's calibration is already broken, not evidence that docking knows the
+affinity order. In the other direction the three trained models' ranking advantage on `random`
+does survive (XGBoost ΔCI **+0.340**, row [0.020, 0.789], cluster [0.154, 0.535];
+random forest and MLP likewise under the cluster bootstrap). For RMSE, Vina is reliably
+better only against the MLP on `scaffold` (−0.631, [−0.887, −0.463]), `cold_drug`
+(−0.919, [−1.066, −0.786]) and `temporal` (−0.760, [−1.093, −0.576]); no trained model vs Vina
+RMSE difference excludes zero. So the defensible claim is "Vina beats the collapsed neural
+baseline and ties the tabular learners at n = 21–28", not "Vina beats learning".
+`readme_numbers.json → docking_paired`; the full 16-row table is
+`results/docking/paired_headtohead.csv`.
+
 The pKd-stratified 20-compound docked subset is small by design (26–28 test rows per protocol,
-80 under `cold_target`), so none of these per-protocol CIs carries an error bar here — §9 says
-so explicitly.
+80 under `cold_target`), so the per-protocol point estimates are fragile; the paired intervals
+above are the error bar, and they leave most learned-vs-Vina ranking gaps unresolved at this n.
+§9 says so explicitly.
 
 **Specificity control.** Re-docking 10 sampled pairs with the search box translated +30 Å
 along x into bulk solvent: mean fitted strength falls from **−8.478 to −6.414 kcal/mol**
@@ -392,9 +434,10 @@ molecule, was doing the work. The CI of that control is *not* reported as eviden
 ceiling-heavy rows leave **9 comparable pairs of 45**, so both the on-site (0.222) and
 shifted (0.333) CIs are noise, and `comparison.csv` says so in its `note` column.
 
-Reproduce: `python run_all.py --with-docking --stage docking` then `--stage dockstats`.
-`vina.exe` is not committed (see `.gitignore`); `docs/data_sources.md` records its version,
-size and sha256, and the script refuses to start without it.
+Reproduce: `python run_all.py --with-docking --stage docking` then `--stage dockstats`, or
+`--stage paired` for the bootstrap table alone. `11_variance_decomposition.py` needs only
+`results/metrics.csv`. `vina.exe` is not committed (see `.gitignore`); `docs/data_sources.md`
+records its version, size and sha256, and the script refuses to start without it.
 
 ## 7. Layout and how to run it
 
@@ -519,8 +562,10 @@ lower bound on real chemical duplication.
 target sequences (442 names). Both `scaffold` and `cold_drug` hold out 13 of those 68
 ligands, and only 3 ligands are shared between the two held-out sets, so a one-point RMSE
 difference between the two protocols is a difference between *which* 13 drugs were hidden,
-not a proven property of the split family. Nothing here is bootstrapped across ligand
-subsets, so no per-protocol comparison should be read as significant.
+not a proven property of the split family. Nothing in the grid is bootstrapped across ligand
+subsets, so no per-protocol RMSE comparison should be read as significant; §6's paired
+docking test is the one place where a paired interval is computed, and it is limited to the
+docked subset.
 
 **KIBA is a consensus score, not a physical unit.** Its 0–17.2 scale is a
 kinase-inhibitor activity consensus, not a pKd, and the matrix is only 24.97 % filled. One
@@ -553,6 +598,16 @@ what Vina sees, while Vina has no notion of the rest of the assay table, which i
 ML arm exploits. §6 compares them on identical *rows* with identical *metrics*, which is
 the fair part; it is not an apples-to-apples information comparison, and no "docking loses
 to ML" conclusion should be drawn from it.
+
+**The paired docking test is low-powered, and the variance decomposition is cell-level.**
+Fifteen of the sixteen learned-vs-Vina intervals in §6 include zero under row resampling
+(twelve under target clustering), which is the honest reading at 21–28 test rows, but it is an
+absence of evidence, not evidence of equivalence; the cells that do exclude zero are the ones
+§6 names. The two-way
+decomposition in §4 treats the 20 protocol × model cells as fixed levels and resamples only
+the three seeds within each cell, so its intervals describe refit stability, not sampling
+variability over ligands, targets or assay batches. Neither addition replaces a test-set
+bootstrap over the full grid, which would be the next experiment.
 
 **Seed spread is real only for the stochastic models, and it is not uniform across them.**
 Ridge's three seeds are bit-identical rows in all 10 dataset × protocol cells, so `rmse_sd = 0`

@@ -110,6 +110,18 @@
     "kiba/scaffold": 0.324,
     "kiba/temporal": 1.0588
   },
+  "model_spread_within_protocol_trained3": {
+    "davis/cold_drug": 0.0607,
+    "davis/cold_target": 0.0873,
+    "davis/random": 0.1864,
+    "davis/scaffold": 0.0683,
+    "davis/temporal": 0.0983,
+    "kiba/cold_drug": 0.0999,
+    "kiba/cold_target": 0.2189,
+    "kiba/random": 0.1763,
+    "kiba/scaffold": 0.1107,
+    "kiba/temporal": 0.2554
+  },
   "ci_caliber_gap_max": {
     "abs_diff": 0.1819,
     "row": "davis/random/xgboost/seed0",
@@ -336,5 +348,665 @@
       "mean_shifted_kcal": -6.414,
       "n_comparable_pairs": 9
     }
+  },
+  "variance_decomposition": {
+    "generated_by": "scripts/11_variance_decomposition.py",
+    "reps": 2000,
+    "seed": 20261103,
+    "note": "Two-way ANOVA on cell means over seeds; interaction is the residual. Bootstrap resamples seeds within each cell. trained3 = ridge/xgboost/randomforest; all4 adds mlp, which loses to the training mean in 7 of 10 dataset x protocol cells and would otherwise be invisible.",
+    "datasets": {
+      "davis": {
+        "trained3": {
+          "models": [
+            "ridge",
+            "xgboost",
+            "randomforest"
+          ],
+          "n_cells": 15,
+          "protocols": 5,
+          "rmse": {
+            "ss_protocol": 0.33788745317500235,
+            "ss_model": 0.025298300426213123,
+            "ss_interaction": 0.006734553307954132,
+            "ss_total": 0.3699203069091696,
+            "eta2_protocol": 0.9134060684534612,
+            "eta2_model": 0.06838851491444313,
+            "eta2_interaction": 0.018205416632095673,
+            "F_protocol": 100.34442901385188,
+            "F_model": 15.02597085174661,
+            "p_protocol": 7.177777468387222e-07,
+            "p_model": 0.0019536765201885824,
+            "df": {
+              "protocol": 4,
+              "model": 2,
+              "residual": 8
+            },
+            "bootstrap_ci95": {
+              "eta2_protocol": [
+                0.9068466782085598,
+                0.9168490062101405
+              ],
+              "eta2_model": [
+                0.06048810300427373,
+                0.07698046543698873
+              ],
+              "eta2_interaction": [
+                0.015289993311100605,
+                0.025577572506532944
+              ]
+            }
+          },
+          "ci_harrell": {
+            "ss_protocol": 0.07592381800203489,
+            "ss_model": 0.010722087094144989,
+            "ss_interaction": 0.00678554196854575,
+            "ss_total": 0.09343144706472563,
+            "eta2_protocol": 0.8126152423759193,
+            "eta2_model": 0.11475886792930809,
+            "eta2_interaction": 0.07262588969477261,
+            "F_protocol": 22.378114630777702,
+            "F_model": 6.320548686514368,
+            "p_protocol": 0.00021164459745028896,
+            "p_model": 0.022564661221353595,
+            "df": {
+              "protocol": 4,
+              "model": 2,
+              "residual": 8
+            },
+            "bootstrap_ci95": {
+              "eta2_protocol": [
+                0.7953030411398965,
+                0.826282586929831
+              ],
+              "eta2_model": [
+                0.09770356001022765,
+                0.13184398663757863
+              ],
+              "eta2_interaction": [
+                0.06324888447162379,
+                0.08853843255720373
+              ]
+            }
+          },
+          "mae": {
+            "ss_protocol": 0.13008708732013224,
+            "ss_model": 0.016009547781941483,
+            "ss_interaction": 0.004119807985924304,
+            "ss_total": 0.15021644308799803,
+            "eta2_protocol": 0.8659976540912113,
+            "eta2_model": 0.10657653351945603,
+            "eta2_interaction": 0.027425812389332678,
+            "F_protocol": 63.152014736893825,
+            "F_model": 15.5439747062383,
+            "p_protocol": 4.3309189777660465e-06,
+            "p_model": 0.0017546415032976771,
+            "df": {
+              "protocol": 4,
+              "model": 2,
+              "residual": 8
+            },
+            "bootstrap_ci95": {
+              "eta2_protocol": [
+                0.8546489092767601,
+                0.8723649529955164
+              ],
+              "eta2_model": [
+                0.09331985003094555,
+                0.12109204645841708
+              ],
+              "eta2_interaction": [
+                0.02230183307250728,
+                0.03798958914537054
+              ]
+            }
+          }
+        },
+        "all4": {
+          "models": [
+            "ridge",
+            "xgboost",
+            "randomforest",
+            "mlp"
+          ],
+          "n_cells": 20,
+          "protocols": 5,
+          "rmse": {
+            "ss_protocol": 0.7510906491308715,
+            "ss_model": 1.1394382776336507,
+            "ss_interaction": 0.6014960591813909,
+            "ss_total": 2.492024985945913,
+            "eta2_protocol": 0.3013977200737317,
+            "eta2_model": 0.4572338897321076,
+            "eta2_interaction": 0.24136839019416068,
+            "F_protocol": 3.7461125688158563,
+            "F_model": 7.577361548698256,
+            "p_protocol": 0.03350225880201582,
+            "p_model": 0.0041831756974686895,
+            "df": {
+              "protocol": 4,
+              "model": 3,
+              "residual": 12
+            },
+            "bootstrap_ci95": {
+              "eta2_protocol": [
+                0.2929137120786396,
+                0.31075609916075536
+              ],
+              "eta2_model": [
+                0.44746638894278146,
+                0.46508355266018697
+              ],
+              "eta2_interaction": [
+                0.2320722218220399,
+                0.2542412851674431
+              ]
+            }
+          },
+          "ci_harrell": {
+            "ss_protocol": 0.11574025595908936,
+            "ss_model": 0.025650625779491426,
+            "ss_interaction": 0.010800967842675632,
+            "ss_total": 0.15219184958125642,
+            "eta2_protocol": 0.7604891870197998,
+            "eta2_model": 0.16854138937181623,
+            "eta2_interaction": 0.0709694236083839,
+            "F_protocol": 32.147190227283744,
+            "F_model": 9.499380482605794,
+            "p_protocol": 2.5089145123043164e-06,
+            "p_model": 0.00171387904386794,
+            "df": {
+              "protocol": 4,
+              "model": 3,
+              "residual": 12
+            },
+            "bootstrap_ci95": {
+              "eta2_protocol": [
+                0.7373229096696463,
+                0.7799409594577756
+              ],
+              "eta2_model": [
+                0.1448736774588174,
+                0.1933509332041409
+              ],
+              "eta2_interaction": [
+                0.059020189093893866,
+                0.09091867017971803
+              ]
+            }
+          },
+          "mae": {
+            "ss_protocol": 0.503795734542541,
+            "ss_model": 1.1633448770919124,
+            "ss_interaction": 0.5078318204246248,
+            "ss_total": 2.174972432059078,
+            "eta2_protocol": 0.23163315870886245,
+            "eta2_model": 0.534877987391572,
+            "eta2_interaction": 0.23348885389956553,
+            "F_protocol": 2.976156953622703,
+            "F_model": 9.16322948112372,
+            "p_protocol": 0.06381959952973229,
+            "p_model": 0.00198510514962068,
+            "df": {
+              "protocol": 4,
+              "model": 3,
+              "residual": 12
+            },
+            "bootstrap_ci95": {
+              "eta2_protocol": [
+                0.22588517121512536,
+                0.2382679043897079
+              ],
+              "eta2_model": [
+                0.5190496759932649,
+                0.5473542120344993
+              ],
+              "eta2_interaction": [
+                0.22050356704389784,
+                0.25162017376604057
+              ]
+            }
+          }
+        }
+      },
+      "kiba": {
+        "trained3": {
+          "models": [
+            "ridge",
+            "xgboost",
+            "randomforest"
+          ],
+          "n_cells": 15,
+          "protocols": 5,
+          "rmse": {
+            "ss_protocol": 0.1456045636802139,
+            "ss_model": 0.07272491504014589,
+            "ss_interaction": 0.018483843453519305,
+            "ss_total": 0.2368133221738791,
+            "eta2_protocol": 0.614849546231628,
+            "eta2_model": 0.3070980735904205,
+            "eta2_interaction": 0.07805238017795142,
+            "F_protocol": 15.754792994905065,
+            "F_model": 15.738050416413614,
+            "p_protocol": 0.0007325095961741843,
+            "p_model": 0.0016866421506677401,
+            "df": {
+              "protocol": 4,
+              "model": 2,
+              "residual": 8
+            },
+            "bootstrap_ci95": {
+              "eta2_protocol": [
+                0.6063128823693309,
+                0.6222976800789677
+              ],
+              "eta2_model": [
+                0.2997452906718295,
+                0.31519121998169414
+              ],
+              "eta2_interaction": [
+                0.07345856636994876,
+                0.08356857010607045
+              ]
+            }
+          },
+          "ci_harrell": {
+            "ss_protocol": 0.04030760577640358,
+            "ss_model": 0.02249330993885343,
+            "ss_interaction": 0.003247042808071407,
+            "ss_total": 0.06604795852332841,
+            "eta2_protocol": 0.61027784472955,
+            "eta2_model": 0.34056026017683344,
+            "eta2_interaction": 0.04916189509361653,
+            "F_protocol": 24.82727094093621,
+            "F_model": 27.70928659510148,
+            "p_protocol": 0.00014523717116638878,
+            "p_model": 0.00025321771199549763,
+            "df": {
+              "protocol": 4,
+              "model": 2,
+              "residual": 8
+            },
+            "bootstrap_ci95": {
+              "eta2_protocol": [
+                0.6000680161410478,
+                0.6196191111938776
+              ],
+              "eta2_model": [
+                0.33312985805702516,
+                0.3479801267036514
+              ],
+              "eta2_interaction": [
+                0.04447740679473265,
+                0.05482405110771262
+              ]
+            }
+          },
+          "mae": {
+            "ss_protocol": 0.10326478185739119,
+            "ss_model": 0.0710301392963508,
+            "ss_interaction": 0.017787485644528533,
+            "ss_total": 0.19208240679827052,
+            "eta2_protocol": 0.5376066636120522,
+            "eta2_model": 0.36978992756451834,
+            "eta2_interaction": 0.09260340882342948,
+            "F_protocol": 11.61094759777424,
+            "F_model": 15.973058973222516,
+            "p_protocol": 0.0020569581197765535,
+            "p_model": 0.0016086502397277597,
+            "df": {
+              "protocol": 4,
+              "model": 2,
+              "residual": 8
+            },
+            "bootstrap_ci95": {
+              "eta2_protocol": [
+                0.5255812291515917,
+                0.5481683822612954
+              ],
+              "eta2_model": [
+                0.3621147198804401,
+                0.3787419927889113
+              ],
+              "eta2_interaction": [
+                0.08742668321815593,
+                0.09832865070546559
+              ]
+            }
+          }
+        },
+        "all4": {
+          "models": [
+            "ridge",
+            "xgboost",
+            "randomforest",
+            "mlp"
+          ],
+          "n_cells": 20,
+          "protocols": 5,
+          "rmse": {
+            "ss_protocol": 0.47363492217193026,
+            "ss_model": 0.7079478143454021,
+            "ss_interaction": 0.31601204370589153,
+            "ss_total": 1.497594780223224,
+            "eta2_protocol": 0.31626373731172636,
+            "eta2_model": 0.4727232117087634,
+            "eta2_interaction": 0.2110130509795102,
+            "F_protocol": 4.496362701410865,
+            "F_model": 8.96102320713169,
+            "p_protocol": 0.018891735506431046,
+            "p_model": 0.002172302402097813,
+            "df": {
+              "protocol": 4,
+              "model": 3,
+              "residual": 12
+            },
+            "bootstrap_ci95": {
+              "eta2_protocol": [
+                0.30134730562926637,
+                0.3315031998283155
+              ],
+              "eta2_model": [
+                0.4381104940998881,
+                0.5072366469364847
+              ],
+              "eta2_interaction": [
+                0.18423176891269877,
+                0.23951560540156436
+              ]
+            }
+          },
+          "ci_harrell": {
+            "ss_protocol": 0.05351966956676321,
+            "ss_model": 0.04849525200378938,
+            "ss_interaction": 0.005018195844830077,
+            "ss_total": 0.10703311741538267,
+            "eta2_protocol": 0.5000290644535729,
+            "eta2_model": 0.45308642011785133,
+            "eta2_interaction": 0.04688451542857583,
+            "F_protocol": 31.99536519996588,
+            "F_model": 38.655527606600614,
+            "p_protocol": 2.5740536830762794e-06,
+            "p_model": 1.912315252160099e-06,
+            "df": {
+              "protocol": 4,
+              "model": 3,
+              "residual": 12
+            },
+            "bootstrap_ci95": {
+              "eta2_protocol": [
+                0.4778078984028204,
+                0.5186958004544027
+              ],
+              "eta2_model": [
+                0.4324197962838453,
+                0.476502161286939
+              ],
+              "eta2_interaction": [
+                0.03968131587868762,
+                0.05609254302027338
+              ]
+            }
+          },
+          "mae": {
+            "ss_protocol": 0.3278162473662114,
+            "ss_model": 0.6196411035412831,
+            "ss_interaction": 0.23897162945519856,
+            "ss_total": 1.186428980362693,
+            "eta2_protocol": 0.27630498984102486,
+            "eta2_model": 0.5222740794411966,
+            "eta2_interaction": 0.20142093071777847,
+            "F_protocol": 4.115336805212718,
+            "F_model": 10.371793588283682,
+            "p_protocol": 0.02511232274961978,
+            "p_model": 0.0011892098794976113,
+            "df": {
+              "protocol": 4,
+              "model": 3,
+              "residual": 12
+            },
+            "bootstrap_ci95": {
+              "eta2_protocol": [
+                0.26127548812721646,
+                0.2919514276314726
+              ],
+              "eta2_model": [
+                0.48945546558176095,
+                0.5576476937567633
+              ],
+              "eta2_interaction": [
+                0.17475635030971282,
+                0.22701367160055316
+              ]
+            }
+          }
+        }
+      }
+    },
+    "model_spread": {
+      "davis/trained3": {
+        "cold_drug": {
+          "best_model": "xgboost",
+          "best_rmse": 0.7872,
+          "worst_model": "ridge",
+          "worst_rmse": 0.8479,
+          "spread": 0.0607
+        },
+        "cold_target": {
+          "best_model": "xgboost",
+          "best_rmse": 1.052,
+          "worst_model": "ridge",
+          "worst_rmse": 1.1393,
+          "spread": 0.0873
+        },
+        "random": {
+          "best_model": "xgboost",
+          "best_rmse": 0.5697,
+          "worst_model": "ridge",
+          "worst_rmse": 0.7561,
+          "spread": 0.1864
+        },
+        "scaffold": {
+          "best_model": "xgboost",
+          "best_rmse": 0.8104,
+          "worst_model": "ridge",
+          "worst_rmse": 0.8786,
+          "spread": 0.0683
+        },
+        "temporal": {
+          "best_model": "randomforest",
+          "best_rmse": 0.9458,
+          "worst_model": "ridge",
+          "worst_rmse": 1.0442,
+          "spread": 0.0983
+        }
+      },
+      "davis/all4": {
+        "cold_drug": {
+          "best_model": "xgboost",
+          "best_rmse": 0.7872,
+          "worst_model": "mlp",
+          "worst_rmse": 1.4814,
+          "spread": 0.6942
+        },
+        "cold_target": {
+          "best_model": "xgboost",
+          "best_rmse": 1.052,
+          "worst_model": "mlp",
+          "worst_rmse": 1.2061,
+          "spread": 0.1541
+        },
+        "random": {
+          "best_model": "xgboost",
+          "best_rmse": 0.5697,
+          "worst_model": "ridge",
+          "worst_rmse": 0.7561,
+          "spread": 0.1864
+        },
+        "scaffold": {
+          "best_model": "xgboost",
+          "best_rmse": 0.8104,
+          "worst_model": "mlp",
+          "worst_rmse": 1.6124,
+          "spread": 0.802
+        },
+        "temporal": {
+          "best_model": "randomforest",
+          "best_rmse": 0.9458,
+          "worst_model": "mlp",
+          "worst_rmse": 2.0822,
+          "spread": 1.1364
+        }
+      },
+      "kiba/trained3": {
+        "cold_drug": {
+          "best_model": "randomforest",
+          "best_rmse": 0.5697,
+          "worst_model": "ridge",
+          "worst_rmse": 0.6695,
+          "spread": 0.0999
+        },
+        "cold_target": {
+          "best_model": "xgboost",
+          "best_rmse": 0.7052,
+          "worst_model": "ridge",
+          "worst_rmse": 0.9241,
+          "spread": 0.2189
+        },
+        "random": {
+          "best_model": "xgboost",
+          "best_rmse": 0.5143,
+          "worst_model": "ridge",
+          "worst_rmse": 0.6906,
+          "spread": 0.1763
+        },
+        "scaffold": {
+          "best_model": "randomforest",
+          "best_rmse": 0.6145,
+          "worst_model": "ridge",
+          "worst_rmse": 0.7252,
+          "spread": 0.1107
+        },
+        "temporal": {
+          "best_model": "randomforest",
+          "best_rmse": 0.7244,
+          "worst_model": "ridge",
+          "worst_rmse": 0.9798,
+          "spread": 0.2554
+        }
+      },
+      "kiba/all4": {
+        "cold_drug": {
+          "best_model": "randomforest",
+          "best_rmse": 0.5697,
+          "worst_model": "mlp",
+          "worst_rmse": 0.9598,
+          "spread": 0.3901
+        },
+        "cold_target": {
+          "best_model": "xgboost",
+          "best_rmse": 0.7052,
+          "worst_model": "mlp",
+          "worst_rmse": 1.1147,
+          "spread": 0.4095
+        },
+        "random": {
+          "best_model": "xgboost",
+          "best_rmse": 0.5143,
+          "worst_model": "mlp",
+          "worst_rmse": 0.763,
+          "spread": 0.2487
+        },
+        "scaffold": {
+          "best_model": "randomforest",
+          "best_rmse": 0.6145,
+          "worst_model": "mlp",
+          "worst_rmse": 0.9385,
+          "spread": 0.324
+        },
+        "temporal": {
+          "best_model": "randomforest",
+          "best_rmse": 0.7244,
+          "worst_model": "mlp",
+          "worst_rmse": 1.7832,
+          "spread": 1.0588
+        }
+      }
+    }
+  },
+  "docking_paired": {
+    "generated_by": "scripts/10_paired_headtohead.py",
+    "reps": 2000,
+    "seed": 20261103,
+    "note": "Pairing is identical to 06: same test pair_ids, same Vina regression fit on the train block, same seed-0 model predictions. Both deltas are oriented so positive favours the model: delta_rmse = RMSE_vina - RMSE_model and delta_ci = CI_model - CI_vina. Row bootstrap resamples pairs; cluster bootstrap resamples kinase targets because pairs inside a target are dependent.",
+    "learned_cells": 16,
+    "point_wins": {
+      "model": 11,
+      "vina": 4,
+      "tie": 1
+    },
+    "ci_wins_point_estimate": {
+      "vina": [
+        "cold_drug",
+        "temporal"
+      ],
+      "model": [
+        "cold_drug",
+        "random",
+        "scaffold",
+        "temporal"
+      ]
+    },
+    "significant_ci_rowbootstrap": {
+      "vina": 0,
+      "model": 1,
+      "undecided": 15,
+      "rows": [
+        {
+          "protocol": "random",
+          "model": "xgboost",
+          "delta_ci": 0.3404,
+          "delta_ci_lo_row": 0.0204,
+          "delta_ci_hi_row": 0.7887
+        }
+      ]
+    },
+    "significant_ci_clusterbootstrap": {
+      "vina": 1,
+      "model": 3,
+      "undecided": 12,
+      "rows": [
+        {
+          "protocol": "random",
+          "model": "mlp",
+          "delta_ci": 0.2872,
+          "delta_ci_lo_cluster": 0.1315,
+          "delta_ci_hi_cluster": 0.535
+        },
+        {
+          "protocol": "random",
+          "model": "randomforest",
+          "delta_ci": 0.234,
+          "delta_ci_lo_cluster": 0.0479,
+          "delta_ci_hi_cluster": 0.44
+        },
+        {
+          "protocol": "random",
+          "model": "xgboost",
+          "delta_ci": 0.3404,
+          "delta_ci_lo_cluster": 0.1538,
+          "delta_ci_hi_cluster": 0.535
+        },
+        {
+          "protocol": "cold_drug",
+          "model": "mlp",
+          "delta_ci": -0.2308,
+          "delta_ci_lo_cluster": -0.4783,
+          "delta_ci_hi_cluster": -0.0377
+        }
+      ]
+    },
+    "rmse_significant_cells": 3,
+    "sign_test_below_0.05": 6,
+    "min_sign_test_p": 2.1606683731079102e-07
   }
 }

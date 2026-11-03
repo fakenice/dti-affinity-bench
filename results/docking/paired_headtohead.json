@@ -1,0 +1,76 @@
+{
+  "generated_by": "scripts/10_paired_headtohead.py",
+  "reps": 2000,
+  "seed": 20261103,
+  "note": "Pairing is identical to 06: same test pair_ids, same Vina regression fit on the train block, same seed-0 model predictions. Both deltas are oriented so positive favours the model: delta_rmse = RMSE_vina - RMSE_model and delta_ci = CI_model - CI_vina. Row bootstrap resamples pairs; cluster bootstrap resamples kinase targets because pairs inside a target are dependent.",
+  "learned_cells": 16,
+  "point_wins": {
+    "model": 11,
+    "vina": 4,
+    "tie": 1
+  },
+  "ci_wins_point_estimate": {
+    "vina": [
+      "cold_drug",
+      "temporal"
+    ],
+    "model": [
+      "cold_drug",
+      "random",
+      "scaffold",
+      "temporal"
+    ]
+  },
+  "significant_ci_rowbootstrap": {
+    "vina": 0,
+    "model": 1,
+    "undecided": 15,
+    "rows": [
+      {
+        "protocol": "random",
+        "model": "xgboost",
+        "delta_ci": 0.3404,
+        "delta_ci_lo_row": 0.0204,
+        "delta_ci_hi_row": 0.7887
+      }
+    ]
+  },
+  "significant_ci_clusterbootstrap": {
+    "vina": 1,
+    "model": 3,
+    "undecided": 12,
+    "rows": [
+      {
+        "protocol": "random",
+        "model": "mlp",
+        "delta_ci": 0.2872,
+        "delta_ci_lo_cluster": 0.1315,
+        "delta_ci_hi_cluster": 0.535
+      },
+      {
+        "protocol": "random",
+        "model": "randomforest",
+        "delta_ci": 0.234,
+        "delta_ci_lo_cluster": 0.0479,
+        "delta_ci_hi_cluster": 0.44
+      },
+      {
+        "protocol": "random",
+        "model": "xgboost",
+        "delta_ci": 0.3404,
+        "delta_ci_lo_cluster": 0.1538,
+        "delta_ci_hi_cluster": 0.535
+      },
+      {
+        "protocol": "cold_drug",
+        "model": "mlp",
+        "delta_ci": -0.2308,
+        "delta_ci_lo_cluster": -0.4783,
+        "delta_ci_hi_cluster": -0.0377
+      }
+    ]
+  },
+  "rmse_significant_cells": 3,
+  "sign_test_below_0.05": 6,
+  "min_sign_test_p": 2.1606683731079102e-07
+}
