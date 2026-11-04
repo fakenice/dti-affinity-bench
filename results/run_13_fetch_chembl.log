@@ -1,0 +1,57 @@
+filter verification:
+  OK   target_pref_name__icontains=kinase
+  OK   activity_standard_type=Ki
+  OK   activity_standard_flag=1
+  OK   activity_standard_relation=exact
+  OK   molecule_molecule_chembl_id__in
+chembl release stamp: {'ok': True, 'chembl_db_version': 'ChEMBL_37', 'chembl_release_date': '2026-05-01', 'activities_in_db': '24527044', 'publications_in_db': '101100', 'checked_at_utc': '2026-11-04T04:28:04Z'}
+kinase-named human single-protein targets screened: 548 (dropped for no component accession: 0)
+  counted 100/548 candidates (0.1 MB, 153.0 s)
+  counted 200/548 candidates (0.2 MB, 404.0 s)
+  counted 300/548 candidates (0.3 MB, 655.0 s)
+  counted 400/548 candidates (0.4 MB, 888.0 s)
+  counted 500/548 candidates (0.4 MB, 1114.0 s)
+  counted 548/548 candidates (0.4 MB, 1224.0 s)
+count requests that failed (those candidates are excluded, n_ki_rows=-1): 0
+panel (16 of 69 candidates with >= 300 Ki rows):
+      CHEMBL2971  Tyrosine-protein kinase JAK2                     O60674     3333 Ki rows
+      CHEMBL2835  Tyrosine-protein kinase JAK1                     P23458     3237 Ki rows
+      CHEMBL2147  Serine/threonine-protein kinase pim-1            P11309     3226 Ki rows
+      CHEMBL5024  Serine/threonine-protein kinase ATR              Q13535     2960 Ki rows
+      CHEMBL3553  Non-receptor tyrosine-protein kinase TYK2        P29597     1605 Ki rows
+      CHEMBL2148  Tyrosine-protein kinase JAK3                     P52333     1588 Ki rows
+      CHEMBL5749  Mitogen-activated protein kinase kinase ki       Q92918     1471 Ki rows
+      CHEMBL4005  Phosphatidylinositol 4,5-bisphosphate 3-ki       P42336     1469 Ki rows
+       CHEMBL262  Glycogen synthase kinase-3 beta                  P49841     1269 Ki rows
+      CHEMBL1862  Tyrosine-protein kinase ABL1                     P00519     1146 Ki rows
+      CHEMBL5888  Mitogen-activated protein kinase kinase ki       Q99558     1023 Ki rows
+      CHEMBL3778  Interleukin-1 receptor-associated kinase 4       Q9NWZ3     1020 Ki rows
+   CHEMBL1075104  Leucine-rich repeat serine/threonine-prote       Q5S007      992 Ki rows
+   CHEMBL1908389  Mitogen-activated protein kinase kinase ki       Q12852      978 Ki rows
+      CHEMBL3231  Rho-associated protein kinase 1                  Q13464      920 Ki rows
+      CHEMBL3286  Urokinase-type plasminogen activator             P00749      910 Ki rows
+planned activity rows: 26351  slice=spread  (budget 175 MB, spent so far 0.44 MB)
+  CHEMBL2971: 3000 fetched, 2298 kept
+  CHEMBL2835: 3000 fetched, 2479 kept
+  CHEMBL2147: 3000 fetched, 2803 kept
+  CHEMBL5024: 2960 fetched, 1703 kept
+  CHEMBL3553: 1605 fetched, 1049 kept
+  CHEMBL2148: 1588 fetched, 1151 kept
+  CHEMBL5749: 1471 fetched, 1454 kept
+  CHEMBL4005: 1469 fetched, 1423 kept
+  CHEMBL262: 1269 fetched, 1253 kept
+  CHEMBL1862: 1146 fetched, 1090 kept
+  CHEMBL5888: 1023 fetched, 1014 kept
+  CHEMBL3778: 1020 fetched, 999 kept
+  CHEMBL1075104: 992 fetched, 980 kept
+  CHEMBL1908389: 978 fetched, 966 kept
+  CHEMBL3231: 920 fetched, 887 kept
+  CHEMBL3286: 910 fetched, 803 kept
+dropped rows: {'data_validity': 239, 'wrong_std_type': 0, 'wrong_flag': 0, 'censored_relation': 0, 'non_numeric': 0, 'non_positive_or_nan': 0, 'wrong_units': 0, 'dup_flagged': 3735, 'no_doc': 0, 'no_smiles': 25, 'row_no_smiles': 0, 'bad_mol_id': 0}
+ligands: 14515 unique canonical SMILES carried by 22352 kept rows (chembl ids sharing one canonical SMILES are one ligand here, so a duplicated structure cannot sit in train and test at the same time)
+smiles cross-check: 300 exact matches / 0 mismatches of 300 records
+documents: 395 requested, 394 with a year; year cross-check 19427/19427 agree
+sequences: 16/16 verified as Homo sapiens
+
+wrote E:\Desktop\dti-affinity-bench\data\processed\external  (completed=True)
+pairs 18817  ligands 14515  targets 16  requests 894  59.2 MB  1985.9 s

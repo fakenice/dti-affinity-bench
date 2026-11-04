@@ -189,6 +189,19 @@ def _mlp(view, Xtr, ytr, Xte, seed, valid):
                  "valid_rmse": None if Xval is None else round(best_val, 4)}
 
 
+def entity_mean(ids_tr, y_tr, ids_te):
+    """Null baseline: predict the training mean of the test row's entity, falling back to the
+    global training mean for entities unseen in training.
+
+    Hoisted out of main() so 14_external_chembl.py measures the external table with the *same*
+    nulls rather than a re-derivation of them -- an entity null that differs between tables is
+    a difference in the yardstick, not in the data."""
+    s = pd.Series(y_tr, index=ids_tr)
+    g = s.groupby(level=0).mean()
+    grand = float(s.mean())
+    return np.array([g[i] if i in g.index else grand for i in ids_te], dtype=float)
+
+
 # --------------------------------------------------------------------------- main
 
 # One matrix view per model. `dense_compact` (693 dims: 256 most-frequent ECFP4 count
@@ -280,12 +293,6 @@ def main() -> int:
                 continue
             ytr = y[m]
             # ---- entity-level null baselines (train means, no learning) ----
-            def entity_mean(ids_tr, y_tr, ids_te):
-                s = pd.Series(y_tr, index=ids_tr)
-                g = s.groupby(level=0).mean()
-                grand = float(s.mean())
-                return np.array([g[i] if i in g.index else grand for i in ids_te], dtype=float)
-
             for name, pred in (
                     ("mean_ligand_train", entity_mean(lig_ids[m], ytr, lig_ids[t])),
                     ("mean_target_train", entity_mean(tgt_ids[m], ytr, tgt_ids[t])),

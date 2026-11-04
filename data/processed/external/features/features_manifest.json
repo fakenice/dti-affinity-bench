@@ -1,0 +1,106 @@
+{
+  "generated_by": "scripts/14_external_chembl.py --stage features",
+  "generated_at_utc": "2026-11-04T06:27:59Z",
+  "source_table": {
+    "pairs": 19088,
+    "ligands": 14713,
+    "targets": 16,
+    "chembl_release": {
+      "ok": true,
+      "chembl_db_version": "ChEMBL_37",
+      "chembl_release_date": "2026-05-01",
+      "activities_in_db": "24527044",
+      "publications_in_db": "101100",
+      "checked_at_utc": "2026-11-04T05:49:53Z"
+    },
+    "label": "pKi = 9 - log10(median Ki / nM); same 9-log10(nM) scale as DAVIS pKd, not comparable to KIBA's 0-17.2 consensus score"
+  },
+  "rdkit_version": "2026.03.3",
+  "numpy_version": "2.3.4",
+  "builders": "01_features.build_ligand_features / build_protein_features / scaffold_table / bit_vectors (imported, not copied)",
+  "fingerprint": "Morgan radius 2 (ECFP4), folded; counts for 2048, binary for 1024, 512",
+  "scaffold": "RDKit MurckoScaffoldSmiles, generic (no chirality), '_no_ring_' if acyclic",
+  "ligand": {
+    "ligand_ecfp4_counts": {
+      "path": "data/processed/external/features/ligand_ecfp4_counts.npz",
+      "shape": [
+        14713,
+        2048
+      ],
+      "nnz_per_row_mean": 59.33,
+      "dtype": "uint16",
+      "sha256": "c6bfa6bd7a2b4c7df37b7f5b71853cdb91f3331e47e9482b8e99495253556636"
+    },
+    "ligand_ecfp4_1024": {
+      "path": "data/processed/external/features/ligand_ecfp4_1024.npz",
+      "shape": [
+        14713,
+        1024
+      ],
+      "nnz_per_row_mean": 58.54,
+      "dtype": "float32",
+      "sha256": "eeb70da63f391a35aaa5e401a8a2af36dc49d463bac8bd2da417bf9b19f9d622"
+    },
+    "ligand_ecfp4_512": {
+      "path": "data/processed/external/features/ligand_ecfp4_512.npz",
+      "shape": [
+        14713,
+        512
+      ],
+      "nnz_per_row_mean": 56.95,
+      "dtype": "float32",
+      "sha256": "1bcff16a433fb12125f9dd225660555f6724d54f33529cd0192a90dd49802255"
+    },
+    "ligand_desc": {
+      "path": "data/processed/external/features/ligand_desc.csv",
+      "columns": [
+        "MolWt",
+        "MolLogP",
+        "TPSA",
+        "NumHAcceptors",
+        "NumHDonors",
+        "NumRotatableBonds",
+        "NumAromaticRings",
+        "HeavyAtomCount",
+        "FractionCSP3",
+        "FormalCharge",
+        "MolMR",
+        "NumSaturatedRings",
+        "BalabanJ"
+      ],
+      "sha256": "6b89897a46b101a24e327b0f43dc4e6d165a4aac7961c57c216bf3e780f5b1fe"
+    },
+    "_bad_smiles": []
+  },
+  "protein_features": {
+    "protein_features": {
+      "path": "data/processed/external/features/protein_features.csv",
+      "shape": [
+        16,
+        425
+      ],
+      "n_aac": 20,
+      "n_dpc": 400,
+      "sha256": "c3fef6ee6c7cc3463a812fc62037d6bb5c2c9ce864e1898065beaddfef66cbcc"
+    }
+  },
+  "scaffolds": {
+    "path": "data/processed/external/features/ligand_scaffolds.csv",
+    "n_scaffolds": 5742,
+    "largest_scaffold": {
+      "O=C(Nc1cn[nH]c1C1CCCCCO1)c1csc(-c2ccccc2)n1": 132,
+      "c1cnc2cc(Nc3cc[nH]n3)nc(NC3CC4CCC(C3)N4)c2c1": 113,
+      "O=C1c2ccncc2CN1c1cccc(-c2nnc[nH]2)n1": 81
+    },
+    "sha256": "f294714ddf697908cf75b60ea779a6b9efb1fe69305530c63d825bcec9c360e8"
+  },
+  "dense_tanimoto_omitted": {
+    "why": "a dense 14713 x 14713 float32 similarity matrix would be 866 MB (the shipped 2,127-ligand one is 18 MB); 14 computes only the blocks the leakage audit asks for, from bit_vectors()",
+    "equivalence": "BlockTanimoto vs dense checked in --selftest"
+  },
+  "unparseable_smiles": {
+    "n": 0,
+    "note": "RDKit substitutes methane for these, exactly as 01 does for the shipped table; a count is reported rather than the structures silently replaced"
+  },
+  "wall_seconds": 38.0
+}

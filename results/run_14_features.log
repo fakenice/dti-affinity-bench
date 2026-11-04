@@ -1,0 +1,7 @@
+
+### stage features ----------------------------------------
+external ligands 14713  targets 16  rdkit 2026.03.3
+scaffolds 5742 of 14713 ligands; unparseable SMILES 0; bad ligand ids []
+wrote E:\Desktop\dti-affinity-bench\data\processed\external\features (38.0s)
+
+[14] stages ['features'] done in 38.1s

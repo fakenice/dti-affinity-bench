@@ -1,0 +1,67 @@
+{
+  "generated_by": "scripts/14_external_chembl.py --stage splits",
+  "functions": "02_splits.random_split / scaffold_split / cold_split / temporal_split (imported, not copied)",
+  "seed": 2026,
+  "frac_test": 0.2,
+  "frac_valid": 0.1,
+  "n_pairs_total": 19088,
+  "temporal_note": "date resolution is one year and the date is the source publication year, not a deposition date; undated pairs are excluded and counted",
+  "protocols": {
+    "random": {
+      "counts": {
+        "train": 13361,
+        "test": 3818,
+        "valid": 1909
+      },
+      "rows_in_protocol": 19088,
+      "temporal_cutoff": null,
+      "excluded_rows": 0,
+      "test_fraction_of_kept": 0.2
+    },
+    "scaffold": {
+      "counts": {
+        "train": 13361,
+        "test": 3818,
+        "valid": 1909
+      },
+      "rows_in_protocol": 19088,
+      "temporal_cutoff": null,
+      "excluded_rows": 0,
+      "test_fraction_of_kept": 0.2
+    },
+    "cold_drug": {
+      "counts": {
+        "train": 13361,
+        "test": 3818,
+        "valid": 1909
+      },
+      "rows_in_protocol": 19088,
+      "temporal_cutoff": null,
+      "excluded_rows": 0,
+      "test_fraction_of_kept": 0.2
+    },
+    "cold_target": {
+      "counts": {
+        "train": 14250,
+        "test": 3480,
+        "valid": 1358
+      },
+      "rows_in_protocol": 19088,
+      "temporal_cutoff": null,
+      "excluded_rows": 0,
+      "test_fraction_of_kept": 0.1823
+    },
+    "temporal": {
+      "counts": {
+        "train": 10306,
+        "test": 3791,
+        "excluded": 2829,
+        "valid": 2162
+      },
+      "rows_in_protocol": 16259,
+      "temporal_cutoff": "2021-01-01",
+      "excluded_rows": 2829,
+      "test_fraction_of_kept": 0.2332
+    }
+  }
+}

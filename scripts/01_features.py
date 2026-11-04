@@ -163,6 +163,36 @@ def build_protein_features(tg: pd.DataFrame) -> dict:
 
 # --------------------------------------------------------------------------- main
 
+def bit_vectors(lig: pd.DataFrame) -> list:
+    """The 2048-bit ECFP4 vectors the Tanimoto table is built from.
+
+    Split out of main() so that another table can compute *block* similarities from the same
+    vectors without materialising the dense n x n matrix: 14_external_chembl.py has 14,713
+    ligands, where the full float32 matrix would be 867 MB against 18 MB for the 2,127-ligand
+    main set. Same fingerprints, same call, one order of magnitude less RAM."""
+    fps = []
+    for smi in lig.canonical_smiles:
+        m = Chem.MolFromSmiles(smi) or Chem.MolFromSmiles("C")
+        fps.append(rdMolDescriptors.GetMorganFingerprintAsBitVect(m, 2, nBits=2048))
+    return fps
+
+
+def scaffold_table(lig: pd.DataFrame) -> pd.DataFrame:
+    """Generic Murcko scaffold per ligand, '_no_ring_' when there is none, so an acyclic
+    ligand groups with the other acyclic ligands instead of forming its own singleton.
+    Split out of main() for the same reason as bit_vectors: the scaffold protocol must be
+    the same protocol on every table, not a reimplementation of it."""
+    scaff = []
+    for smi in lig.canonical_smiles:
+        m = Chem.MolFromSmiles(smi)
+        try:
+            sc = MurckoScaffold.MurckoScaffoldSmiles(mol=m, includeChirality=False)
+        except Exception:
+            sc = ""
+        scaff.append(sc if sc else "_no_ring_")
+    return pd.DataFrame({"ligand_id": lig.ligand_id, "scaffold": scaff})
+
+
 def main() -> int:
     FEAT.mkdir(parents=True, exist_ok=True)
     lig = pd.read_csv(PROC / "ligands.csv")
@@ -174,25 +204,14 @@ def main() -> int:
 
     # similarity tables used by the leakage analysis: pairwise Tanimoto on ECFP4-2048
     from rdkit.DataStructs import cDataStructs
-    fps = []
-    for smi in lig.canonical_smiles:
-        m = Chem.MolFromSmiles(smi) or Chem.MolFromSmiles("C")
-        fps.append(rdMolDescriptors.GetMorganFingerprintAsBitVect(m, 2, nBits=2048))
+    fps = bit_vectors(lig)
     sims = np.zeros((len(fps), len(fps)), dtype=np.float32)
     for i in range(len(fps)):
         sims[i, i + 1:] = cDataStructs.BulkTanimotoSimilarity(fps[i], fps[i + 1:])
     np.save(FEAT / "ligand_tanimoto.npy", sims)
 
     # scaffold assignment (Murcko, generic) for the split protocol
-    scaff = []
-    for smi in lig.canonical_smiles:
-        m = Chem.MolFromSmiles(smi)
-        try:
-            sc = MurckoScaffold.MurckoScaffoldSmiles(mol=m, includeChirality=False)
-        except Exception:
-            sc = ""
-        scaff.append(sc if sc else "_no_ring_")
-    sdf = pd.DataFrame({"ligand_id": lig.ligand_id, "scaffold": scaff})
+    sdf = scaffold_table(lig)
     sdf.to_csv(FEAT / "ligand_scaffolds.csv", index=False)
 
     manifest = {

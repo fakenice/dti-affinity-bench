@@ -38,6 +38,31 @@ were unreachable from this network — only the API host resolved.)
 The last two parquet tables supply the **deposit dates** used by the forward-looking
 `temporal` split (DAVIS 25,194/30,056 rows dated; KIBA 44,702/118,254 = 37.8 %).
 
+## 1b. External validation table (ChEMBL kinase Ki)
+
+Retrieved on **2026-11-04 (UTC)** by `scripts/13_fetch_chembl.py`, from the ChEMBL REST API
+(`https://www.ebi.ac.uk/chembl/api/data`) plus the UniProt REST service for the protein
+sequences. ChEMBL_37, release date 2026-05-01, with the version read live at run time.
+
+| item | value |
+|---|---|
+| panel | 16 human SINGLE PROTEIN kinase targets, ≥ 300 exact-standard Ki rows each |
+| pairs / ligands / targets / documents | 19,088 / 14,713 / 16 / 398 |
+| label | pKi = 9 − log₁₀(median Ki / nM), median over a pair's curated rows |
+| pKi range | 4.0 – 11.0 (mean 7.786, sd 1.476) |
+| transferred | 59.2 MB + 18.3 MB + 0.0 MB over three runs = **77.5 MB** (cap: 200 MB) |
+| raw page cache | `data/raw/chembl/` (104,814,223 bytes, git-ignored), 1,123 pages, each sha256 listed in `data/processed/external/external_manifest.json → raw_cache_sha256` |
+
+The output tables and their sha256 are in
+`data/processed/external/external_manifest.json → files` (`chembl_ki.csv`, `ligands.csv`,
+`targets.csv`, `documents.csv`); the derived features and the five split files carry their own
+manifests in `data/processed/external/features/` and `data/processed/external/splits/`.
+
+Two limits the manifest records instead of hiding: the download cap forced the fetcher to
+sample activity pages, so three of the sixteen targets are `complete: false`; and the public
+API exposes no per-activity deposition date, so this table's `temporal` protocol uses the
+**publication year** of the source document instead of a deposition date (README §9).
+
 ## 2. Structural arm (AutoDock Vina)
 
 Four REST endpoints, all cached under `data/raw/docking/` (66 MB, git-ignored) and reusable

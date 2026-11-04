@@ -3,7 +3,9 @@
 DAVIS (30,056 kinase–inhibitor $K_d$ rows) and KIBA (118,254 rows) scored with
 RDKit ECFP4 fingerprints + amino-acid/dipeptide composition, evaluated under **five
 different split protocols** with RMSE and both concordance calibres, plus an
-AutoDock Vina arm on the same compounds.
+AutoDock Vina arm on the same compounds — and then re-checked on a **third,
+independently curated table** (a ChEMBL kinase Ki panel, §9) to make sure the
+headline is not a property of the two shipped benchmarks.
 
 Every table and figure here is produced by the code in this repository from committed
 inputs — `results/report.md`, `results/summary.json` and
@@ -12,7 +14,9 @@ inputs — `results/report.md`, `results/summary.json` and
 ## Headline
 
 Every number below is a key in `results/summary.json` or `results/readme_numbers.json`, so the
-claim and its evidence are one `jq` apart.
+claim and its evidence are one `jq` apart. The one exception is the external-validation block
+(§9), which lives in its own tree — `results/external_chembl/paired_bootstrap.json` — because
+it must not be able to touch the shipped grid.
 
 1. **The split protocol moves the result more than the model does — for the models that
    work.** With identical features, code and seeds, the best achievable DAVIS test RMSE runs
@@ -73,6 +77,27 @@ claim and its evidence are one `jq` apart.
    only RMSE wins with an interval excluding zero are against the MLP on `scaffold`,
    `cold_drug` and `temporal`. On `scaffold` its CI falls to 0.421, *below* the constant
    predictor's 0.500. `readme_numbers.json → docking`, `docking_paired`.
+8. **The headline reproduces on a third table that nobody in this repo had seen.** DAVIS and KIBA
+   are both small, both kinase-centred and both widely re-used — exactly the setting in which a
+   protocol artefact can look like a property of the field. So the same five protocols, three
+   nulls, four models, three seeds, two concordance calibres and the same bootstrap families were
+   re-run on a **ChEMBL kinase Ki panel** (ChEMBL_37, 19,088 pairs, 14,713 ligands, 16 human
+   kinases, pKi = 9 − log₁₀(Ki/nM)), fetched and hashed by `13_fetch_chembl.py` and scored by
+   `14_external_chembl.py` in a self-contained tree that does not touch `results/metrics.csv`:
+   **η²(protocol) = 0.8657** (seed bootstrap CI [0.8606, 0.8702]) against **η²(model) = 0.0197**
+   ([0.0172, 0.0223]) — a *smaller* model share than on DAVIS (6.8 %) or KIBA (30.7 %); the best
+   achievable test RMSE runs **0.6467** (`random`) to **1.3514** (`temporal`), a range of
+   **0.7047 pKi**, larger than DAVIS's 0.4823 and KIBA's 0.2101, while the three trained models
+   differ by at most 0.3515 inside one protocol; and **15 of 15** per-arm hardest-minus-easiest
+   protocol contrasts exclude zero under row resampling. The negative results reproduce too, and
+   sharpen: under `temporal`, XGBoost beats the global-mean null by **−0.0064**
+   (95 % CI [−0.0239, 0.0117], Holm p = 1.0) and random forest by **−0.0050** ([−0.0216, 0.0120],
+   p = 1.0) — *statistically indistinguishable from predicting the training mean* — while only
+   Ridge is significantly worse (+0.0933). The MLP collapses on `cold_target` (3.2429 vs a 1.6165
+   null) and `temporal` (2.8400 vs 1.3576), as it does on DAVIS and KIBA. pKi, pKd and KIBA's
+   consensus score are different scales, so **RMSE magnitudes are not compared across tables —
+   only the protocol-vs-model structure is.** `results/external_chembl/paired_bootstrap.json`,
+   §9.
 
 The audit trail is part of the result: `04_uncertainty.py` recomputes `03_models.py`'s point
 predictions and asserts the RMSE match (40/40 rows pass on the shipped grid), and that assert is
@@ -184,7 +209,7 @@ XGBoost 400 trees with early stopping, random forest 150 trees, a DeepDTA-style 
 all five protocols on both datasets, **3 seeds each = 120 fitted runs**, and every run also
 carries three deterministic nulls that need no learning: the global training mean, the
 per-ligand training mean, and the per-target training mean. Test RMSE, mean of 3 seeds
-(seeds are deterministic; the spread is in §9):
+(seeds are deterministic; the spread is in §10):
 
 **DAVIS — RMSE in pKd units** (the training block's label sd is 0.79–0.91 depending on
 protocol, so RMSE 0.85 ≈ "predict the mean")
@@ -238,7 +263,7 @@ Four readings, each traceable to `results/metrics_by_protocol.csv` and
    nulls 0.8522 / 0.9173 / 1.0030; KIBA 0.9385 / 0.9598 / 1.1147 / 1.7832 vs 0.8701 / 0.7225 /
    0.9396 / 0.8149) — only `random` rescues it, in both datasets. A DeepDTA-style network on
    hand-made features is not a free win; it is the least robust entry in the grid, and also
-   the least reproducible one (seed span up to 0.179 vs ≤ 0.013 for random forest, §9).
+   the least reproducible one (seed span up to 0.179 vs ≤ 0.013 for random forest, §10).
    Script 12's paired bootstrap resolves **all seven** of those cells: ΔRMSE −0.0684 to
    −1.0793, every one significant after Holm (worst p = 0.046).
    (b) **Ridge loses to the global-mean null** on DAVIS `scaffold` (0.8786 vs 0.8522) and
@@ -460,7 +485,7 @@ baseline and ties the tabular learners at n = 21–28", not "Vina beats learning
 The pKd-stratified 20-compound docked subset is small by design (26–28 test rows per protocol,
 80 under `cold_target`), so the per-protocol point estimates are fragile; the paired intervals
 above are the error bar, and they leave most learned-vs-Vina ranking gaps unresolved at this n.
-§9 says so explicitly.
+§10 says so explicitly.
 
 **Specificity control.** Re-docking 10 sampled pairs with the search box translated +30 Å
 along x into bulk solvent: mean fitted strength falls from **−8.478 to −6.414 kcal/mol**
@@ -479,9 +504,15 @@ records its version, size and sha256, and the script refuses to start without it
 ```
 data/processed/    committed tidy tables (davis.csv, kiba.csv, ligands.csv, targets.csv)
                    + the five split files per dataset + feature arrays
+                   + external/ : the ChEMBL kinase Ki table of §9 (tables, hashes, features,
+                     splits) — a self-contained tree that the main pipeline never reads
 results/           committed metrics, leakage audit, docking tables, bootstrap tables
                    (testset_bootstrap_ci/models/pairs + .json), figures, report.md
+results/external_chembl/  §9's own results (metrics, leakage audit, Holm contrasts,
+                   bootstrap json, run manifest) — never written by scripts 00…12
 scripts/00…12      one stage per script, run in order
+scripts/13, 14     the external table: fetch + hash-pin (13), then features/splits/audit/
+                   grid/analyse on it (14); imported by the same modules, not re-implemented
 run_all.py         one-command reproduction
 docs/data_sources.md  endpoints, sha256 of every raw file, vina binary hash, versions
 ```
@@ -500,6 +531,10 @@ python run_all.py --stage bootstrap     # adds 12: intervals for all 150 fits, n
                                         # (that directory is gitignored, so a fresh clone must
                                         # run the grid before this stage alone will work)
 python run_all.py --stage report        # re-render tables + figures from committed CSVs
+python run_all.py --stage external      # §9: fetch + hash-pin the ChEMBL panel (network),
+                                        # then features/splits/audit/grid/analyse on it.
+                                        # Measured: fetch 77.5 MB transferred, features 38 s,
+                                        # audit 50 s, grid 291 s, analyse 766 s (2,000 reps)
 ```
 
 `run_all.py` recomputes the whole grid by default; `--resume-grid` is opt-in, because keeping
@@ -583,7 +618,160 @@ preprocessing decision that changed a headline number, so it gets its own ablati
   kept working from the pre-edit bytecode — which is how a crash got misread as "stale
   cache". It is fixed, and it is the reason the per-row `metrics.csv` flush exists.
 
-## 9. Known limitations / next steps
+## 9. External validation on a third table (ChEMBL kinase Ki)
+
+**Why a third table at all.** DAVIS and KIBA share exactly the properties that make a
+protocol artefact look like a property of the field: both are kinase-centred, both are small
+(68 ligands / 379 sequences, and a 25 %-filled matrix), and both are re-used by so many
+papers that a protocol tuned on them is already tuned on the literature. §1–§8 therefore rest on
+*two tables* — and two tables that agree can still agree for a shared reason. The test here is
+whether the *structure* of the headline survives on a table whose curation pipeline, label
+definition, temporal field and split sizes share none of those properties.
+
+**The table.** `scripts/13_fetch_chembl.py` builds a 16-target human kinase panel from the
+ChEMBL REST API (ChEMBL_37, release date 2026-05-01, version read live at run time): human
+SINGLE PROTEIN targets whose preferred name contains "kinase", exact-standard Ki rows
+(`standard_type=Ki`, `standard_flag=1`, `standard_relation='='`), the top 16 by that count with
+≥ 300 such rows each. Every (ligand, target) pair is labelled **pKi = 9 − log₁₀(median
+Ki / nM)** over its curated rows: **19,088 pairs, 14,713 ligands, 16 targets, 398 source
+documents**, pKi 4.0–11.0 (mean 7.786, sd 1.476). Everything is hashed before it is modelled —
+`data/processed/external/external_manifest.json` carries the sha256 of each output table and of
+all 1,123 cached raw API pages.
+
+**The checks that had to pass before the table was allowed near a model.**
+
+| check | measured result |
+|---|---|
+| every API filter is discriminating, not silently ignored | `molecule_molecule_chembl_id__in` reports `total_count` 3 for 3 requested ids; an ignored filter would report the whole compound table |
+| protein sequences are the ones ChEMBL claimed | 16 requested / **16 verified** (fasta header accession equal to the ChEMBL accession *and* `OS=` equal to "Homo sapiens") / 0 rejected |
+| the structure attached to an activity is that molecule's structure | 300 sampled rows, **300/300 exact string matches** between `activity.canonical_smiles` and `molecule_structures.canonical_smiles` |
+| the year attached to an activity is the year of its document | 18,978 rows carrying both, **18,978 agree, 0 disagree** |
+| the local filters actually bite | 4,197 potential duplicates dropped, 229 data-validity comments, 22 rows without a canonical SMILES |
+
+**The sampling caveat, and the repair that came out of it.** The download cap means the fetcher
+cannot read every Ki row of every target, so it samples pages (page size 1,000, up to 3,000
+distinct rows per target) and spreads them across that target's own offset range instead of
+reading the head. The first version sampled offsets 0/1000/2000 for every target; because
+ChEMBL paginates by activity id and each target's Ki rows are *not* contiguous, that returned
+the same activity rows under two targets and inflated the pair count. The repair was measured,
+not assumed: the offsets are now per-target and listed in the manifest
+(`row_sampling.offsets_per_target`), the re-fetch re-hashed every table, and the manifest now
+reports per target how many rows the API claimed, how many *distinct* rows were fetched and how
+many survived the local filters (`coverage_per_target`, with a `complete` flag). Three of the
+sixteen targets are still `complete: false` — that is the cap, not a bug, and it is labelled as
+such rather than hidden.
+
+**Ordering probe.** If the API returns rows in deposition order, a head-only sample would
+silently over-represent old measurements and bias the temporal protocol. Measured on the live
+API (`data/processed/external/probe_page_year_ordering.json`): for CHEMBL262 the head page has
+median year 2011 and the deep page at offset 269 has 2021 (`later_at_depth: true`), while for
+CHEMBL1862 both pages have median 2014 (`false`). The ordering is therefore *not* uniform across
+targets — which is exactly why the sampler spreads pages instead of reading the head.
+
+**Download footprint** against the ≤ 200 MB the run was authorised under: 59.2 MB + 18.3 MB +
+0.0 MB over the three fetch runs = **77.5 MB transferred**; the on-disk raw cache is
+104,814,223 bytes; the script's own budget is 175 MB and `budget_exceeded` is `false`.
+
+**What was reused, and what was re-derived.** Reused *by import, not by copy*:
+`01_features.build_ligand_features / build_protein_features / scaffold_table / bit_vectors`,
+`02_splits.random_split / scaffold_split / cold_split / temporal_split / audit`,
+`03_models.entity_mean / standardize / fit_predict`, and `dti_core.evaluate / ci_harrell`.
+Re-derived for this table: every feature array, every split, every fit, every bootstrap draw.
+The isolation is structural rather than a promise — `dti_core.Featuriser` reads the module
+globals `PROC`/`FEAT` at call time, so script 14 points them at `data/processed/external/`.
+The consequence is that the 256 top ECFP4 bits are selected over the *external* ligand set
+only, and the shipped DAVIS/KIBA arrays — hence every number in `results/metrics.csv` — cannot
+move. Checked after the run: `git diff` over `results/metrics.csv`, `results/readme_numbers.json`,
+`results/variance_decomposition.json` and `data/processed/` is empty. Script 14 writes only to
+`data/processed/external/` and `results/external_chembl/`.
+
+**The grid** (75 rows: 4 learned models × 3 seeds + 3 nulls × 5 protocols). RMSE in pKi units,
+3-seed mean; the training label sd is 1.35–1.49 per protocol, so "predict the mean" costs
+about 1.35–1.62.
+
+| protocol | global-mean null | per-ligand null | per-target null | Ridge | XGBoost | Rand. forest | MLP | best learned |
+|---|---|---|---|---|---|---|---|---|
+| random | 1.4780 | 1.3022 | 1.2634 | 0.8988 | **0.6467** | 0.7519 | 0.9795 | XGBoost 0.6467 |
+| scaffold | 1.4937 | 1.4937 | 1.2818 | 0.9113 | **0.7315** | 0.7670 | 1.0065 | XGBoost 0.7315 |
+| cold_drug | 1.6209 | 1.6209 | 1.7731 | 1.4828 | **1.1415** | 1.2117 | 1.3366 | XGBoost 1.1415 |
+| cold_target | 1.6165 | 1.2957 | 1.6165 | **1.2129** | 1.5644 | 1.5136 | 3.2429 | Ridge 1.2129 |
+| temporal | 1.3576 | 1.3588 | **1.2397** | 1.4506 | 1.3514 | 1.3528 | 2.8400 | XGBoost 1.3514 |
+
+**What the third table adds.**
+
+1. **The protocol effect is larger here, not smaller.** The best achievable RMSE runs 0.6467
+   (`random`) → 1.3514 (`temporal`), a range of **0.7047 pKi**, against DAVIS's 0.4823 and
+   KIBA's 0.2101. The two-way decomposition gives **η²(protocol) = 0.8657** (seed bootstrap CI
+   [0.8606, 0.8702]) against **η²(model) = 0.0197** ([0.0172, 0.0223]) — a *smaller* model share
+   than on either shipped table. Adding the collapsed MLP (all4) gives η²(protocol) 0.4735 /
+   η²(model) 0.2599 / interaction 0.2666, so once again "the model barely matters" is a
+   statement about the trained tabular models, not about architecture.
+2. **Every per-arm protocol contrast survives.** Hardest-minus-easiest RMSE spread runs
+   **0.2633–2.4121** over the 15 arms and **15 of 15** intervals exclude zero under row
+   resampling (same conservative treatment of the two protocols' draws as script 12).
+3. **The negative results reproduce and sharpen.** Under `temporal` the trees are
+   *statistically indistinguishable from predicting the training mean*: XGBoost − mean =
+   **−0.0064** [−0.0239, 0.0117] and random forest − mean = **−0.0050** [−0.0216, 0.0120],
+   both Holm p = 1.0, while only Ridge is significantly worse (+0.0933, p = 0.01). XGBoost vs
+   random forest on `temporal` is −0.0014 [−0.0079, 0.0054], Holm p = 1.0 — the same
+   "the gap is smaller than the noise" cell that DAVIS `cold_drug` (0.0005) provides on the
+   other table. The MLP collapses on `cold_target` (3.2429 vs a 1.6165 null) and `temporal`
+   (2.8400 vs 1.3576), as it does on DAVIS and KIBA.
+4. **A two-line lookup wins a cell here too.** Under `temporal` the **per-target training mean
+   (1.2397) beats every learned model** (best 1.3514). Two honest caveats: 35.69 % of test rows
+   have a target absent from training, so this null is a partial lookup with a fallback; and it
+   is not a member of the Holm family above, which is defined against the *global* mean, so it
+   is reported as a point estimate rather than as a tested win.
+5. **Leakage is again a property of the protocol, but the ordering differs from the shipped
+   tables.** `random` leaks *more* here — 89.79 % of test rows have an ECFP4 ≥ 0.7 ligand twin
+   in train (40.65 % at ≥ 0.95) against DAVIS/KIBA's ~35 % — and `temporal` is the cleanest
+   (6.44 %). `cold_target` is not clean either: 56.78 % of its test rows still have a
+   near-duplicate ligand in train, because that protocol hides *targets*, not ligands.
+
+| protocol | test rows with a ligand ≥ 0.7 twin | ≥ 0.95 | scaffold already in train | rows whose ligand is unseen | rows whose target is unseen | rows with target family ≥ 0.95 |
+|---|---|---|---|---|---|---|
+| random | 89.79 % | 40.65 % | 80.02 % | 69.25 % | 0.00 % | 100 % |
+| scaffold | 66.87 % | 0.45 % | 0.00 % | 100.00 % | 0.00 % | 100 % |
+| cold_drug | 18.91 % | 1.15 % | 30.15 % | 100.00 % | 0.00 % | 100 % |
+| cold_target | 56.78 % | 42.67 % | 51.61 % | 57.59 % | 100.00 % | 0.00 % |
+| temporal | 6.44 % | 0.66 % | 4.17 % | 99.89 % | 35.69 % | 64.31 % |
+
+6. **The scale caveat, stated once and applied everywhere.** pKi shares the 9 − log₁₀(nM)
+   *definition* with DAVIS pKd but not the measurement process; KIBA's 0–17.2 consensus score
+   shares neither. **RMSE magnitudes are therefore not comparable across the three tables**,
+   and nothing above compares them. What is comparable is the *structure* — the protocol-vs-model
+   variance share, the sign and resolvability of paired contrasts, which nulls win which cells
+   — and that structure is what was tested.
+
+**Scope of the external arm.** It reproduces the *protocol-vs-model* headline only. The
+conformal arm (script 04) and the docking arm (scripts 05/06) were **not** re-run on this
+table: the docking panel is DAVIS-specific by construction (it needs DAVIS compounds, DAVIS
+sequences and a per-target Vina calibration), and the conformal arm is a property of the
+protocol, not of the headline being tested. Both remain as they are on the shipped grid.
+
+**Where the numbers live.** `results/external_chembl/` — `metrics.csv` (75 rows),
+`metrics_by_protocol.csv`, `leakage_audit.csv`/`.json`, `model_contrasts_holm.csv` (50 rows:
+5 protocols × 10 contrasts), `arm_marginal_intervals.csv`, `paired_bootstrap.json` (variance
+decomposition, protocol contrasts, cross-table block) and `external_run_manifest.json` (every
+output file with its sha256). The bootstrap's point estimates reproduce `metrics.csv` exactly
+(max absolute deviation 0.0 over all five cells), so the intervals provably come from this
+table's own predictions. `results/external_chembl/predictions/` is gitignored like
+`results/predictions/`: it is regenerated by `--stage grid`, and the analyse stage reads it.
+
+**How to run it.**
+
+```bash
+python scripts/13_fetch_chembl.py --budget-mb 175      # network; caches every page it reads
+python scripts/14_external_chembl.py --stage all        # features → splits → audit → grid → analyse
+python scripts/14_external_chembl.py --stage analyse --reps 2000 --ci-reps 600 --jobs 5
+```
+
+or `python run_all.py --stage external`, which runs both. Measured wall time on the same
+8-core laptop: features 38.0 s, audit 50.3 s (202,980,503 similarity entries computed), grid
+291.0 s, analyse **765.5 s** (2,000 RMSE/MAE reps + 600 Harrell-CI reps, 5 protocol cells in
+parallel; the committed `results/external_chembl/` is the output of one such run).
+
+## 10. Known limitations / next steps
 
 **The label is censored, and nothing here fixes that.** 69.64 % of DAVIS pKd values sit on
 the assay ceiling (pKd 5.0 = "Kd ≥ 10 000 nM, the limit of detection"). A model that
@@ -687,6 +875,21 @@ differences sit at or below their own seed noise, while the MLP's collapse sits 
 so §4's negative result for the MLP is not a seeding artifact. Per-seed rows are in
 `results/metrics.csv`. That file is the record of the run that produced the figures and the
 tables above, on Python 3.13.7 / i7-9700 / 32 GB with the versions in `requirements.txt`.
+
+**The external table has three limitations of its own, and they are not the same as the
+shipped ones.** (i) *Scale*: pKi = 9 − log₁₀(median Ki / nM) shares the **definition** of
+DAVIS pKd but not the measurement process, and KIBA's 0–17.2 consensus score shares neither —
+so RMSE magnitudes are comparable **within** the ChEMBL table and **not across** the three
+tables; §9 compares structure, never magnitude. (ii) *The temporal protocol is a proxy*: the
+public ChEMBL API exposes no per-activity deposition date, so the temporal split uses the
+**source publication year**, at one-year resolution, and the 2,829 pairs with no year at all
+(14.8 % of the table) are excluded from that protocol — 16,259 of 19,088 pairs enter it, and
+the cutoff is 2021-01-01. That is a documented substitute for DAVIS's `deposited` date, not
+the same quantity. (iii) *Row sampling*: the download cap forces the fetcher to sample activity
+pages, and three of the sixteen targets are still incompletely covered
+(`complete: false` in the manifest). The panel is also a **single chemical family** (human
+kinases), so §9 tests whether the protocol effect is a property of *affinity prediction* or
+only of *kinases*; the latter is not excluded by this table.
 
 Next steps that would actually change the conclusions: a censored likelihood for DAVIS; a
 held-out fourth split so the conformal guarantee is real; ≥3 structures per target with

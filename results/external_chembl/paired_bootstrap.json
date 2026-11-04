@@ -1,0 +1,5217 @@
+{
+  "generated_by": "scripts/14_external_chembl.py --stage analyse",
+  "generated_at_utc": "2026-11-04T07:22:38Z",
+  "table": "chembl",
+  "label": "pki",
+  "boot_reps": 2000,
+  "ci_reps": 600,
+  "holm_note": "12_testset_bootstrap.py -- put intervals on the whole 150-fit grid, not on one cell.",
+  "variance_decomposition": {
+    "trained3": {
+      "models": [
+        "ridge",
+        "xgboost",
+        "randomforest"
+      ],
+      "n_cells": 15,
+      "protocols": 5,
+      "note": "two-way ANOVA on the (protocol x model) cell means, seeds averaged first -- the same construction 11_variance_decomposition uses, so eta2 here is comparable with the shipped davis/kiba eta2",
+      "rmse": {
+        "ss_protocol": 1.2498918127330734,
+        "ss_model": 0.02844189902069425,
+        "ss_interaction": 0.16540608664765702,
+        "ss_total": 1.4437397984014246,
+        "eta2_protocol": 0.8657320481966427,
+        "eta2_model": 0.01970015583984485,
+        "eta2_interaction": 0.11456779596351245,
+        "F_protocol": 15.113008693513857,
+        "F_model": 0.6878077970922634,
+        "p_protocol": 0.000845578959668802,
+        "p_model": 0.530103628751577,
+        "df": {
+          "protocol": 4,
+          "model": 2,
+          "residual": 8
+        },
+        "bootstrap_ci95": {
+          "eta2_protocol": [
+            0.8605747537670192,
+            0.8701947688514181
+          ],
+          "eta2_model": [
+            0.017200293276746326,
+            0.022319478184497633
+          ],
+          "eta2_interaction": [
+            0.10999958402659313,
+            0.11929962728595402
+          ]
+        }
+      },
+      "ci_harrell": {
+        "ss_protocol": 0.15585906227398036,
+        "ss_model": 0.0034073923511973745,
+        "ss_interaction": 0.002528282317220393,
+        "ss_total": 0.16179473694239813,
+        "eta2_protocol": 0.9633135491265641,
+        "eta2_model": 0.02105997027833154,
+        "eta2_interaction": 0.015626480595104325,
+        "F_protocol": 123.29245133141036,
+        "F_model": 5.3908415654205575,
+        "p_protocol": 3.204856970989844e-07,
+        "p_model": 0.03291712609469698,
+        "df": {
+          "protocol": 4,
+          "model": 2,
+          "residual": 8
+        },
+        "bootstrap_ci95": {
+          "eta2_protocol": [
+            0.9538852278691553,
+            0.9680601171252085
+          ],
+          "eta2_model": [
+            0.016114887492378837,
+            0.02810979915416348
+          ],
+          "eta2_interaction": [
+            0.009161202876993213,
+            0.027042083757192876
+          ]
+        }
+      },
+      "mae": {
+        "ss_protocol": 1.0482755764119858,
+        "ss_model": 0.00752566782853731,
+        "ss_interaction": 0.2044057596958207,
+        "ss_total": 1.2602070039363438,
+        "eta2_protocol": 0.8318280831146189,
+        "eta2_model": 0.005971771149525725,
+        "eta2_interaction": 0.16220014573585542,
+        "F_protocol": 10.256810551443762,
+        "F_model": 0.14726919319174508,
+        "p_protocol": 0.003081980347716919,
+        "p_model": 0.8653485344823886,
+        "df": {
+          "protocol": 4,
+          "model": 2,
+          "residual": 8
+        },
+        "bootstrap_ci95": {
+          "eta2_protocol": [
+            0.8272837286002448,
+            0.8360588043667195
+          ],
+          "eta2_model": [
+            0.00490577250806359,
+            0.007290037252387411
+          ],
+          "eta2_interaction": [
+            0.15766681183009046,
+            0.1667644448692945
+          ]
+        }
+      }
+    },
+    "all4": {
+      "models": [
+        "ridge",
+        "xgboost",
+        "randomforest",
+        "mlp"
+      ],
+      "n_cells": 20,
+      "protocols": 5,
+      "note": "two-way ANOVA on the (protocol x model) cell means, seeds averaged first -- the same construction 11_variance_decomposition uses, so eta2 here is comparable with the shipped davis/kiba eta2",
+      "rmse": {
+        "ss_protocol": 3.879406615305592,
+        "ss_model": 2.129450670273829,
+        "ss_interaction": 2.1842555787387927,
+        "ss_total": 8.193112864318215,
+        "eta2_protocol": 0.4734960544972811,
+        "eta2_model": 0.2599074009523034,
+        "eta2_interaction": 0.2665965445504154,
+        "F_protocol": 5.328231713908123,
+        "F_model": 3.899636454637587,
+        "p_protocol": 0.010571517855264511,
+        "p_model": 0.03713185377166123,
+        "df": {
+          "protocol": 4,
+          "model": 3,
+          "residual": 12
+        },
+        "bootstrap_ci95": {
+          "eta2_protocol": [
+            0.45763021103643553,
+            0.4917223362986519
+          ],
+          "eta2_model": [
+            0.25335533230719215,
+            0.26577174191382247
+          ],
+          "eta2_interaction": [
+            0.2528006355074746,
+            0.2792344165668032
+          ]
+        }
+      },
+      "ci_harrell": {
+        "ss_protocol": 0.22115715337032132,
+        "ss_model": 0.01481221911812186,
+        "ss_interaction": 0.012969188069485995,
+        "ss_total": 0.24893856055792918,
+        "eta2_protocol": 0.8884005470050792,
+        "eta2_model": 0.05950150545148262,
+        "eta2_interaction": 0.05209794754343815,
+        "F_protocol": 51.157517074795514,
+        "F_model": 4.568433748901263,
+        "p_protocol": 1.926402131252487e-07,
+        "p_model": 0.023483000089325107,
+        "df": {
+          "protocol": 4,
+          "model": 3,
+          "residual": 12
+        },
+        "bootstrap_ci95": {
+          "eta2_protocol": [
+            0.8728589523672302,
+            0.8989894931654309
+          ],
+          "eta2_model": [
+            0.05089099805783223,
+            0.06995260715089834
+          ],
+          "eta2_interaction": [
+            0.0438594769424753,
+            0.06345042028096809
+          ]
+        }
+      },
+      "mae": {
+        "ss_protocol": 3.306514475193287,
+        "ss_model": 1.6322791372297751,
+        "ss_interaction": 1.921909406942845,
+        "ss_total": 6.860703019365907,
+        "eta2_protocol": 0.48194980395739206,
+        "eta2_model": 0.23791718321319158,
+        "eta2_interaction": 0.28013301282941633,
+        "F_protocol": 5.161296047433756,
+        "F_model": 3.3972030759269116,
+        "p_protocol": 0.011828050123194368,
+        "p_model": 0.05360484697205015,
+        "df": {
+          "protocol": 4,
+          "model": 3,
+          "residual": 12
+        },
+        "bootstrap_ci95": {
+          "eta2_protocol": [
+            0.4668440222516918,
+            0.5009570424906974
+          ],
+          "eta2_model": [
+            0.23273629529272238,
+            0.24215204376367874
+          ],
+          "eta2_interaction": [
+            0.26423253020595217,
+            0.2928701936172915
+          ]
+        }
+      }
+    }
+  },
+  "protocol_spread_of_the_best_model": {
+    "chembl": {
+      "per_protocol_best_rmse": {
+        "random": 0.6467,
+        "scaffold": 0.7315,
+        "cold_drug": 1.1415,
+        "cold_target": 1.2129,
+        "temporal": 1.3514
+      },
+      "easiest": "random",
+      "best_of": 0.6467,
+      "hardest": "temporal",
+      "worst_of": 1.3514,
+      "range": 0.7047
+    }
+  },
+  "model_spread_within_protocol_trained3": {
+    "chembl/cold_drug": 0.3413,
+    "chembl/cold_target": 0.3515,
+    "chembl/random": 0.2521,
+    "chembl/scaffold": 0.1798,
+    "chembl/temporal": 0.0992
+  },
+  "model_spread_within_protocol_all4": {
+    "chembl/cold_drug": 0.3413,
+    "chembl/cold_target": 2.0301,
+    "chembl/random": 0.3328,
+    "chembl/scaffold": 0.275,
+    "chembl/temporal": 1.4886
+  },
+  "best_learned_minus_global_mean_null": {
+    "random": -0.8313,
+    "scaffold": -0.7623,
+    "cold_drug": -0.4794,
+    "cold_target": -0.4036,
+    "temporal": -0.0062
+  },
+  "learned_models_worse_than_the_global_mean": [
+    {
+      "dataset": "chembl",
+      "protocol": "cold_target",
+      "model": "mlp",
+      "rmse": 3.2429,
+      "null": 1.6165
+    },
+    {
+      "dataset": "chembl",
+      "protocol": "temporal",
+      "model": "mlp",
+      "rmse": 2.84,
+      "null": 1.3576
+    },
+    {
+      "dataset": "chembl",
+      "protocol": "temporal",
+      "model": "ridge",
+      "rmse": 1.4506,
+      "null": 1.3576
+    }
+  ],
+  "protocols_where_no_learned_model_beats_the_global_mean": {
+    "count": 0,
+    "of_protocols": 5,
+    "detail": {
+      "cold_drug": {
+        "global_mean_null": 1.6209,
+        "best_learned": 1.1415,
+        "beaten_by_null": false
+      },
+      "cold_target": {
+        "global_mean_null": 1.6165,
+        "best_learned": 1.2129,
+        "beaten_by_null": false
+      },
+      "random": {
+        "global_mean_null": 1.478,
+        "best_learned": 0.6467,
+        "beaten_by_null": false
+      },
+      "scaffold": {
+        "global_mean_null": 1.4937,
+        "best_learned": 0.7315,
+        "beaten_by_null": false
+      },
+      "temporal": {
+        "global_mean_null": 1.3576,
+        "best_learned": 1.3514,
+        "beaten_by_null": false
+      }
+    }
+  },
+  "ci_caliber_gap_max": {
+    "abs_diff": 0.0126,
+    "row": "chembl/cold_drug/xgboost/seed2",
+    "ci_harrell": 0.7615,
+    "ci_sklearn_like": 0.7489
+  },
+  "label_tie_fraction_range": [
+    0.6389,
+    0.884
+  ],
+  "protocol_contrasts_rmse": [
+    {
+      "dataset": "chembl",
+      "model": "mean_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "temporal",
+      "easiest_rmse": 1.3576,
+      "hardest_protocol": "cold_drug",
+      "hardest_rmse": 1.6209,
+      "spread_point": 0.2633,
+      "spread_lo95": 0.2253,
+      "spread_hi95": 0.3018,
+      "excludes_zero": true,
+      "reps_used": 2000,
+      "caveat": "the protocols of one table draw their test rows from the same pairs, so the two bootstrap draws are combined as if independent and the interval is conservative (same treatment as 12_testset_bootstrap)"
+    },
+    {
+      "dataset": "chembl",
+      "model": "mean_ligand_train_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "cold_target",
+      "easiest_rmse": 1.2957,
+      "hardest_protocol": "cold_drug",
+      "hardest_rmse": 1.6209,
+      "spread_point": 0.3252,
+      "spread_lo95": 0.2858,
+      "spread_hi95": 0.3647,
+      "excludes_zero": true,
+      "reps_used": 2000,
+      "caveat": "the protocols of one table draw their test rows from the same pairs, so the two bootstrap draws are combined as if independent and the interval is conservative (same treatment as 12_testset_bootstrap)"
+    },
+    {
+      "dataset": "chembl",
+      "model": "mean_target_train_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "temporal",
+      "easiest_rmse": 1.2397,
+      "hardest_protocol": "cold_drug",
+      "hardest_rmse": 1.7731,
+      "spread_point": 0.5334,
+      "spread_lo95": 0.4904,
+      "spread_hi95": 0.576,
+      "excludes_zero": true,
+      "reps_used": 2000,
+      "caveat": "the protocols of one table draw their test rows from the same pairs, so the two bootstrap draws are combined as if independent and the interval is conservative (same treatment as 12_testset_bootstrap)"
+    },
+    {
+      "dataset": "chembl",
+      "model": "ridge_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.8988,
+      "hardest_protocol": "cold_drug",
+      "hardest_rmse": 1.4828,
+      "spread_point": 0.584,
+      "spread_lo95": 0.5455,
+      "spread_hi95": 0.6218,
+      "excludes_zero": true,
+      "reps_used": 2000,
+      "caveat": "the protocols of one table draw their test rows from the same pairs, so the two bootstrap draws are combined as if independent and the interval is conservative (same treatment as 12_testset_bootstrap)"
+    },
+    {
+      "dataset": "chembl",
+      "model": "ridge_seed1",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.8988,
+      "hardest_protocol": "cold_drug",
+      "hardest_rmse": 1.4828,
+      "spread_point": 0.584,
+      "spread_lo95": 0.5455,
+      "spread_hi95": 0.6218,
+      "excludes_zero": true,
+      "reps_used": 2000,
+      "caveat": "the protocols of one table draw their test rows from the same pairs, so the two bootstrap draws are combined as if independent and the interval is conservative (same treatment as 12_testset_bootstrap)"
+    },
+    {
+      "dataset": "chembl",
+      "model": "ridge_seed2",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.8988,
+      "hardest_protocol": "cold_drug",
+      "hardest_rmse": 1.4828,
+      "spread_point": 0.584,
+      "spread_lo95": 0.5455,
+      "spread_hi95": 0.6218,
+      "excludes_zero": true,
+      "reps_used": 2000,
+      "caveat": "the protocols of one table draw their test rows from the same pairs, so the two bootstrap draws are combined as if independent and the interval is conservative (same treatment as 12_testset_bootstrap)"
+    },
+    {
+      "dataset": "chembl",
+      "model": "xgboost_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.6441,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.5438,
+      "spread_point": 0.8998,
+      "spread_lo95": 0.8697,
+      "spread_hi95": 0.9295,
+      "excludes_zero": true,
+      "reps_used": 2000,
+      "caveat": "the protocols of one table draw their test rows from the same pairs, so the two bootstrap draws are combined as if independent and the interval is conservative (same treatment as 12_testset_bootstrap)"
+    },
+    {
+      "dataset": "chembl",
+      "model": "xgboost_seed1",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.6474,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.5743,
+      "spread_point": 0.9269,
+      "spread_lo95": 0.8961,
+      "spread_hi95": 0.957,
+      "excludes_zero": true,
+      "reps_used": 2000,
+      "caveat": "the protocols of one table draw their test rows from the same pairs, so the two bootstrap draws are combined as if independent and the interval is conservative (same treatment as 12_testset_bootstrap)"
+    },
+    {
+      "dataset": "chembl",
+      "model": "xgboost_seed2",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.6486,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.575,
+      "spread_point": 0.9264,
+      "spread_lo95": 0.8971,
+      "spread_hi95": 0.9563,
+      "excludes_zero": true,
+      "reps_used": 2000,
+      "caveat": "the protocols of one table draw their test rows from the same pairs, so the two bootstrap draws are combined as if independent and the interval is conservative (same treatment as 12_testset_bootstrap)"
+    },
+    {
+      "dataset": "chembl",
+      "model": "randomforest_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.7521,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.5093,
+      "spread_point": 0.7572,
+      "spread_lo95": 0.7262,
+      "spread_hi95": 0.7881,
+      "excludes_zero": true,
+      "reps_used": 2000,
+      "caveat": "the protocols of one table draw their test rows from the same pairs, so the two bootstrap draws are combined as if independent and the interval is conservative (same treatment as 12_testset_bootstrap)"
+    },
+    {
+      "dataset": "chembl",
+      "model": "randomforest_seed1",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.7521,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.5531,
+      "spread_point": 0.801,
+      "spread_lo95": 0.7693,
+      "spread_hi95": 0.8321,
+      "excludes_zero": true,
+      "reps_used": 2000,
+      "caveat": "the protocols of one table draw their test rows from the same pairs, so the two bootstrap draws are combined as if independent and the interval is conservative (same treatment as 12_testset_bootstrap)"
+    },
+    {
+      "dataset": "chembl",
+      "model": "randomforest_seed2",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.7515,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.4784,
+      "spread_point": 0.7269,
+      "spread_lo95": 0.6954,
+      "spread_hi95": 0.7573,
+      "excludes_zero": true,
+      "reps_used": 2000,
+      "caveat": "the protocols of one table draw their test rows from the same pairs, so the two bootstrap draws are combined as if independent and the interval is conservative (same treatment as 12_testset_bootstrap)"
+    },
+    {
+      "dataset": "chembl",
+      "model": "mlp_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.999,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 3.4111,
+      "spread_point": 2.4121,
+      "spread_lo95": 2.3607,
+      "spread_hi95": 2.4641,
+      "excludes_zero": true,
+      "reps_used": 2000,
+      "caveat": "the protocols of one table draw their test rows from the same pairs, so the two bootstrap draws are combined as if independent and the interval is conservative (same treatment as 12_testset_bootstrap)"
+    },
+    {
+      "dataset": "chembl",
+      "model": "mlp_seed1",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.96,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 3.31,
+      "spread_point": 2.35,
+      "spread_lo95": 2.2985,
+      "spread_hi95": 2.4045,
+      "excludes_zero": true,
+      "reps_used": 2000,
+      "caveat": "the protocols of one table draw their test rows from the same pairs, so the two bootstrap draws are combined as if independent and the interval is conservative (same treatment as 12_testset_bootstrap)"
+    },
+    {
+      "dataset": "chembl",
+      "model": "mlp_seed2",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.9794,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 3.0077,
+      "spread_point": 2.0283,
+      "spread_lo95": 1.9808,
+      "spread_hi95": 2.0775,
+      "excludes_zero": true,
+      "reps_used": 2000,
+      "caveat": "the protocols of one table draw their test rows from the same pairs, so the two bootstrap draws are combined as if independent and the interval is conservative (same treatment as 12_testset_bootstrap)"
+    }
+  ],
+  "protocol_spread_range_rmse": [
+    0.2633,
+    2.4121
+  ],
+  "protocol_spread_excludes_zero_frac": 1.0,
+  "cells": [
+    {
+      "protocol": "random",
+      "n_test": 3818,
+      "arms": [
+        "mean_seed0",
+        "mean_ligand_train_seed0",
+        "mean_target_train_seed0",
+        "ridge_seed0",
+        "ridge_seed1",
+        "ridge_seed2",
+        "xgboost_seed0",
+        "xgboost_seed1",
+        "xgboost_seed2",
+        "randomforest_seed0",
+        "randomforest_seed1",
+        "randomforest_seed2",
+        "mlp_seed0",
+        "mlp_seed1",
+        "mlp_seed2"
+      ],
+      "n_clusters": {
+        "target": 16,
+        "ligand": 3539
+      },
+      "seconds": 716.6,
+      "reps_rmse_mae": 2000,
+      "reps_ci": 600,
+      "point_rmse_max_abs_dev_vs_metrics_csv": 0.0,
+      "point_rmse": {
+        "mean_seed0": 1.478,
+        "mean_ligand_train_seed0": 1.3022,
+        "mean_target_train_seed0": 1.2634,
+        "ridge_seed0": 0.8988,
+        "ridge_seed1": 0.8988,
+        "ridge_seed2": 0.8988,
+        "xgboost_seed0": 0.6441,
+        "xgboost_seed1": 0.6474,
+        "xgboost_seed2": 0.6486,
+        "randomforest_seed0": 0.7521,
+        "randomforest_seed1": 0.7521,
+        "randomforest_seed2": 0.7515,
+        "mlp_seed0": 0.999,
+        "mlp_seed1": 0.96,
+        "mlp_seed2": 0.9794
+      },
+      "marginal_ci95": {
+        "row": {
+          "rmse": {
+            "mean_seed0": [
+              1.453,
+              1.5048
+            ],
+            "mean_ligand_train_seed0": [
+              1.2756,
+              1.3297
+            ],
+            "mean_target_train_seed0": [
+              1.2364,
+              1.2905
+            ],
+            "ridge_seed0": [
+              0.8755,
+              0.9229
+            ],
+            "ridge_seed1": [
+              0.8755,
+              0.9229
+            ],
+            "ridge_seed2": [
+              0.8755,
+              0.9229
+            ],
+            "xgboost_seed0": [
+              0.623,
+              0.6649
+            ],
+            "xgboost_seed1": [
+              0.6269,
+              0.6678
+            ],
+            "xgboost_seed2": [
+              0.6285,
+              0.6689
+            ],
+            "randomforest_seed0": [
+              0.7316,
+              0.773
+            ],
+            "randomforest_seed1": [
+              0.7312,
+              0.7727
+            ],
+            "randomforest_seed2": [
+              0.7312,
+              0.772
+            ],
+            "mlp_seed0": [
+              0.9756,
+              1.0233
+            ],
+            "mlp_seed1": [
+              0.9343,
+              0.9842
+            ],
+            "mlp_seed2": [
+              0.9563,
+              1.0033
+            ]
+          },
+          "mae": {
+            "mean_seed0": [
+              1.2296,
+              1.2791
+            ],
+            "mean_ligand_train_seed0": [
+              1.0128,
+              1.0628
+            ],
+            "mean_target_train_seed0": [
+              0.9993,
+              1.0456
+            ],
+            "ridge_seed0": [
+              0.6788,
+              0.7158
+            ],
+            "ridge_seed1": [
+              0.6788,
+              0.7158
+            ],
+            "ridge_seed2": [
+              0.6788,
+              0.7158
+            ],
+            "xgboost_seed0": [
+              0.4569,
+              0.4848
+            ],
+            "xgboost_seed1": [
+              0.4617,
+              0.4897
+            ],
+            "xgboost_seed2": [
+              0.4635,
+              0.4916
+            ],
+            "randomforest_seed0": [
+              0.5521,
+              0.5828
+            ],
+            "randomforest_seed1": [
+              0.5521,
+              0.5834
+            ],
+            "randomforest_seed2": [
+              0.5516,
+              0.5825
+            ],
+            "mlp_seed0": [
+              0.7619,
+              0.8009
+            ],
+            "mlp_seed1": [
+              0.7347,
+              0.7724
+            ],
+            "mlp_seed2": [
+              0.7496,
+              0.7881
+            ]
+          },
+          "ci_harrell": {
+            "mean_seed0": [
+              0.5,
+              0.5
+            ],
+            "mean_ligand_train_seed0": [
+              0.6176,
+              0.6346
+            ],
+            "mean_target_train_seed0": [
+              0.6661,
+              0.6838
+            ],
+            "ridge_seed0": [
+              0.7976,
+              0.8096
+            ],
+            "ridge_seed1": [
+              0.7976,
+              0.8096
+            ],
+            "ridge_seed2": [
+              0.7976,
+              0.8096
+            ],
+            "xgboost_seed0": [
+              0.8632,
+              0.8725
+            ],
+            "xgboost_seed1": [
+              0.8625,
+              0.872
+            ],
+            "xgboost_seed2": [
+              0.8619,
+              0.871
+            ],
+            "randomforest_seed0": [
+              0.8379,
+              0.8478
+            ],
+            "randomforest_seed1": [
+              0.8377,
+              0.8481
+            ],
+            "randomforest_seed2": [
+              0.8382,
+              0.8481
+            ],
+            "mlp_seed0": [
+              0.7852,
+              0.7973
+            ],
+            "mlp_seed1": [
+              0.7953,
+              0.8068
+            ],
+            "mlp_seed2": [
+              0.7916,
+              0.8038
+            ]
+          }
+        },
+        "target": {
+          "rmse": {
+            "mean_seed0": [
+              1.3347,
+              1.6358
+            ],
+            "mean_ligand_train_seed0": [
+              1.1266,
+              1.4855
+            ],
+            "mean_target_train_seed0": [
+              1.0714,
+              1.4629
+            ],
+            "ridge_seed0": [
+              0.8216,
+              0.973
+            ],
+            "ridge_seed1": [
+              0.8216,
+              0.973
+            ],
+            "ridge_seed2": [
+              0.8216,
+              0.973
+            ],
+            "xgboost_seed0": [
+              0.5835,
+              0.7073
+            ],
+            "xgboost_seed1": [
+              0.5877,
+              0.7104
+            ],
+            "xgboost_seed2": [
+              0.5872,
+              0.7122
+            ],
+            "randomforest_seed0": [
+              0.6777,
+              0.8259
+            ],
+            "randomforest_seed1": [
+              0.6774,
+              0.8257
+            ],
+            "randomforest_seed2": [
+              0.6774,
+              0.8232
+            ],
+            "mlp_seed0": [
+              0.9297,
+              1.0714
+            ],
+            "mlp_seed1": [
+              0.9182,
+              1.0084
+            ],
+            "mlp_seed2": [
+              0.9311,
+              1.0393
+            ]
+          },
+          "mae": {
+            "mean_seed0": [
+              1.1146,
+              1.4084
+            ],
+            "mean_ligand_train_seed0": [
+              0.884,
+              1.2219
+            ],
+            "mean_target_train_seed0": [
+              0.8519,
+              1.2137
+            ],
+            "ridge_seed0": [
+              0.629,
+              0.7607
+            ],
+            "ridge_seed1": [
+              0.629,
+              0.7607
+            ],
+            "ridge_seed2": [
+              0.629,
+              0.7607
+            ],
+            "xgboost_seed0": [
+              0.4195,
+              0.5219
+            ],
+            "xgboost_seed1": [
+              0.4232,
+              0.5281
+            ],
+            "xgboost_seed2": [
+              0.4239,
+              0.5315
+            ],
+            "randomforest_seed0": [
+              0.4945,
+              0.6358
+            ],
+            "randomforest_seed1": [
+              0.4937,
+              0.636
+            ],
+            "randomforest_seed2": [
+              0.4934,
+              0.635
+            ],
+            "mlp_seed0": [
+              0.7266,
+              0.8403
+            ],
+            "mlp_seed1": [
+              0.7195,
+              0.7952
+            ],
+            "mlp_seed2": [
+              0.7325,
+              0.8134
+            ]
+          },
+          "ci_harrell": {
+            "mean_seed0": [
+              0.5,
+              0.5
+            ],
+            "mean_ligand_train_seed0": [
+              0.5758,
+              0.6706
+            ],
+            "mean_target_train_seed0": [
+              0.6081,
+              0.7239
+            ],
+            "ridge_seed0": [
+              0.7693,
+              0.8193
+            ],
+            "ridge_seed1": [
+              0.7693,
+              0.8193
+            ],
+            "ridge_seed2": [
+              0.7693,
+              0.8193
+            ],
+            "xgboost_seed0": [
+              0.8444,
+              0.8797
+            ],
+            "xgboost_seed1": [
+              0.8436,
+              0.8791
+            ],
+            "xgboost_seed2": [
+              0.8421,
+              0.8791
+            ],
+            "randomforest_seed0": [
+              0.8144,
+              0.8572
+            ],
+            "randomforest_seed1": [
+              0.8146,
+              0.8569
+            ],
+            "randomforest_seed2": [
+              0.8151,
+              0.8575
+            ],
+            "mlp_seed0": [
+              0.7622,
+              0.8069
+            ],
+            "mlp_seed1": [
+              0.7749,
+              0.8143
+            ],
+            "mlp_seed2": [
+              0.7705,
+              0.813
+            ]
+          }
+        },
+        "ligand": {
+          "rmse": {
+            "mean_seed0": [
+              1.4513,
+              1.5055
+            ],
+            "mean_ligand_train_seed0": [
+              1.2751,
+              1.3284
+            ],
+            "mean_target_train_seed0": [
+              1.2345,
+              1.293
+            ],
+            "ridge_seed0": [
+              0.8745,
+              0.9217
+            ],
+            "ridge_seed1": [
+              0.8745,
+              0.9217
+            ],
+            "ridge_seed2": [
+              0.8745,
+              0.9217
+            ],
+            "xgboost_seed0": [
+              0.6226,
+              0.6646
+            ],
+            "xgboost_seed1": [
+              0.6254,
+              0.6677
+            ],
+            "xgboost_seed2": [
+              0.6276,
+              0.6691
+            ],
+            "randomforest_seed0": [
+              0.73,
+              0.7732
+            ],
+            "randomforest_seed1": [
+              0.73,
+              0.7731
+            ],
+            "randomforest_seed2": [
+              0.73,
+              0.7727
+            ],
+            "mlp_seed0": [
+              0.9752,
+              1.0232
+            ],
+            "mlp_seed1": [
+              0.9363,
+              0.9841
+            ],
+            "mlp_seed2": [
+              0.9557,
+              1.0032
+            ]
+          },
+          "mae": {
+            "mean_seed0": [
+              1.2292,
+              1.2803
+            ],
+            "mean_ligand_train_seed0": [
+              1.0115,
+              1.0616
+            ],
+            "mean_target_train_seed0": [
+              0.9984,
+              1.0464
+            ],
+            "ridge_seed0": [
+              0.6789,
+              0.7147
+            ],
+            "ridge_seed1": [
+              0.6789,
+              0.7147
+            ],
+            "ridge_seed2": [
+              0.6789,
+              0.7147
+            ],
+            "xgboost_seed0": [
+              0.4565,
+              0.4849
+            ],
+            "xgboost_seed1": [
+              0.461,
+              0.4898
+            ],
+            "xgboost_seed2": [
+              0.4633,
+              0.4912
+            ],
+            "randomforest_seed0": [
+              0.5511,
+              0.5835
+            ],
+            "randomforest_seed1": [
+              0.5515,
+              0.5836
+            ],
+            "randomforest_seed2": [
+              0.5506,
+              0.583
+            ],
+            "mlp_seed0": [
+              0.7612,
+              0.8011
+            ],
+            "mlp_seed1": [
+              0.7357,
+              0.7733
+            ],
+            "mlp_seed2": [
+              0.7503,
+              0.7875
+            ]
+          }
+        }
+      },
+      "model_contrasts_rmse": [
+        {
+          "pair": "ridge-vs-xgboost",
+          "delta_mean": 0.2521,
+          "ci95": [
+            0.2327,
+            0.2719
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-randomforest",
+          "delta_mean": 0.1467,
+          "ci95": [
+            0.1311,
+            0.163
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mlp",
+          "delta_mean": -0.0807,
+          "ci95": [
+            -0.1014,
+            -0.0589
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-randomforest",
+          "delta_mean": -0.1054,
+          "ci95": [
+            -0.1178,
+            -0.0937
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mlp",
+          "delta_mean": -0.3328,
+          "ci95": [
+            -0.3508,
+            -0.3162
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mlp",
+          "delta_mean": -0.2274,
+          "ci95": [
+            -0.2464,
+            -0.2089
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mean",
+          "delta_mean": -0.5793,
+          "ci95": [
+            -0.6087,
+            -0.5493
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mean",
+          "delta_mean": -0.8314,
+          "ci95": [
+            -0.8611,
+            -0.8021
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mean",
+          "delta_mean": -0.7261,
+          "ci95": [
+            -0.7533,
+            -0.6989
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "mlp-vs-mean",
+          "delta_mean": -0.4987,
+          "ci95": [
+            -0.5269,
+            -0.4696
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        }
+      ],
+      "holm_family_rmse": {
+        "m": 10,
+        "reps": 2000,
+        "p_floor": 0.001,
+        "resolvable": true,
+        "n_significant": 10
+      },
+      "model_contrasts_mae": [
+        {
+          "pair": "ridge-vs-xgboost",
+          "delta_mean": 0.2224,
+          "ci95": [
+            0.2083,
+            0.2369
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-randomforest",
+          "delta_mean": 0.1299,
+          "ci95": [
+            0.1177,
+            0.1422
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mlp",
+          "delta_mean": -0.0709,
+          "ci95": [
+            -0.0878,
+            -0.0536
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-randomforest",
+          "delta_mean": -0.0925,
+          "ci95": [
+            -0.1019,
+            -0.0838
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mlp",
+          "delta_mean": -0.2933,
+          "ci95": [
+            -0.3077,
+            -0.2799
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mlp",
+          "delta_mean": -0.2008,
+          "ci95": [
+            -0.2164,
+            -0.1855
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mean",
+          "delta_mean": -0.5569,
+          "ci95": [
+            -0.5831,
+            -0.5296
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mean",
+          "delta_mean": -0.7793,
+          "ci95": [
+            -0.8053,
+            -0.7529
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mean",
+          "delta_mean": -0.6868,
+          "ci95": [
+            -0.7124,
+            -0.662
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "mlp-vs-mean",
+          "delta_mean": -0.486,
+          "ci95": [
+            -0.5129,
+            -0.4603
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        }
+      ],
+      "holm_family_mae": {
+        "m": 10,
+        "reps": 2000,
+        "p_floor": 0.001,
+        "resolvable": true,
+        "n_significant": 10
+      },
+      "model_contrasts_ci_harrell": [
+        {
+          "pair": "ridge-vs-xgboost",
+          "delta_mean": -0.0634,
+          "ci95": [
+            -0.0678,
+            -0.0588
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-randomforest",
+          "delta_mean": -0.0391,
+          "ci95": [
+            -0.0429,
+            -0.0352
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mlp",
+          "delta_mean": 0.007,
+          "ci95": [
+            0.0016,
+            0.0122
+          ],
+          "p_boot": 0.00666,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-randomforest",
+          "delta_mean": 0.0243,
+          "ci95": [
+            0.0216,
+            0.0268
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mlp",
+          "delta_mean": 0.0704,
+          "ci95": [
+            0.0666,
+            0.0746
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mlp",
+          "delta_mean": 0.0461,
+          "ci95": [
+            0.0423,
+            0.0506
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mean",
+          "delta_mean": 0.3038,
+          "ci95": [
+            0.2976,
+            0.3096
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mean",
+          "delta_mean": 0.3672,
+          "ci95": [
+            0.3626,
+            0.3718
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mean",
+          "delta_mean": 0.3429,
+          "ci95": [
+            0.3381,
+            0.348
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "mlp-vs-mean",
+          "delta_mean": 0.2968,
+          "ci95": [
+            0.2917,
+            0.3015
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        }
+      ],
+      "holm_family_ci_harrell": {
+        "m": 10,
+        "reps": 600,
+        "p_floor": 0.003328,
+        "resolvable": true,
+        "n_significant": 10
+      }
+    },
+    {
+      "protocol": "scaffold",
+      "n_test": 3818,
+      "arms": [
+        "mean_seed0",
+        "mean_ligand_train_seed0",
+        "mean_target_train_seed0",
+        "ridge_seed0",
+        "ridge_seed1",
+        "ridge_seed2",
+        "xgboost_seed0",
+        "xgboost_seed1",
+        "xgboost_seed2",
+        "randomforest_seed0",
+        "randomforest_seed1",
+        "randomforest_seed2",
+        "mlp_seed0",
+        "mlp_seed1",
+        "mlp_seed2"
+      ],
+      "n_clusters": {
+        "target": 16,
+        "ligand": 2544
+      },
+      "seconds": 673.9,
+      "reps_rmse_mae": 2000,
+      "reps_ci": 600,
+      "point_rmse_max_abs_dev_vs_metrics_csv": 0.0,
+      "point_rmse": {
+        "mean_seed0": 1.4937,
+        "mean_ligand_train_seed0": 1.4937,
+        "mean_target_train_seed0": 1.2818,
+        "ridge_seed0": 0.9113,
+        "ridge_seed1": 0.9113,
+        "ridge_seed2": 0.9113,
+        "xgboost_seed0": 0.7303,
+        "xgboost_seed1": 0.7383,
+        "xgboost_seed2": 0.7257,
+        "randomforest_seed0": 0.7677,
+        "randomforest_seed1": 0.7652,
+        "randomforest_seed2": 0.7683,
+        "mlp_seed0": 1.0053,
+        "mlp_seed1": 1.0129,
+        "mlp_seed2": 1.0013
+      },
+      "marginal_ci95": {
+        "row": {
+          "rmse": {
+            "mean_seed0": [
+              1.4688,
+              1.5169
+            ],
+            "mean_ligand_train_seed0": [
+              1.4688,
+              1.5169
+            ],
+            "mean_target_train_seed0": [
+              1.2557,
+              1.3084
+            ],
+            "ridge_seed0": [
+              0.8911,
+              0.9306
+            ],
+            "ridge_seed1": [
+              0.8911,
+              0.9306
+            ],
+            "ridge_seed2": [
+              0.8911,
+              0.9306
+            ],
+            "xgboost_seed0": [
+              0.7106,
+              0.751
+            ],
+            "xgboost_seed1": [
+              0.7191,
+              0.7588
+            ],
+            "xgboost_seed2": [
+              0.7064,
+              0.7465
+            ],
+            "randomforest_seed0": [
+              0.7482,
+              0.7884
+            ],
+            "randomforest_seed1": [
+              0.7457,
+              0.7856
+            ],
+            "randomforest_seed2": [
+              0.7485,
+              0.7889
+            ],
+            "mlp_seed0": [
+              0.9815,
+              1.0294
+            ],
+            "mlp_seed1": [
+              0.988,
+              1.039
+            ],
+            "mlp_seed2": [
+              0.9771,
+              1.0253
+            ]
+          },
+          "mae": {
+            "mean_seed0": [
+              1.2484,
+              1.2964
+            ],
+            "mean_ligand_train_seed0": [
+              1.2484,
+              1.2964
+            ],
+            "mean_target_train_seed0": [
+              1.0337,
+              1.0799
+            ],
+            "ridge_seed0": [
+              0.7286,
+              0.7616
+            ],
+            "ridge_seed1": [
+              0.7286,
+              0.7616
+            ],
+            "ridge_seed2": [
+              0.7286,
+              0.7616
+            ],
+            "xgboost_seed0": [
+              0.5404,
+              0.5702
+            ],
+            "xgboost_seed1": [
+              0.5488,
+              0.5793
+            ],
+            "xgboost_seed2": [
+              0.534,
+              0.5647
+            ],
+            "randomforest_seed0": [
+              0.5803,
+              0.611
+            ],
+            "randomforest_seed1": [
+              0.5799,
+              0.6109
+            ],
+            "randomforest_seed2": [
+              0.5801,
+              0.6112
+            ],
+            "mlp_seed0": [
+              0.7731,
+              0.8115
+            ],
+            "mlp_seed1": [
+              0.7805,
+              0.8203
+            ],
+            "mlp_seed2": [
+              0.7659,
+              0.8048
+            ]
+          },
+          "ci_harrell": {
+            "mean_seed0": [
+              0.5,
+              0.5
+            ],
+            "mean_ligand_train_seed0": [
+              0.5,
+              0.5
+            ],
+            "mean_target_train_seed0": [
+              0.6136,
+              0.6348
+            ],
+            "ridge_seed0": [
+              0.7793,
+              0.7919
+            ],
+            "ridge_seed1": [
+              0.7793,
+              0.7919
+            ],
+            "ridge_seed2": [
+              0.7793,
+              0.7919
+            ],
+            "xgboost_seed0": [
+              0.8298,
+              0.8419
+            ],
+            "xgboost_seed1": [
+              0.8262,
+              0.8387
+            ],
+            "xgboost_seed2": [
+              0.8298,
+              0.8419
+            ],
+            "randomforest_seed0": [
+              0.8239,
+              0.8365
+            ],
+            "randomforest_seed1": [
+              0.8252,
+              0.8372
+            ],
+            "randomforest_seed2": [
+              0.8236,
+              0.8361
+            ],
+            "mlp_seed0": [
+              0.7712,
+              0.7868
+            ],
+            "mlp_seed1": [
+              0.7686,
+              0.7834
+            ],
+            "mlp_seed2": [
+              0.7725,
+              0.7874
+            ]
+          }
+        },
+        "target": {
+          "rmse": {
+            "mean_seed0": [
+              1.2482,
+              1.7415
+            ],
+            "mean_ligand_train_seed0": [
+              1.2482,
+              1.7415
+            ],
+            "mean_target_train_seed0": [
+              1.017,
+              1.5787
+            ],
+            "ridge_seed0": [
+              0.8137,
+              1.0123
+            ],
+            "ridge_seed1": [
+              0.8137,
+              1.0123
+            ],
+            "ridge_seed2": [
+              0.8137,
+              1.0123
+            ],
+            "xgboost_seed0": [
+              0.6485,
+              0.8276
+            ],
+            "xgboost_seed1": [
+              0.6537,
+              0.8412
+            ],
+            "xgboost_seed2": [
+              0.6471,
+              0.8203
+            ],
+            "randomforest_seed0": [
+              0.6816,
+              0.8658
+            ],
+            "randomforest_seed1": [
+              0.6811,
+              0.8639
+            ],
+            "randomforest_seed2": [
+              0.6829,
+              0.8667
+            ],
+            "mlp_seed0": [
+              0.9308,
+              1.0852
+            ],
+            "mlp_seed1": [
+              0.94,
+              1.0955
+            ],
+            "mlp_seed2": [
+              0.9239,
+              1.087
+            ]
+          },
+          "mae": {
+            "mean_seed0": [
+              1.036,
+              1.5178
+            ],
+            "mean_ligand_train_seed0": [
+              1.036,
+              1.5178
+            ],
+            "mean_target_train_seed0": [
+              0.8287,
+              1.3436
+            ],
+            "ridge_seed0": [
+              0.6593,
+              0.8388
+            ],
+            "ridge_seed1": [
+              0.6593,
+              0.8388
+            ],
+            "ridge_seed2": [
+              0.6593,
+              0.8388
+            ],
+            "xgboost_seed0": [
+              0.4847,
+              0.644
+            ],
+            "xgboost_seed1": [
+              0.4918,
+              0.6547
+            ],
+            "xgboost_seed2": [
+              0.4807,
+              0.6351
+            ],
+            "randomforest_seed0": [
+              0.5251,
+              0.6794
+            ],
+            "randomforest_seed1": [
+              0.5254,
+              0.6779
+            ],
+            "randomforest_seed2": [
+              0.5248,
+              0.6785
+            ],
+            "mlp_seed0": [
+              0.7387,
+              0.8529
+            ],
+            "mlp_seed1": [
+              0.7485,
+              0.8567
+            ],
+            "mlp_seed2": [
+              0.7303,
+              0.8485
+            ]
+          },
+          "ci_harrell": {
+            "mean_seed0": [
+              0.5,
+              0.5
+            ],
+            "mean_ligand_train_seed0": [
+              0.5,
+              0.5
+            ],
+            "mean_target_train_seed0": [
+              0.5198,
+              0.7141
+            ],
+            "ridge_seed0": [
+              0.7272,
+              0.8174
+            ],
+            "ridge_seed1": [
+              0.7272,
+              0.8174
+            ],
+            "ridge_seed2": [
+              0.7272,
+              0.8174
+            ],
+            "xgboost_seed0": [
+              0.7849,
+              0.8642
+            ],
+            "xgboost_seed1": [
+              0.7787,
+              0.8623
+            ],
+            "xgboost_seed2": [
+              0.7863,
+              0.8631
+            ],
+            "randomforest_seed0": [
+              0.7805,
+              0.8577
+            ],
+            "randomforest_seed1": [
+              0.781,
+              0.8581
+            ],
+            "randomforest_seed2": [
+              0.7795,
+              0.8579
+            ],
+            "mlp_seed0": [
+              0.7278,
+              0.8119
+            ],
+            "mlp_seed1": [
+              0.7238,
+              0.809
+            ],
+            "mlp_seed2": [
+              0.7247,
+              0.8121
+            ]
+          }
+        },
+        "ligand": {
+          "rmse": {
+            "mean_seed0": [
+              1.466,
+              1.5226
+            ],
+            "mean_ligand_train_seed0": [
+              1.466,
+              1.5226
+            ],
+            "mean_target_train_seed0": [
+              1.2547,
+              1.3115
+            ],
+            "ridge_seed0": [
+              0.8908,
+              0.9332
+            ],
+            "ridge_seed1": [
+              0.8908,
+              0.9332
+            ],
+            "ridge_seed2": [
+              0.8908,
+              0.9332
+            ],
+            "xgboost_seed0": [
+              0.7078,
+              0.7536
+            ],
+            "xgboost_seed1": [
+              0.7164,
+              0.7618
+            ],
+            "xgboost_seed2": [
+              0.7038,
+              0.7487
+            ],
+            "randomforest_seed0": [
+              0.7468,
+              0.7905
+            ],
+            "randomforest_seed1": [
+              0.7446,
+              0.7874
+            ],
+            "randomforest_seed2": [
+              0.7477,
+              0.7908
+            ],
+            "mlp_seed0": [
+              0.9827,
+              1.0298
+            ],
+            "mlp_seed1": [
+              0.9874,
+              1.0382
+            ],
+            "mlp_seed2": [
+              0.9772,
+              1.0268
+            ]
+          },
+          "mae": {
+            "mean_seed0": [
+              1.2449,
+              1.3006
+            ],
+            "mean_ligand_train_seed0": [
+              1.2449,
+              1.3006
+            ],
+            "mean_target_train_seed0": [
+              1.0326,
+              1.0834
+            ],
+            "ridge_seed0": [
+              0.728,
+              0.7646
+            ],
+            "ridge_seed1": [
+              0.728,
+              0.7646
+            ],
+            "ridge_seed2": [
+              0.728,
+              0.7646
+            ],
+            "xgboost_seed0": [
+              0.5383,
+              0.573
+            ],
+            "xgboost_seed1": [
+              0.547,
+              0.5812
+            ],
+            "xgboost_seed2": [
+              0.5324,
+              0.5668
+            ],
+            "randomforest_seed0": [
+              0.5785,
+              0.6127
+            ],
+            "randomforest_seed1": [
+              0.5782,
+              0.6118
+            ],
+            "randomforest_seed2": [
+              0.5781,
+              0.6124
+            ],
+            "mlp_seed0": [
+              0.7726,
+              0.8135
+            ],
+            "mlp_seed1": [
+              0.7799,
+              0.8209
+            ],
+            "mlp_seed2": [
+              0.7663,
+              0.8058
+            ]
+          }
+        }
+      },
+      "model_contrasts_rmse": [
+        {
+          "pair": "ridge-vs-xgboost",
+          "delta_mean": 0.1797,
+          "ci95": [
+            0.1661,
+            0.1935
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-randomforest",
+          "delta_mean": 0.1442,
+          "ci95": [
+            0.1305,
+            0.1584
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mlp",
+          "delta_mean": -0.0954,
+          "ci95": [
+            -0.1149,
+            -0.0762
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-randomforest",
+          "delta_mean": -0.0355,
+          "ci95": [
+            -0.0439,
+            -0.0274
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mlp",
+          "delta_mean": -0.2751,
+          "ci95": [
+            -0.2916,
+            -0.2586
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mlp",
+          "delta_mean": -0.2396,
+          "ci95": [
+            -0.2564,
+            -0.2225
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mean",
+          "delta_mean": -0.5825,
+          "ci95": [
+            -0.6086,
+            -0.5568
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mean",
+          "delta_mean": -0.7622,
+          "ci95": [
+            -0.791,
+            -0.7335
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mean",
+          "delta_mean": -0.7267,
+          "ci95": [
+            -0.7533,
+            -0.6995
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "mlp-vs-mean",
+          "delta_mean": -0.4871,
+          "ci95": [
+            -0.5143,
+            -0.4581
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        }
+      ],
+      "holm_family_rmse": {
+        "m": 10,
+        "reps": 2000,
+        "p_floor": 0.001,
+        "resolvable": true,
+        "n_significant": 10
+      },
+      "model_contrasts_mae": [
+        {
+          "pair": "ridge-vs-xgboost",
+          "delta_mean": 0.1896,
+          "ci95": [
+            0.1773,
+            0.2018
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-randomforest",
+          "delta_mean": 0.1507,
+          "ci95": [
+            0.1387,
+            0.1631
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mlp",
+          "delta_mean": -0.0474,
+          "ci95": [
+            -0.0642,
+            -0.0312
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-randomforest",
+          "delta_mean": -0.0389,
+          "ci95": [
+            -0.0467,
+            -0.0313
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mlp",
+          "delta_mean": -0.237,
+          "ci95": [
+            -0.2508,
+            -0.2232
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mlp",
+          "delta_mean": -0.1981,
+          "ci95": [
+            -0.2123,
+            -0.1835
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mean",
+          "delta_mean": -0.5271,
+          "ci95": [
+            -0.5527,
+            -0.5011
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mean",
+          "delta_mean": -0.7167,
+          "ci95": [
+            -0.7442,
+            -0.689
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mean",
+          "delta_mean": -0.6778,
+          "ci95": [
+            -0.7028,
+            -0.6522
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "mlp-vs-mean",
+          "delta_mean": -0.4797,
+          "ci95": [
+            -0.5057,
+            -0.4535
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        }
+      ],
+      "holm_family_mae": {
+        "m": 10,
+        "reps": 2000,
+        "p_floor": 0.001,
+        "resolvable": true,
+        "n_significant": 10
+      },
+      "model_contrasts_ci_harrell": [
+        {
+          "pair": "ridge-vs-xgboost",
+          "delta_mean": -0.0488,
+          "ci95": [
+            -0.0527,
+            -0.0448
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-randomforest",
+          "delta_mean": -0.0444,
+          "ci95": [
+            -0.0485,
+            -0.0402
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mlp",
+          "delta_mean": 0.0073,
+          "ci95": [
+            0.0022,
+            0.0128
+          ],
+          "p_boot": 0.01664,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-randomforest",
+          "delta_mean": 0.0044,
+          "ci95": [
+            0.0021,
+            0.0064
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mlp",
+          "delta_mean": 0.0561,
+          "ci95": [
+            0.0517,
+            0.0609
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mlp",
+          "delta_mean": 0.0517,
+          "ci95": [
+            0.047,
+            0.0566
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mean",
+          "delta_mean": 0.2857,
+          "ci95": [
+            0.2793,
+            0.2919
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mean",
+          "delta_mean": 0.3345,
+          "ci95": [
+            0.3285,
+            0.3409
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mean",
+          "delta_mean": 0.3301,
+          "ci95": [
+            0.3242,
+            0.3365
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "mlp-vs-mean",
+          "delta_mean": 0.2783,
+          "ci95": [
+            0.2724,
+            0.2843
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        }
+      ],
+      "holm_family_ci_harrell": {
+        "m": 10,
+        "reps": 600,
+        "p_floor": 0.003328,
+        "resolvable": true,
+        "n_significant": 10
+      }
+    },
+    {
+      "protocol": "cold_drug",
+      "n_test": 3818,
+      "arms": [
+        "mean_seed0",
+        "mean_ligand_train_seed0",
+        "mean_target_train_seed0",
+        "ridge_seed0",
+        "ridge_seed1",
+        "ridge_seed2",
+        "xgboost_seed0",
+        "xgboost_seed1",
+        "xgboost_seed2",
+        "randomforest_seed0",
+        "randomforest_seed1",
+        "randomforest_seed2",
+        "mlp_seed0",
+        "mlp_seed1",
+        "mlp_seed2"
+      ],
+      "n_clusters": {
+        "target": 12,
+        "ligand": 1007
+      },
+      "seconds": 643.8,
+      "reps_rmse_mae": 2000,
+      "reps_ci": 600,
+      "point_rmse_max_abs_dev_vs_metrics_csv": 0.0,
+      "point_rmse": {
+        "mean_seed0": 1.6209,
+        "mean_ligand_train_seed0": 1.6209,
+        "mean_target_train_seed0": 1.7731,
+        "ridge_seed0": 1.4828,
+        "ridge_seed1": 1.4828,
+        "ridge_seed2": 1.4828,
+        "xgboost_seed0": 1.1556,
+        "xgboost_seed1": 1.143,
+        "xgboost_seed2": 1.1258,
+        "randomforest_seed0": 1.2082,
+        "randomforest_seed1": 1.2222,
+        "randomforest_seed2": 1.2047,
+        "mlp_seed0": 1.3184,
+        "mlp_seed1": 1.3563,
+        "mlp_seed2": 1.3353
+      },
+      "marginal_ci95": {
+        "row": {
+          "rmse": {
+            "mean_seed0": [
+              1.595,
+              1.6476
+            ],
+            "mean_ligand_train_seed0": [
+              1.595,
+              1.6476
+            ],
+            "mean_target_train_seed0": [
+              1.7392,
+              1.8064
+            ],
+            "ridge_seed0": [
+              1.4519,
+              1.5135
+            ],
+            "ridge_seed1": [
+              1.4519,
+              1.5135
+            ],
+            "ridge_seed2": [
+              1.4519,
+              1.5135
+            ],
+            "xgboost_seed0": [
+              1.1316,
+              1.1791
+            ],
+            "xgboost_seed1": [
+              1.1189,
+              1.1662
+            ],
+            "xgboost_seed2": [
+              1.1027,
+              1.1491
+            ],
+            "randomforest_seed0": [
+              1.1855,
+              1.2311
+            ],
+            "randomforest_seed1": [
+              1.1991,
+              1.2454
+            ],
+            "randomforest_seed2": [
+              1.1823,
+              1.227
+            ],
+            "mlp_seed0": [
+              1.2875,
+              1.3481
+            ],
+            "mlp_seed1": [
+              1.3249,
+              1.3875
+            ],
+            "mlp_seed2": [
+              1.3045,
+              1.3648
+            ]
+          },
+          "mae": {
+            "mean_seed0": [
+              1.3902,
+              1.4396
+            ],
+            "mean_ligand_train_seed0": [
+              1.3902,
+              1.4396
+            ],
+            "mean_target_train_seed0": [
+              1.4296,
+              1.4923
+            ],
+            "ridge_seed0": [
+              1.1471,
+              1.2047
+            ],
+            "ridge_seed1": [
+              1.1471,
+              1.2047
+            ],
+            "ridge_seed2": [
+              1.1471,
+              1.2047
+            ],
+            "xgboost_seed0": [
+              0.9152,
+              0.9586
+            ],
+            "xgboost_seed1": [
+              0.9041,
+              0.9473
+            ],
+            "xgboost_seed2": [
+              0.8966,
+              0.9372
+            ],
+            "randomforest_seed0": [
+              0.9847,
+              1.027
+            ],
+            "randomforest_seed1": [
+              0.9979,
+              1.0396
+            ],
+            "randomforest_seed2": [
+              0.9848,
+              1.0263
+            ],
+            "mlp_seed0": [
+              1.0295,
+              1.0799
+            ],
+            "mlp_seed1": [
+              1.0561,
+              1.1073
+            ],
+            "mlp_seed2": [
+              1.045,
+              1.0944
+            ]
+          },
+          "ci_harrell": {
+            "mean_seed0": [
+              0.5,
+              0.5
+            ],
+            "mean_ligand_train_seed0": [
+              0.5,
+              0.5
+            ],
+            "mean_target_train_seed0": [
+              0.5834,
+              0.6038
+            ],
+            "ridge_seed0": [
+              0.7236,
+              0.7378
+            ],
+            "ridge_seed1": [
+              0.7236,
+              0.7378
+            ],
+            "ridge_seed2": [
+              0.7236,
+              0.7378
+            ],
+            "xgboost_seed0": [
+              0.7522,
+              0.7662
+            ],
+            "xgboost_seed1": [
+              0.7525,
+              0.7663
+            ],
+            "xgboost_seed2": [
+              0.7547,
+              0.7686
+            ],
+            "randomforest_seed0": [
+              0.7379,
+              0.752
+            ],
+            "randomforest_seed1": [
+              0.7345,
+              0.749
+            ],
+            "randomforest_seed2": [
+              0.7373,
+              0.752
+            ],
+            "mlp_seed0": [
+              0.7042,
+              0.72
+            ],
+            "mlp_seed1": [
+              0.6975,
+              0.7144
+            ],
+            "mlp_seed2": [
+              0.6949,
+              0.7106
+            ]
+          }
+        },
+        "target": {
+          "rmse": {
+            "mean_seed0": [
+              1.4295,
+              1.833
+            ],
+            "mean_ligand_train_seed0": [
+              1.4295,
+              1.833
+            ],
+            "mean_target_train_seed0": [
+              1.3099,
+              2.2025
+            ],
+            "ridge_seed0": [
+              1.0577,
+              1.8817
+            ],
+            "ridge_seed1": [
+              1.0577,
+              1.8817
+            ],
+            "ridge_seed2": [
+              1.0577,
+              1.8817
+            ],
+            "xgboost_seed0": [
+              0.9212,
+              1.396
+            ],
+            "xgboost_seed1": [
+              0.9187,
+              1.369
+            ],
+            "xgboost_seed2": [
+              0.9163,
+              1.3372
+            ],
+            "randomforest_seed0": [
+              0.9908,
+              1.4036
+            ],
+            "randomforest_seed1": [
+              0.9966,
+              1.4266
+            ],
+            "randomforest_seed2": [
+              0.9915,
+              1.3924
+            ],
+            "mlp_seed0": [
+              1.1296,
+              1.4634
+            ],
+            "mlp_seed1": [
+              1.1608,
+              1.5004
+            ],
+            "mlp_seed2": [
+              1.1583,
+              1.4581
+            ]
+          },
+          "mae": {
+            "mean_seed0": [
+              1.2322,
+              1.6378
+            ],
+            "mean_ligand_train_seed0": [
+              1.2322,
+              1.6378
+            ],
+            "mean_target_train_seed0": [
+              1.088,
+              1.8982
+            ],
+            "ridge_seed0": [
+              0.827,
+              1.5647
+            ],
+            "ridge_seed1": [
+              0.827,
+              1.5647
+            ],
+            "ridge_seed2": [
+              0.827,
+              1.5647
+            ],
+            "xgboost_seed0": [
+              0.7586,
+              1.1336
+            ],
+            "xgboost_seed1": [
+              0.7488,
+              1.1169
+            ],
+            "xgboost_seed2": [
+              0.7555,
+              1.0917
+            ],
+            "randomforest_seed0": [
+              0.8419,
+              1.1743
+            ],
+            "randomforest_seed1": [
+              0.8477,
+              1.1969
+            ],
+            "randomforest_seed2": [
+              0.8422,
+              1.1684
+            ],
+            "mlp_seed0": [
+              0.9015,
+              1.1944
+            ],
+            "mlp_seed1": [
+              0.9334,
+              1.2171
+            ],
+            "mlp_seed2": [
+              0.9224,
+              1.1855
+            ]
+          },
+          "ci_harrell": {
+            "mean_seed0": [
+              0.5,
+              0.5
+            ],
+            "mean_ligand_train_seed0": [
+              0.5,
+              0.5
+            ],
+            "mean_target_train_seed0": [
+              0.457,
+              0.7269
+            ],
+            "ridge_seed0": [
+              0.6715,
+              0.7904
+            ],
+            "ridge_seed1": [
+              0.6715,
+              0.7904
+            ],
+            "ridge_seed2": [
+              0.6715,
+              0.7904
+            ],
+            "xgboost_seed0": [
+              0.7036,
+              0.8074
+            ],
+            "xgboost_seed1": [
+              0.7047,
+              0.8068
+            ],
+            "xgboost_seed2": [
+              0.7062,
+              0.8087
+            ],
+            "randomforest_seed0": [
+              0.6883,
+              0.7955
+            ],
+            "randomforest_seed1": [
+              0.6831,
+              0.7935
+            ],
+            "randomforest_seed2": [
+              0.6878,
+              0.7963
+            ],
+            "mlp_seed0": [
+              0.6515,
+              0.7373
+            ],
+            "mlp_seed1": [
+              0.6478,
+              0.7283
+            ],
+            "mlp_seed2": [
+              0.6448,
+              0.7298
+            ]
+          }
+        },
+        "ligand": {
+          "rmse": {
+            "mean_seed0": [
+              1.576,
+              1.6652
+            ],
+            "mean_ligand_train_seed0": [
+              1.576,
+              1.6652
+            ],
+            "mean_target_train_seed0": [
+              1.7254,
+              1.8186
+            ],
+            "ridge_seed0": [
+              1.4468,
+              1.518
+            ],
+            "ridge_seed1": [
+              1.4468,
+              1.518
+            ],
+            "ridge_seed2": [
+              1.4468,
+              1.518
+            ],
+            "xgboost_seed0": [
+              1.1279,
+              1.1826
+            ],
+            "xgboost_seed1": [
+              1.1147,
+              1.1701
+            ],
+            "xgboost_seed2": [
+              1.0977,
+              1.1527
+            ],
+            "randomforest_seed0": [
+              1.1805,
+              1.2333
+            ],
+            "randomforest_seed1": [
+              1.194,
+              1.2477
+            ],
+            "randomforest_seed2": [
+              1.1769,
+              1.2296
+            ],
+            "mlp_seed0": [
+              1.2802,
+              1.3569
+            ],
+            "mlp_seed1": [
+              1.3146,
+              1.3988
+            ],
+            "mlp_seed2": [
+              1.2947,
+              1.3718
+            ]
+          },
+          "mae": {
+            "mean_seed0": [
+              1.375,
+              1.4521
+            ],
+            "mean_ligand_train_seed0": [
+              1.375,
+              1.4521
+            ],
+            "mean_target_train_seed0": [
+              1.4212,
+              1.5003
+            ],
+            "ridge_seed0": [
+              1.1447,
+              1.2076
+            ],
+            "ridge_seed1": [
+              1.1447,
+              1.2076
+            ],
+            "ridge_seed2": [
+              1.1447,
+              1.2076
+            ],
+            "xgboost_seed0": [
+              0.911,
+              0.9625
+            ],
+            "xgboost_seed1": [
+              0.9002,
+              0.9495
+            ],
+            "xgboost_seed2": [
+              0.8911,
+              0.941
+            ],
+            "randomforest_seed0": [
+              0.9795,
+              1.031
+            ],
+            "randomforest_seed1": [
+              0.9927,
+              1.0437
+            ],
+            "randomforest_seed2": [
+              0.9793,
+              1.03
+            ],
+            "mlp_seed0": [
+              1.0249,
+              1.0873
+            ],
+            "mlp_seed1": [
+              1.0485,
+              1.1134
+            ],
+            "mlp_seed2": [
+              1.0388,
+              1.1004
+            ]
+          }
+        }
+      },
+      "model_contrasts_rmse": [
+        {
+          "pair": "ridge-vs-xgboost",
+          "delta_mean": 0.3415,
+          "ci95": [
+            0.321,
+            0.3618
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-randomforest",
+          "delta_mean": 0.2714,
+          "ci95": [
+            0.2485,
+            0.2963
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mlp",
+          "delta_mean": 0.1463,
+          "ci95": [
+            0.1125,
+            0.1791
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-randomforest",
+          "delta_mean": -0.0702,
+          "ci95": [
+            -0.081,
+            -0.0594
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mlp",
+          "delta_mean": -0.1952,
+          "ci95": [
+            -0.2202,
+            -0.1708
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mlp",
+          "delta_mean": -0.1251,
+          "ci95": [
+            -0.1482,
+            -0.1016
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mean",
+          "delta_mean": -0.1383,
+          "ci95": [
+            -0.1761,
+            -0.0968
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mean",
+          "delta_mean": -0.4798,
+          "ci95": [
+            -0.5141,
+            -0.4448
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mean",
+          "delta_mean": -0.4097,
+          "ci95": [
+            -0.4392,
+            -0.3797
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "mlp-vs-mean",
+          "delta_mean": -0.2846,
+          "ci95": [
+            -0.319,
+            -0.2522
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        }
+      ],
+      "holm_family_rmse": {
+        "m": 10,
+        "reps": 2000,
+        "p_floor": 0.001,
+        "resolvable": true,
+        "n_significant": 10
+      },
+      "model_contrasts_mae": [
+        {
+          "pair": "ridge-vs-xgboost",
+          "delta_mean": 0.2499,
+          "ci95": [
+            0.2286,
+            0.2704
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-randomforest",
+          "delta_mean": 0.1663,
+          "ci95": [
+            0.1437,
+            0.1905
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mlp",
+          "delta_mean": 0.1067,
+          "ci95": [
+            0.0771,
+            0.1367
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-randomforest",
+          "delta_mean": -0.0836,
+          "ci95": [
+            -0.0941,
+            -0.0729
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mlp",
+          "delta_mean": -0.1431,
+          "ci95": [
+            -0.1633,
+            -0.1226
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mlp",
+          "delta_mean": -0.0596,
+          "ci95": [
+            -0.0796,
+            -0.0394
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mean",
+          "delta_mean": -0.2389,
+          "ci95": [
+            -0.2747,
+            -0.1992
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mean",
+          "delta_mean": -0.4888,
+          "ci95": [
+            -0.5209,
+            -0.4566
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mean",
+          "delta_mean": -0.4052,
+          "ci95": [
+            -0.4334,
+            -0.3767
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "mlp-vs-mean",
+          "delta_mean": -0.3457,
+          "ci95": [
+            -0.3769,
+            -0.3158
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        }
+      ],
+      "holm_family_mae": {
+        "m": 10,
+        "reps": 2000,
+        "p_floor": 0.001,
+        "resolvable": true,
+        "n_significant": 10
+      },
+      "model_contrasts_ci_harrell": [
+        {
+          "pair": "ridge-vs-xgboost",
+          "delta_mean": -0.0291,
+          "ci95": [
+            -0.0344,
+            -0.0245
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-randomforest",
+          "delta_mean": -0.0129,
+          "ci95": [
+            -0.0186,
+            -0.0074
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mlp",
+          "delta_mean": 0.0238,
+          "ci95": [
+            0.0169,
+            0.0311
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-randomforest",
+          "delta_mean": 0.0163,
+          "ci95": [
+            0.0131,
+            0.0195
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mlp",
+          "delta_mean": 0.0529,
+          "ci95": [
+            0.0466,
+            0.0596
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mlp",
+          "delta_mean": 0.0366,
+          "ci95": [
+            0.0298,
+            0.0439
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mean",
+          "delta_mean": 0.2307,
+          "ci95": [
+            0.2236,
+            0.2378
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mean",
+          "delta_mean": 0.2599,
+          "ci95": [
+            0.2533,
+            0.267
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mean",
+          "delta_mean": 0.2436,
+          "ci95": [
+            0.2365,
+            0.2509
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "mlp-vs-mean",
+          "delta_mean": 0.2069,
+          "ci95": [
+            0.2001,
+            0.2144
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        }
+      ],
+      "holm_family_ci_harrell": {
+        "m": 10,
+        "reps": 600,
+        "p_floor": 0.003328,
+        "resolvable": true,
+        "n_significant": 10
+      }
+    },
+    {
+      "protocol": "cold_target",
+      "n_test": 3480,
+      "arms": [
+        "mean_seed0",
+        "mean_ligand_train_seed0",
+        "mean_target_train_seed0",
+        "ridge_seed0",
+        "ridge_seed1",
+        "ridge_seed2",
+        "xgboost_seed0",
+        "xgboost_seed1",
+        "xgboost_seed2",
+        "randomforest_seed0",
+        "randomforest_seed1",
+        "randomforest_seed2",
+        "mlp_seed0",
+        "mlp_seed1",
+        "mlp_seed2"
+      ],
+      "n_clusters": {
+        "target": 2,
+        "ligand": 3480
+      },
+      "seconds": 584.4,
+      "reps_rmse_mae": 2000,
+      "reps_ci": 600,
+      "point_rmse_max_abs_dev_vs_metrics_csv": 0.0,
+      "point_rmse": {
+        "mean_seed0": 1.6165,
+        "mean_ligand_train_seed0": 1.2957,
+        "mean_target_train_seed0": 1.6165,
+        "ridge_seed0": 1.2129,
+        "ridge_seed1": 1.2129,
+        "ridge_seed2": 1.2129,
+        "xgboost_seed0": 1.5438,
+        "xgboost_seed1": 1.5743,
+        "xgboost_seed2": 1.575,
+        "randomforest_seed0": 1.5093,
+        "randomforest_seed1": 1.5531,
+        "randomforest_seed2": 1.4784,
+        "mlp_seed0": 3.4111,
+        "mlp_seed1": 3.31,
+        "mlp_seed2": 3.0077
+      },
+      "marginal_ci95": {
+        "row": {
+          "rmse": {
+            "mean_seed0": [
+              1.5931,
+              1.6399
+            ],
+            "mean_ligand_train_seed0": [
+              1.2663,
+              1.3264
+            ],
+            "mean_target_train_seed0": [
+              1.5931,
+              1.6399
+            ],
+            "ridge_seed0": [
+              1.1719,
+              1.2528
+            ],
+            "ridge_seed1": [
+              1.1719,
+              1.2528
+            ],
+            "ridge_seed2": [
+              1.1719,
+              1.2528
+            ],
+            "xgboost_seed0": [
+              1.5219,
+              1.5665
+            ],
+            "xgboost_seed1": [
+              1.5514,
+              1.5973
+            ],
+            "xgboost_seed2": [
+              1.552,
+              1.5983
+            ],
+            "randomforest_seed0": [
+              1.4861,
+              1.5337
+            ],
+            "randomforest_seed1": [
+              1.5299,
+              1.5769
+            ],
+            "randomforest_seed2": [
+              1.4547,
+              1.5028
+            ],
+            "mlp_seed0": [
+              3.3667,
+              3.4572
+            ],
+            "mlp_seed1": [
+              3.2658,
+              3.3587
+            ],
+            "mlp_seed2": [
+              2.966,
+              3.0502
+            ]
+          },
+          "mae": {
+            "mean_seed0": [
+              1.428,
+              1.4758
+            ],
+            "mean_ligand_train_seed0": [
+              0.9761,
+              1.0307
+            ],
+            "mean_target_train_seed0": [
+              1.428,
+              1.4758
+            ],
+            "ridge_seed0": [
+              0.9125,
+              0.9649
+            ],
+            "ridge_seed1": [
+              0.9125,
+              0.9649
+            ],
+            "ridge_seed2": [
+              0.9125,
+              0.9649
+            ],
+            "xgboost_seed0": [
+              1.3626,
+              1.4092
+            ],
+            "xgboost_seed1": [
+              1.3923,
+              1.4388
+            ],
+            "xgboost_seed2": [
+              1.3911,
+              1.4378
+            ],
+            "randomforest_seed0": [
+              1.3225,
+              1.3681
+            ],
+            "randomforest_seed1": [
+              1.3642,
+              1.411
+            ],
+            "randomforest_seed2": [
+              1.2881,
+              1.334
+            ],
+            "mlp_seed0": [
+              3.0755,
+              3.1621
+            ],
+            "mlp_seed1": [
+              2.9874,
+              3.0753
+            ],
+            "mlp_seed2": [
+              2.7138,
+              2.7948
+            ]
+          },
+          "ci_harrell": {
+            "mean_seed0": [
+              0.5,
+              0.5
+            ],
+            "mean_ligand_train_seed0": [
+              0.6101,
+              0.629
+            ],
+            "mean_target_train_seed0": [
+              0.5,
+              0.5
+            ],
+            "ridge_seed0": [
+              0.5548,
+              0.5792
+            ],
+            "ridge_seed1": [
+              0.5548,
+              0.5792
+            ],
+            "ridge_seed2": [
+              0.5548,
+              0.5792
+            ],
+            "xgboost_seed0": [
+              0.5172,
+              0.5431
+            ],
+            "xgboost_seed1": [
+              0.5698,
+              0.592
+            ],
+            "xgboost_seed2": [
+              0.5468,
+              0.5728
+            ],
+            "randomforest_seed0": [
+              0.5912,
+              0.6175
+            ],
+            "randomforest_seed1": [
+              0.6026,
+              0.6265
+            ],
+            "randomforest_seed2": [
+              0.593,
+              0.6196
+            ],
+            "mlp_seed0": [
+              0.5612,
+              0.5845
+            ],
+            "mlp_seed1": [
+              0.5584,
+              0.5823
+            ],
+            "mlp_seed2": [
+              0.5675,
+              0.5925
+            ]
+          }
+        },
+        "target": {
+          "rmse": {
+            "mean_seed0": [
+              1.5099,
+              1.7681
+            ],
+            "mean_ligand_train_seed0": [
+              0.8596,
+              1.7681
+            ],
+            "mean_target_train_seed0": [
+              1.5099,
+              1.7681
+            ],
+            "ridge_seed0": [
+              0.8742,
+              1.5999
+            ],
+            "ridge_seed1": [
+              0.8742,
+              1.5999
+            ],
+            "ridge_seed2": [
+              0.8742,
+              1.5999
+            ],
+            "xgboost_seed0": [
+              1.4684,
+              1.6534
+            ],
+            "xgboost_seed1": [
+              1.4715,
+              1.7206
+            ],
+            "xgboost_seed2": [
+              1.4713,
+              1.7226
+            ],
+            "randomforest_seed0": [
+              1.3264,
+              1.754
+            ],
+            "randomforest_seed1": [
+              1.3557,
+              1.8156
+            ],
+            "randomforest_seed2": [
+              1.2837,
+              1.7361
+            ],
+            "mlp_seed0": [
+              2.731,
+              4.2508
+            ],
+            "mlp_seed1": [
+              2.6014,
+              4.1722
+            ],
+            "mlp_seed2": [
+              2.5063,
+              3.6475
+            ]
+          },
+          "mae": {
+            "mean_seed0": [
+              1.4053,
+              1.5215
+            ],
+            "mean_ligand_train_seed0": [
+              0.6658,
+              1.5215
+            ],
+            "mean_target_train_seed0": [
+              1.4053,
+              1.5215
+            ],
+            "ridge_seed0": [
+              0.7126,
+              1.2857
+            ],
+            "ridge_seed1": [
+              0.7126,
+              1.2857
+            ],
+            "ridge_seed2": [
+              0.7126,
+              1.2857
+            ],
+            "xgboost_seed0": [
+              1.3669,
+              1.4133
+            ],
+            "xgboost_seed1": [
+              1.3738,
+              1.479
+            ],
+            "xgboost_seed2": [
+              1.3714,
+              1.4786
+            ],
+            "randomforest_seed0": [
+              1.2456,
+              1.4974
+            ],
+            "randomforest_seed1": [
+              1.2743,
+              1.5615
+            ],
+            "randomforest_seed2": [
+              1.202,
+              1.4785
+            ],
+            "mlp_seed0": [
+              2.5751,
+              3.9546
+            ],
+            "mlp_seed1": [
+              2.485,
+              3.8698
+            ],
+            "mlp_seed2": [
+              2.3811,
+              3.3281
+            ]
+          },
+          "ci_harrell": {
+            "mean_seed0": [
+              0.5,
+              0.5
+            ],
+            "mean_ligand_train_seed0": [
+              0.5,
+              0.7274
+            ],
+            "mean_target_train_seed0": [
+              0.5,
+              0.5
+            ],
+            "ridge_seed0": [
+              0.5075,
+              0.6278
+            ],
+            "ridge_seed1": [
+              0.5075,
+              0.6278
+            ],
+            "ridge_seed2": [
+              0.5075,
+              0.6278
+            ],
+            "xgboost_seed0": [
+              0.5302,
+              0.5842
+            ],
+            "xgboost_seed1": [
+              0.5111,
+              0.65
+            ],
+            "xgboost_seed2": [
+              0.4744,
+              0.6703
+            ],
+            "randomforest_seed0": [
+              0.4719,
+              0.7579
+            ],
+            "randomforest_seed1": [
+              0.482,
+              0.7623
+            ],
+            "randomforest_seed2": [
+              0.4835,
+              0.7461
+            ],
+            "mlp_seed0": [
+              0.502,
+              0.6394
+            ],
+            "mlp_seed1": [
+              0.4792,
+              0.654
+            ],
+            "mlp_seed2": [
+              0.4961,
+              0.6623
+            ]
+          }
+        },
+        "ligand": {
+          "rmse": {
+            "mean_seed0": [
+              1.5914,
+              1.6413
+            ],
+            "mean_ligand_train_seed0": [
+              1.2626,
+              1.3265
+            ],
+            "mean_target_train_seed0": [
+              1.5914,
+              1.6413
+            ],
+            "ridge_seed0": [
+              1.1714,
+              1.2522
+            ],
+            "ridge_seed1": [
+              1.1714,
+              1.2522
+            ],
+            "ridge_seed2": [
+              1.1714,
+              1.2522
+            ],
+            "xgboost_seed0": [
+              1.5201,
+              1.5679
+            ],
+            "xgboost_seed1": [
+              1.5499,
+              1.5985
+            ],
+            "xgboost_seed2": [
+              1.5502,
+              1.6002
+            ],
+            "randomforest_seed0": [
+              1.4828,
+              1.5345
+            ],
+            "randomforest_seed1": [
+              1.5261,
+              1.5786
+            ],
+            "randomforest_seed2": [
+              1.4518,
+              1.5037
+            ],
+            "mlp_seed0": [
+              3.361,
+              3.4574
+            ],
+            "mlp_seed1": [
+              3.2601,
+              3.3579
+            ],
+            "mlp_seed2": [
+              2.9642,
+              3.0499
+            ]
+          },
+          "mae": {
+            "mean_seed0": [
+              1.4261,
+              1.4754
+            ],
+            "mean_ligand_train_seed0": [
+              0.9738,
+              1.0302
+            ],
+            "mean_target_train_seed0": [
+              1.4261,
+              1.4754
+            ],
+            "ridge_seed0": [
+              0.9098,
+              0.9632
+            ],
+            "ridge_seed1": [
+              0.9098,
+              0.9632
+            ],
+            "ridge_seed2": [
+              0.9098,
+              0.9632
+            ],
+            "xgboost_seed0": [
+              1.3611,
+              1.4087
+            ],
+            "xgboost_seed1": [
+              1.3907,
+              1.4389
+            ],
+            "xgboost_seed2": [
+              1.3888,
+              1.4375
+            ],
+            "randomforest_seed0": [
+              1.3205,
+              1.3688
+            ],
+            "randomforest_seed1": [
+              1.3628,
+              1.4119
+            ],
+            "randomforest_seed2": [
+              1.2866,
+              1.3349
+            ],
+            "mlp_seed0": [
+              3.0689,
+              3.1635
+            ],
+            "mlp_seed1": [
+              2.9835,
+              3.0748
+            ],
+            "mlp_seed2": [
+              2.7127,
+              2.7943
+            ]
+          }
+        }
+      },
+      "model_contrasts_rmse": [
+        {
+          "pair": "ridge-vs-xgboost",
+          "delta_mean": -0.3523,
+          "ci95": [
+            -0.3888,
+            -0.3156
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-randomforest",
+          "delta_mean": -0.3015,
+          "ci95": [
+            -0.3348,
+            -0.268
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mlp",
+          "delta_mean": -2.0308,
+          "ci95": [
+            -2.0861,
+            -1.9753
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-randomforest",
+          "delta_mean": 0.0508,
+          "ci95": [
+            0.0413,
+            0.06
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mlp",
+          "delta_mean": -1.6785,
+          "ci95": [
+            -1.7133,
+            -1.6433
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mlp",
+          "delta_mean": -1.7293,
+          "ci95": [
+            -1.7617,
+            -1.698
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mean",
+          "delta_mean": -0.4044,
+          "ci95": [
+            -0.4432,
+            -0.3649
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mean",
+          "delta_mean": -0.0521,
+          "ci95": [
+            -0.0555,
+            -0.0486
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mean",
+          "delta_mean": -0.1029,
+          "ci95": [
+            -0.1141,
+            -0.0918
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "mlp-vs-mean",
+          "delta_mean": 1.6264,
+          "ci95": [
+            1.5919,
+            1.6604
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        }
+      ],
+      "holm_family_rmse": {
+        "m": 10,
+        "reps": 2000,
+        "p_floor": 0.001,
+        "resolvable": true,
+        "n_significant": 10
+      },
+      "model_contrasts_mae": [
+        {
+          "pair": "ridge-vs-xgboost",
+          "delta_mean": -0.4669,
+          "ci95": [
+            -0.4924,
+            -0.4404
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-randomforest",
+          "delta_mean": -0.4098,
+          "ci95": [
+            -0.4324,
+            -0.3863
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mlp",
+          "delta_mean": -2.0296,
+          "ci95": [
+            -2.0731,
+            -1.9852
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-randomforest",
+          "delta_mean": 0.0571,
+          "ci95": [
+            0.048,
+            0.0658
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mlp",
+          "delta_mean": -1.5627,
+          "ci95": [
+            -1.5976,
+            -1.5267
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mlp",
+          "delta_mean": -1.6197,
+          "ci95": [
+            -1.652,
+            -1.5883
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mean",
+          "delta_mean": -0.5133,
+          "ci95": [
+            -0.5408,
+            -0.4847
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mean",
+          "delta_mean": -0.0464,
+          "ci95": [
+            -0.0498,
+            -0.0432
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mean",
+          "delta_mean": -0.1035,
+          "ci95": [
+            -0.114,
+            -0.093
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "mlp-vs-mean",
+          "delta_mean": 1.5163,
+          "ci95": [
+            1.4809,
+            1.5507
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        }
+      ],
+      "holm_family_mae": {
+        "m": 10,
+        "reps": 2000,
+        "p_floor": 0.001,
+        "resolvable": true,
+        "n_significant": 10
+      },
+      "model_contrasts_ci_harrell": [
+        {
+          "pair": "ridge-vs-xgboost",
+          "delta_mean": 0.0098,
+          "ci95": [
+            -0.0017,
+            0.0213
+          ],
+          "p_boot": 0.08319,
+          "p_holm": 0.16639,
+          "significant_at_0.05": false
+        },
+        {
+          "pair": "ridge-vs-randomforest",
+          "delta_mean": -0.0411,
+          "ci95": [
+            -0.0489,
+            -0.0331
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mlp",
+          "delta_mean": -0.0084,
+          "ci95": [
+            -0.021,
+            0.0057
+          ],
+          "p_boot": 0.21963,
+          "p_holm": 0.21963,
+          "significant_at_0.05": false
+        },
+        {
+          "pair": "xgboost-vs-randomforest",
+          "delta_mean": -0.051,
+          "ci95": [
+            -0.0607,
+            -0.0413
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mlp",
+          "delta_mean": -0.0182,
+          "ci95": [
+            -0.0349,
+            -0.0017
+          ],
+          "p_boot": 0.03328,
+          "p_holm": 0.09983,
+          "significant_at_0.05": false
+        },
+        {
+          "pair": "randomforest-vs-mlp",
+          "delta_mean": 0.0328,
+          "ci95": [
+            0.0193,
+            0.0465
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mean",
+          "delta_mean": 0.0665,
+          "ci95": [
+            0.0548,
+            0.0792
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mean",
+          "delta_mean": 0.0567,
+          "ci95": [
+            0.0461,
+            0.0676
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mean",
+          "delta_mean": 0.1076,
+          "ci95": [
+            0.0958,
+            0.1207
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "mlp-vs-mean",
+          "delta_mean": 0.0749,
+          "ci95": [
+            0.0634,
+            0.0857
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        }
+      ],
+      "holm_family_ci_harrell": {
+        "m": 10,
+        "reps": 600,
+        "p_floor": 0.003328,
+        "resolvable": true,
+        "n_significant": 7
+      }
+    },
+    {
+      "protocol": "temporal",
+      "n_test": 3791,
+      "arms": [
+        "mean_seed0",
+        "mean_ligand_train_seed0",
+        "mean_target_train_seed0",
+        "ridge_seed0",
+        "ridge_seed1",
+        "ridge_seed2",
+        "xgboost_seed0",
+        "xgboost_seed1",
+        "xgboost_seed2",
+        "randomforest_seed0",
+        "randomforest_seed1",
+        "randomforest_seed2",
+        "mlp_seed0",
+        "mlp_seed1",
+        "mlp_seed2"
+      ],
+      "n_clusters": {
+        "target": 15,
+        "ligand": 3477
+      },
+      "seconds": 685.8,
+      "reps_rmse_mae": 2000,
+      "reps_ci": 600,
+      "point_rmse_max_abs_dev_vs_metrics_csv": 0.0,
+      "point_rmse": {
+        "mean_seed0": 1.3576,
+        "mean_ligand_train_seed0": 1.3588,
+        "mean_target_train_seed0": 1.2397,
+        "ridge_seed0": 1.4506,
+        "ridge_seed1": 1.4506,
+        "ridge_seed2": 1.4506,
+        "xgboost_seed0": 1.3481,
+        "xgboost_seed1": 1.3811,
+        "xgboost_seed2": 1.325,
+        "randomforest_seed0": 1.3493,
+        "randomforest_seed1": 1.3318,
+        "randomforest_seed2": 1.3773,
+        "mlp_seed0": 2.7899,
+        "mlp_seed1": 2.849,
+        "mlp_seed2": 2.881
+      },
+      "marginal_ci95": {
+        "row": {
+          "rmse": {
+            "mean_seed0": [
+              1.3285,
+              1.3852
+            ],
+            "mean_ligand_train_seed0": [
+              1.3296,
+              1.3863
+            ],
+            "mean_target_train_seed0": [
+              1.2128,
+              1.2655
+            ],
+            "ridge_seed0": [
+              1.4172,
+              1.4856
+            ],
+            "ridge_seed1": [
+              1.4172,
+              1.4856
+            ],
+            "ridge_seed2": [
+              1.4172,
+              1.4856
+            ],
+            "xgboost_seed0": [
+              1.3192,
+              1.3763
+            ],
+            "xgboost_seed1": [
+              1.3527,
+              1.4096
+            ],
+            "xgboost_seed2": [
+              1.2978,
+              1.351
+            ],
+            "randomforest_seed0": [
+              1.3191,
+              1.3779
+            ],
+            "randomforest_seed1": [
+              1.303,
+              1.3603
+            ],
+            "randomforest_seed2": [
+              1.3475,
+              1.4061
+            ],
+            "mlp_seed0": [
+              2.7375,
+              2.841
+            ],
+            "mlp_seed1": [
+              2.7958,
+              2.9043
+            ],
+            "mlp_seed2": [
+              2.8257,
+              2.9366
+            ]
+          },
+          "mae": {
+            "mean_seed0": [
+              1.0959,
+              1.1456
+            ],
+            "mean_ligand_train_seed0": [
+              1.0966,
+              1.1472
+            ],
+            "mean_target_train_seed0": [
+              0.9977,
+              1.0422
+            ],
+            "ridge_seed0": [
+              1.1522,
+              1.2069
+            ],
+            "ridge_seed1": [
+              1.1522,
+              1.2069
+            ],
+            "ridge_seed2": [
+              1.1522,
+              1.2069
+            ],
+            "xgboost_seed0": [
+              1.0688,
+              1.1182
+            ],
+            "xgboost_seed1": [
+              1.0948,
+              1.1455
+            ],
+            "xgboost_seed2": [
+              1.0628,
+              1.1113
+            ],
+            "randomforest_seed0": [
+              1.0542,
+              1.1062
+            ],
+            "randomforest_seed1": [
+              1.0448,
+              1.0958
+            ],
+            "randomforest_seed2": [
+              1.0786,
+              1.1309
+            ],
+            "mlp_seed0": [
+              2.2342,
+              2.3371
+            ],
+            "mlp_seed1": [
+              2.2346,
+              2.3415
+            ],
+            "mlp_seed2": [
+              2.2551,
+              2.366
+            ]
+          },
+          "ci_harrell": {
+            "mean_seed0": [
+              0.5,
+              0.5
+            ],
+            "mean_ligand_train_seed0": [
+              0.5,
+              0.5008
+            ],
+            "mean_target_train_seed0": [
+              0.6737,
+              0.6891
+            ],
+            "ridge_seed0": [
+              0.6063,
+              0.6258
+            ],
+            "ridge_seed1": [
+              0.6063,
+              0.6258
+            ],
+            "ridge_seed2": [
+              0.6063,
+              0.6258
+            ],
+            "xgboost_seed0": [
+              0.6273,
+              0.6476
+            ],
+            "xgboost_seed1": [
+              0.6251,
+              0.6459
+            ],
+            "xgboost_seed2": [
+              0.6664,
+              0.6841
+            ],
+            "randomforest_seed0": [
+              0.6172,
+              0.6386
+            ],
+            "randomforest_seed1": [
+              0.6425,
+              0.6625
+            ],
+            "randomforest_seed2": [
+              0.6097,
+              0.63
+            ],
+            "mlp_seed0": [
+              0.4705,
+              0.4933
+            ],
+            "mlp_seed1": [
+              0.4664,
+              0.4908
+            ],
+            "mlp_seed2": [
+              0.4579,
+              0.4816
+            ]
+          }
+        },
+        "target": {
+          "rmse": {
+            "mean_seed0": [
+              1.0715,
+              1.5514
+            ],
+            "mean_ligand_train_seed0": [
+              1.0712,
+              1.5556
+            ],
+            "mean_target_train_seed0": [
+              0.9419,
+              1.42
+            ],
+            "ridge_seed0": [
+              1.1742,
+              1.623
+            ],
+            "ridge_seed1": [
+              1.1742,
+              1.623
+            ],
+            "ridge_seed2": [
+              1.1742,
+              1.623
+            ],
+            "xgboost_seed0": [
+              0.9591,
+              1.5745
+            ],
+            "xgboost_seed1": [
+              0.9519,
+              1.651
+            ],
+            "xgboost_seed2": [
+              0.9533,
+              1.5383
+            ],
+            "randomforest_seed0": [
+              0.9002,
+              1.6112
+            ],
+            "randomforest_seed1": [
+              0.895,
+              1.5843
+            ],
+            "randomforest_seed2": [
+              0.9148,
+              1.6434
+            ],
+            "mlp_seed0": [
+              1.5149,
+              3.464
+            ],
+            "mlp_seed1": [
+              1.4657,
+              3.624
+            ],
+            "mlp_seed2": [
+              1.3986,
+              3.673
+            ]
+          },
+          "mae": {
+            "mean_seed0": [
+              0.8619,
+              1.335
+            ],
+            "mean_ligand_train_seed0": [
+              0.8622,
+              1.3376
+            ],
+            "mean_target_train_seed0": [
+              0.7811,
+              1.187
+            ],
+            "ridge_seed0": [
+              0.9542,
+              1.3569
+            ],
+            "ridge_seed1": [
+              0.9542,
+              1.3569
+            ],
+            "ridge_seed2": [
+              0.9542,
+              1.3569
+            ],
+            "xgboost_seed0": [
+              0.7677,
+              1.3152
+            ],
+            "xgboost_seed1": [
+              0.7661,
+              1.3854
+            ],
+            "xgboost_seed2": [
+              0.7696,
+              1.3036
+            ],
+            "randomforest_seed0": [
+              0.7113,
+              1.3516
+            ],
+            "randomforest_seed1": [
+              0.7096,
+              1.3312
+            ],
+            "randomforest_seed2": [
+              0.7246,
+              1.3823
+            ],
+            "mlp_seed0": [
+              1.2435,
+              3.0547
+            ],
+            "mlp_seed1": [
+              1.1778,
+              3.1772
+            ],
+            "mlp_seed2": [
+              1.123,
+              3.2332
+            ]
+          },
+          "ci_harrell": {
+            "mean_seed0": [
+              0.5,
+              0.5
+            ],
+            "mean_ligand_train_seed0": [
+              0.4998,
+              0.5008
+            ],
+            "mean_target_train_seed0": [
+              0.576,
+              0.7449
+            ],
+            "ridge_seed0": [
+              0.5384,
+              0.6633
+            ],
+            "ridge_seed1": [
+              0.5384,
+              0.6633
+            ],
+            "ridge_seed2": [
+              0.5384,
+              0.6633
+            ],
+            "xgboost_seed0": [
+              0.5314,
+              0.7417
+            ],
+            "xgboost_seed1": [
+              0.5436,
+              0.7603
+            ],
+            "xgboost_seed2": [
+              0.6035,
+              0.7534
+            ],
+            "randomforest_seed0": [
+              0.5194,
+              0.751
+            ],
+            "randomforest_seed1": [
+              0.5573,
+              0.7574
+            ],
+            "randomforest_seed2": [
+              0.5231,
+              0.7391
+            ],
+            "mlp_seed0": [
+              0.4095,
+              0.6462
+            ],
+            "mlp_seed1": [
+              0.4056,
+              0.6376
+            ],
+            "mlp_seed2": [
+              0.3979,
+              0.6385
+            ]
+          }
+        },
+        "ligand": {
+          "rmse": {
+            "mean_seed0": [
+              1.327,
+              1.3869
+            ],
+            "mean_ligand_train_seed0": [
+              1.3281,
+              1.3881
+            ],
+            "mean_target_train_seed0": [
+              1.2128,
+              1.2669
+            ],
+            "ridge_seed0": [
+              1.4162,
+              1.4849
+            ],
+            "ridge_seed1": [
+              1.4162,
+              1.4849
+            ],
+            "ridge_seed2": [
+              1.4162,
+              1.4849
+            ],
+            "xgboost_seed0": [
+              1.3188,
+              1.3766
+            ],
+            "xgboost_seed1": [
+              1.351,
+              1.4104
+            ],
+            "xgboost_seed2": [
+              1.2978,
+              1.3517
+            ],
+            "randomforest_seed0": [
+              1.3199,
+              1.3785
+            ],
+            "randomforest_seed1": [
+              1.3028,
+              1.3602
+            ],
+            "randomforest_seed2": [
+              1.3474,
+              1.4071
+            ],
+            "mlp_seed0": [
+              2.7368,
+              2.8426
+            ],
+            "mlp_seed1": [
+              2.7902,
+              2.9045
+            ],
+            "mlp_seed2": [
+              2.8229,
+              2.9382
+            ]
+          },
+          "mae": {
+            "mean_seed0": [
+              1.0943,
+              1.1452
+            ],
+            "mean_ligand_train_seed0": [
+              1.0955,
+              1.1462
+            ],
+            "mean_target_train_seed0": [
+              0.9968,
+              1.0425
+            ],
+            "ridge_seed0": [
+              1.1507,
+              1.2065
+            ],
+            "ridge_seed1": [
+              1.1507,
+              1.2065
+            ],
+            "ridge_seed2": [
+              1.1507,
+              1.2065
+            ],
+            "xgboost_seed0": [
+              1.0666,
+              1.1191
+            ],
+            "xgboost_seed1": [
+              1.0933,
+              1.1473
+            ],
+            "xgboost_seed2": [
+              1.062,
+              1.1124
+            ],
+            "randomforest_seed0": [
+              1.0536,
+              1.1075
+            ],
+            "randomforest_seed1": [
+              1.044,
+              1.0963
+            ],
+            "randomforest_seed2": [
+              1.0771,
+              1.1321
+            ],
+            "mlp_seed0": [
+              2.2334,
+              2.3419
+            ],
+            "mlp_seed1": [
+              2.2329,
+              2.3441
+            ],
+            "mlp_seed2": [
+              2.254,
+              2.3685
+            ]
+          }
+        }
+      },
+      "model_contrasts_rmse": [
+        {
+          "pair": "ridge-vs-xgboost",
+          "delta_mean": 0.0996,
+          "ci95": [
+            0.0735,
+            0.1265
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-randomforest",
+          "delta_mean": 0.0983,
+          "ci95": [
+            0.0687,
+            0.128
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mlp",
+          "delta_mean": -1.3883,
+          "ci95": [
+            -1.449,
+            -1.329
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-randomforest",
+          "delta_mean": -0.0014,
+          "ci95": [
+            -0.0079,
+            0.0054
+          ],
+          "p_boot": 0.67766,
+          "p_holm": 1.0,
+          "significant_at_0.05": false
+        },
+        {
+          "pair": "xgboost-vs-mlp",
+          "delta_mean": -1.4879,
+          "ci95": [
+            -1.5292,
+            -1.4476
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mlp",
+          "delta_mean": -1.4866,
+          "ci95": [
+            -1.5259,
+            -1.4477
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mean",
+          "delta_mean": 0.0933,
+          "ci95": [
+            0.0659,
+            0.1211
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mean",
+          "delta_mean": -0.0064,
+          "ci95": [
+            -0.0239,
+            0.0117
+          ],
+          "p_boot": 0.48476,
+          "p_holm": 1.0,
+          "significant_at_0.05": false
+        },
+        {
+          "pair": "randomforest-vs-mean",
+          "delta_mean": -0.005,
+          "ci95": [
+            -0.0216,
+            0.012
+          ],
+          "p_boot": 0.56372,
+          "p_holm": 1.0,
+          "significant_at_0.05": false
+        },
+        {
+          "pair": "mlp-vs-mean",
+          "delta_mean": 1.4816,
+          "ci95": [
+            1.4309,
+            1.5321
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        }
+      ],
+      "holm_family_rmse": {
+        "m": 10,
+        "reps": 2000,
+        "p_floor": 0.001,
+        "resolvable": true,
+        "n_significant": 7
+      },
+      "model_contrasts_mae": [
+        {
+          "pair": "ridge-vs-xgboost",
+          "delta_mean": 0.0792,
+          "ci95": [
+            0.0566,
+            0.1015
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-randomforest",
+          "delta_mean": 0.0945,
+          "ci95": [
+            0.0699,
+            0.119
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mlp",
+          "delta_mean": -1.1145,
+          "ci95": [
+            -1.1684,
+            -1.0626
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-randomforest",
+          "delta_mean": 0.0153,
+          "ci95": [
+            0.0088,
+            0.0223
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mlp",
+          "delta_mean": -1.1937,
+          "ci95": [
+            -1.2345,
+            -1.1523
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mlp",
+          "delta_mean": -1.209,
+          "ci95": [
+            -1.2495,
+            -1.1697
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mean",
+          "delta_mean": 0.0589,
+          "ci95": [
+            0.0342,
+            0.0853
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mean",
+          "delta_mean": -0.0203,
+          "ci95": [
+            -0.0386,
+            -0.0021
+          ],
+          "p_boot": 0.03698,
+          "p_holm": 0.03698,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mean",
+          "delta_mean": -0.0356,
+          "ci95": [
+            -0.0524,
+            -0.0187
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "mlp-vs-mean",
+          "delta_mean": 1.1734,
+          "ci95": [
+            1.1242,
+            1.2233
+          ],
+          "p_boot": 0.001,
+          "p_holm": 0.01,
+          "significant_at_0.05": true
+        }
+      ],
+      "holm_family_mae": {
+        "m": 10,
+        "reps": 2000,
+        "p_floor": 0.001,
+        "resolvable": true,
+        "n_significant": 10
+      },
+      "model_contrasts_ci_harrell": [
+        {
+          "pair": "ridge-vs-xgboost",
+          "delta_mean": -0.0333,
+          "ci95": [
+            -0.0411,
+            -0.0245
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-randomforest",
+          "delta_mean": -0.0177,
+          "ci95": [
+            -0.0281,
+            -0.006
+          ],
+          "p_boot": 0.00666,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mlp",
+          "delta_mean": 0.1394,
+          "ci95": [
+            0.1241,
+            0.1536
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-randomforest",
+          "delta_mean": 0.0156,
+          "ci95": [
+            0.0107,
+            0.0203
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mlp",
+          "delta_mean": 0.1727,
+          "ci95": [
+            0.1608,
+            0.1851
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mlp",
+          "delta_mean": 0.1571,
+          "ci95": [
+            0.1468,
+            0.1683
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "ridge-vs-mean",
+          "delta_mean": 0.116,
+          "ci95": [
+            0.1063,
+            0.1258
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "xgboost-vs-mean",
+          "delta_mean": 0.1493,
+          "ci95": [
+            0.14,
+            0.1584
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "randomforest-vs-mean",
+          "delta_mean": 0.1337,
+          "ci95": [
+            0.1233,
+            0.1436
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        },
+        {
+          "pair": "mlp-vs-mean",
+          "delta_mean": -0.0234,
+          "ci95": [
+            -0.034,
+            -0.0123
+          ],
+          "p_boot": 0.00333,
+          "p_holm": 0.03328,
+          "significant_at_0.05": true
+        }
+      ],
+      "holm_family_ci_harrell": {
+        "m": 10,
+        "reps": 600,
+        "p_floor": 0.003328,
+        "resolvable": true,
+        "n_significant": 10
+      }
+    }
+  ],
+  "cross_table": {
+    "shipped_protocol_spread_of_the_best_model": {
+      "davis": {
+        "best_of": 0.5697,
+        "worst_of": 1.052,
+        "range": 0.4823,
+        "easiest": "random",
+        "hardest": "cold_target"
+      },
+      "kiba": {
+        "best_of": 0.5143,
+        "worst_of": 0.7244,
+        "range": 0.2101,
+        "easiest": "random",
+        "hardest": "temporal"
+      }
+    },
+    "shipped_model_spread_within_protocol_trained3": {
+      "davis/cold_drug": 0.0607,
+      "davis/cold_target": 0.0873,
+      "davis/random": 0.1864,
+      "davis/scaffold": 0.0683,
+      "davis/temporal": 0.0983,
+      "kiba/cold_drug": 0.0999,
+      "kiba/cold_target": 0.2189,
+      "kiba/random": 0.1763,
+      "kiba/scaffold": 0.1107,
+      "kiba/temporal": 0.2554
+    },
+    "shipped_learned_models_worse_than_global_mean": [
+      {
+        "dataset": "davis",
+        "protocol": "cold_drug",
+        "model": "mlp",
+        "rmse": 1.4814,
+        "null": 0.9173
+      },
+      {
+        "dataset": "davis",
+        "protocol": "scaffold",
+        "model": "mlp",
+        "rmse": 1.6124,
+        "null": 0.8522
+      },
+      {
+        "dataset": "davis",
+        "protocol": "scaffold",
+        "model": "ridge",
+        "rmse": 0.8786,
+        "null": 0.8522
+      },
+      {
+        "dataset": "davis",
+        "protocol": "temporal",
+        "model": "mlp",
+        "rmse": 2.0822,
+        "null": 1.003
+      },
+      {
+        "dataset": "davis",
+        "protocol": "temporal",
+        "model": "ridge",
+        "rmse": 1.0442,
+        "null": 1.003
+      },
+      {
+        "dataset": "kiba",
+        "protocol": "cold_drug",
+        "model": "mlp",
+        "rmse": 0.9598,
+        "null": 0.7225
+      },
+      {
+        "dataset": "kiba",
+        "protocol": "cold_target",
+        "model": "mlp",
+        "rmse": 1.1147,
+        "null": 0.9396
+      },
+      {
+        "dataset": "kiba",
+        "protocol": "scaffold",
+        "model": "mlp",
+        "rmse": 0.9385,
+        "null": 0.8701
+      },
+      {
+        "dataset": "kiba",
+        "protocol": "temporal",
+        "model": "mlp",
+        "rmse": 1.7832,
+        "null": 0.8149
+      },
+      {
+        "dataset": "kiba",
+        "protocol": "temporal",
+        "model": "ridge",
+        "rmse": 0.9798,
+        "null": 0.8149
+      }
+    ],
+    "shipped_eta2_protocol_rmse": {
+      "davis": {
+        "trained3": 0.9134,
+        "all4": 0.3014
+      },
+      "kiba": {
+        "trained3": 0.6148,
+        "all4": 0.3163
+      }
+    },
+    "shipped_eta2_model_rmse": {
+      "davis": {
+        "trained3": 0.0684,
+        "all4": 0.4572
+      },
+      "kiba": {
+        "trained3": 0.3071,
+        "all4": 0.4727
+      }
+    },
+    "note": "read-only from results/readme_numbers.json and results/variance_decomposition.json; RMSE across tables is not comparable (pKi / pKd / KIBA consensus score are different scales), the protocol-vs-model structure is"
+  }
+}

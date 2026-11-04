@@ -1,0 +1,6 @@
+n_train,n_valid,n_test,test_fraction,test_ligands,test_ligands_absent_from_train,test_targets_absent_from_train,test_scaffold_present_in_train,ecfp4_max_similarity_to_train_ligand_mean,ecfp4_max_similarity_median,test_pairs_with_near_duplicate_ligand_ge0.7,test_pairs_with_near_duplicate_ligand_ge0.95,target_max_dpc_cosine_to_train_target_mean,test_pairs_with_target_family_ge0.95,valid_pairs_with_near_duplicate_ligand_ge0.7,dataset,protocol,rows_in_protocol,excluded_rows
+13361,1909,3818,0.2,3539,0.6925,0.0,0.8002,0.8653,0.8645,0.8979,0.4065,1.0,1.0,0.1283,chembl,random,19088,0
+13361,1909,3818,0.2,2544,1.0,0.0,0.0,0.7276,0.7368,0.6687,0.0045,1.0,1.0,0.0,chembl,scaffold,19088,0
+13361,1909,3818,0.2,1007,1.0,0.0,0.3015,0.5555,0.5645,0.1891,0.0115,1.0,1.0,0.0,chembl,cold_drug,19088,0
+14250,1358,3480,0.1823,3480,0.5759,1.0,0.5161,0.7098,0.775,0.5678,0.4267,0.8143,0.0,0.0,chembl,cold_target,19088,0
+10306,2162,3791,0.2332,3477,0.9989,0.3569,0.0417,0.4058,0.3628,0.0644,0.0066,0.9279,0.6431,0.0005,chembl,temporal,16259,2829

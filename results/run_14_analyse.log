@@ -1,0 +1,16 @@
+
+### stage analyse ----------------------------------------
+5 protocol cells, reps=2000 (rmse/mae) / 600 (harrell ci), jobs=5
+bootstrap pool: 720.1s
+
+=== external table: the headline, re-measured ===
+  eta2 protocol 0.8657   eta2 model 0.0197   interaction 0.1146
+  protocol CI95 [0.8605747537670192, 0.8701947688514181]  model CI95 [0.017200293276746326, 0.022319478184497633]
+  best-model RMSE by protocol: {'random': 0.6467, 'scaffold': 0.7315, 'cold_drug': 1.1415, 'cold_target': 1.2129, 'temporal': 1.3514}
+  spread of the best model: random 0.6467 -> temporal 1.3514  (range 0.7047)
+  protocol spread (hardest-easiest) RMSE: [0.2633, 2.4121]  frac excluding zero: 1.0
+  null beats every learned model on 0/5 protocols
+  CI caliber gap (Harrell vs sklearn-like), max: {'abs_diff': 0.0126, 'row': 'chembl/cold_drug/xgboost/seed2', 'ci_harrell': 0.7615, 'ci_sklearn_like': 0.7489}
+  label tie fraction range: [0.6389, 0.884]
+
+[14] stages ['analyse'] done in 765.5s

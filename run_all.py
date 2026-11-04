@@ -9,6 +9,8 @@
     python run_all.py --stage report       # re-render tables + figures from results/*.csv
     python run_all.py --stage notebook     # regenerate and EXECUTE notebook/*.ipynb
     python run_all.py --stage bootstrap    # intervals for all 150 fits (no refitting, CPU only)
+    python run_all.py --stage external     # external validation on a ChEMBL kinase Ki table
+                                           # (network fetch + its own features/splits/grid)
 
 Stages run in dependency order and each one is a separate script, so a failure tells you
 exactly which step broke. Wall time on an 8-core laptop: ~4 h for the full grid is an
@@ -44,9 +46,14 @@ STAGES = [
     ("report",    "07_report.py",         "figures + results/report.md + results/summary.json"),
     ("notebook",  "08_notebook.py",       "writes and executes notebook/dti_affinity_bench.ipynb"),
     ("sensitivity", "09_preproc_sensitivity.py", "three standardisation guards x models x protocols"),
+    ("extfetch",   "13_fetch_chembl.py",   "download + hash-pin the ChEMBL kinase Ki panel (network)"),
+    ("external",   "14_external_chembl.py", "external validation: features/splits/audit/grid/analyse"),
 ]
 OPTIONAL_STAGE = "docking"
 OPTIONAL_STAGES = (OPTIONAL_STAGE, "dockstats", "sensitivity")
+# the external-validation pair is reachable as one stage name: `--stage external` runs the
+# fetcher and then the pipeline, because the pipeline needs the fetched tree.
+EXTERNAL_PAIR = ("extfetch", "external")
 
 
 def run(script: str, extra: list[str]) -> None:
@@ -78,12 +85,26 @@ def main() -> int:
                     help="Harrell-CI bootstrap reps in stage `bootstrap` (the expensive part; "
                          "must exceed 398 for Holm over the 10-contrast model family to be "
                          "resolvable, see scripts/12_testset_bootstrap.py)")
+    ap.add_argument("--external-budget-mb", type=float, default=175.0,
+                    help="download budget for the ChEMBL panel in stage `extfetch` "
+                         "(the run behind this repo's external validation transferred 77.5 MB)")
+    ap.add_argument("--external-reps", type=int, default=2000,
+                    help="bootstrap reps for the external table's analyse stage")
+    ap.add_argument("--external-ci-reps", type=int, default=600,
+                    help="Harrell-CI bootstrap reps for the external table's analyse stage")
     args = ap.parse_args()
 
     want = args.stage
-    order = list(STAGES) if want == "all" else [s for s in STAGES if s[0] == want]
+    if want == "external":
+        order = [s for s in STAGES if s[0] in EXTERNAL_PAIR]
+    else:
+        order = list(STAGES) if want == "all" else [s for s in STAGES if s[0] == want]
     if want == "all" and not args.fetch:
         order = [s for s in order if s[0] != "fetch"]
+    # the external table needs the network and its own ~15 min of compute, so it is never
+    # part of the default run: ask for it by name (`--stage external`).
+    if want == "all":
+        order = [s for s in order if s[0] not in EXTERNAL_PAIR]
     if want == "all" and not args.with_docking:
         order = [s for s in order if s[0] not in (OPTIONAL_STAGE, "dockstats", "paired")]
     if want == "all" and not args.with_sensitivity:
@@ -125,6 +146,15 @@ def main() -> int:
                       ["--reps", str(args.bootstrap_reps),
                        "--ci-reps", str(args.bootstrap_ci_reps),
                        "--jobs", str(args.bootstrap_jobs)])
+        elif name == "extfetch":
+            extra += ["--budget-mb", str(args.external_budget_mb)]
+            if args.quick:
+                extra += ["--max-targets", "4", "--rows-per-target", "400"]
+        elif name == "external":
+            extra += ["--quick"] if args.quick else [
+                "--reps", str(args.external_reps),
+                "--ci-reps", str(args.external_ci_reps),
+                "--jobs", "5"]
         run(script, extra)
     print("\nall requested stages finished")
     return 0

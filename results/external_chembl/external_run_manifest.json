@@ -1,0 +1,477 @@
+{
+  "generated_by": "scripts/14_external_chembl.py",
+  "generated_at_utc": "2026-11-04T07:35:23Z",
+  "table": {
+    "source": "ChEMBL via scripts/13_fetch_chembl.py",
+    "chembl_release": {
+      "ok": true,
+      "chembl_db_version": "ChEMBL_37",
+      "chembl_release_date": "2026-05-01",
+      "activities_in_db": "24527044",
+      "publications_in_db": "101100",
+      "checked_at_utc": "2026-11-04T05:49:53Z"
+    },
+    "pairs": 19088,
+    "ligands": 14713,
+    "targets": 16,
+    "label": "pKi = 9 - log10(median Ki / nM); same 9-log10(nM) scale as DAVIS pKd, not comparable to KIBA's 0-17.2 consensus score",
+    "row_sampling": {
+      "CHEMBL2971": {
+        "usable_rows_reported": 3333,
+        "distinct_rows_fetched": 3000,
+        "rows_kept_after_local_filters": 2131,
+        "complete": false
+      },
+      "CHEMBL2835": {
+        "usable_rows_reported": 3237,
+        "distinct_rows_fetched": 3000,
+        "rows_kept_after_local_filters": 2200,
+        "complete": false
+      },
+      "CHEMBL2147": {
+        "usable_rows_reported": 3226,
+        "distinct_rows_fetched": 3000,
+        "rows_kept_after_local_filters": 2800,
+        "complete": false
+      },
+      "CHEMBL5024": {
+        "usable_rows_reported": 2960,
+        "distinct_rows_fetched": 2960,
+        "rows_kept_after_local_filters": 1703,
+        "complete": true
+      },
+      "CHEMBL3553": {
+        "usable_rows_reported": 1605,
+        "distinct_rows_fetched": 1605,
+        "rows_kept_after_local_filters": 1049,
+        "complete": true
+      },
+      "CHEMBL2148": {
+        "usable_rows_reported": 1588,
+        "distinct_rows_fetched": 1588,
+        "rows_kept_after_local_filters": 1151,
+        "complete": true
+      },
+      "CHEMBL5749": {
+        "usable_rows_reported": 1471,
+        "distinct_rows_fetched": 1471,
+        "rows_kept_after_local_filters": 1454,
+        "complete": true
+      },
+      "CHEMBL4005": {
+        "usable_rows_reported": 1469,
+        "distinct_rows_fetched": 1469,
+        "rows_kept_after_local_filters": 1423,
+        "complete": true
+      },
+      "CHEMBL262": {
+        "usable_rows_reported": 1269,
+        "distinct_rows_fetched": 1269,
+        "rows_kept_after_local_filters": 1253,
+        "complete": true
+      },
+      "CHEMBL1862": {
+        "usable_rows_reported": 1146,
+        "distinct_rows_fetched": 1146,
+        "rows_kept_after_local_filters": 1090,
+        "complete": true
+      },
+      "CHEMBL5888": {
+        "usable_rows_reported": 1023,
+        "distinct_rows_fetched": 1023,
+        "rows_kept_after_local_filters": 1014,
+        "complete": true
+      },
+      "CHEMBL3778": {
+        "usable_rows_reported": 1020,
+        "distinct_rows_fetched": 1020,
+        "rows_kept_after_local_filters": 999,
+        "complete": true
+      },
+      "CHEMBL1075104": {
+        "usable_rows_reported": 992,
+        "distinct_rows_fetched": 992,
+        "rows_kept_after_local_filters": 980,
+        "complete": true
+      },
+      "CHEMBL1908389": {
+        "usable_rows_reported": 978,
+        "distinct_rows_fetched": 978,
+        "rows_kept_after_local_filters": 966,
+        "complete": true
+      },
+      "CHEMBL3231": {
+        "usable_rows_reported": 920,
+        "distinct_rows_fetched": 920,
+        "rows_kept_after_local_filters": 887,
+        "complete": true
+      },
+      "CHEMBL3286": {
+        "usable_rows_reported": 910,
+        "distinct_rows_fetched": 910,
+        "rows_kept_after_local_filters": 803,
+        "complete": true
+      }
+    },
+    "fetch_run_network_bytes": 0,
+    "fetch_run_network_bytes_note": "bytes_downloaded counts this process only: pages already in data/raw/chembl/ are served from the disk cache and cost nothing here, so a re-run after a sampler change is nearly free while the first pull of the panel paid the bytes. The download cap the user authorised is on the whole job, so the size of everything actually held on disk is reported next to it.",
+    "raw_cache_bytes_on_disk": 104814223,
+    "download_budget_mb": 175.0,
+    "download_budget_exceeded": false
+  },
+  "features": {
+    "builders": "01_features.build_ligand_features / build_protein_features / scaffold_table / bit_vectors (imported, not copied)",
+    "rdkit": "2026.03.3",
+    "unparseable_smiles": {
+      "n": 0,
+      "note": "RDKit substitutes methane for these, exactly as 01 does for the shipped table; a count is reported rather than the structures silently replaced"
+    }
+  },
+  "splits": {
+    "seed": 2026,
+    "frac_test": 0.2,
+    "protocols": {
+      "random": {
+        "test": 3818,
+        "excluded": 0,
+        "cutoff": null
+      },
+      "scaffold": {
+        "test": 3818,
+        "excluded": 0,
+        "cutoff": null
+      },
+      "cold_drug": {
+        "test": 3818,
+        "excluded": 0,
+        "cutoff": null
+      },
+      "cold_target": {
+        "test": 3480,
+        "excluded": 0,
+        "cutoff": null
+      },
+      "temporal": {
+        "test": 3791,
+        "excluded": 2829,
+        "cutoff": "2021-01-01"
+      }
+    },
+    "temporal_note": "date resolution is one year and the date is the source publication year, not a deposition date; undated pairs are excluded and counted"
+  },
+  "metrics_rows": 75,
+  "headline": {
+    "protocol_spread_range_rmse": [
+      0.2633,
+      2.4121
+    ],
+    "protocol_spread_excludes_zero_frac": 1.0,
+    "eta2_protocol_rmse": {
+      "trained3": 0.8657320481966427,
+      "all4": 0.4734960544972811
+    },
+    "eta2_model_rmse": {
+      "trained3": 0.01970015583984485,
+      "all4": 0.2599074009523034
+    },
+    "protocols_where_null_wins": {
+      "count": 0,
+      "of_protocols": 5,
+      "detail": {
+        "cold_drug": {
+          "global_mean_null": 1.6209,
+          "best_learned": 1.1415,
+          "beaten_by_null": false
+        },
+        "cold_target": {
+          "global_mean_null": 1.6165,
+          "best_learned": 1.2129,
+          "beaten_by_null": false
+        },
+        "random": {
+          "global_mean_null": 1.478,
+          "best_learned": 0.6467,
+          "beaten_by_null": false
+        },
+        "scaffold": {
+          "global_mean_null": 1.4937,
+          "best_learned": 0.7315,
+          "beaten_by_null": false
+        },
+        "temporal": {
+          "global_mean_null": 1.3576,
+          "best_learned": 1.3514,
+          "beaten_by_null": false
+        }
+      }
+    },
+    "ci_caliber_gap_max": {
+      "abs_diff": 0.0126,
+      "row": "chembl/cold_drug/xgboost/seed2",
+      "ci_harrell": 0.7615,
+      "ci_sklearn_like": 0.7489
+    }
+  },
+  "files": {
+    "arm_marginal_intervals.csv": {
+      "path": "results/external_chembl/arm_marginal_intervals.csv",
+      "bytes": 34732,
+      "sha256": "ce656a68a7d8c182bb4193c32677f769dbd8eb7b4cf7258966c3dcd81da2c642"
+    },
+    "leakage_audit.csv": {
+      "path": "results/external_chembl/leakage_audit.csv",
+      "bytes": 1035,
+      "sha256": "c56d772f7b30af2606233171bd7ffd09cfadf2765a61d0535177677fae886923"
+    },
+    "leakage_audit.json": {
+      "path": "results/external_chembl/leakage_audit.json",
+      "bytes": 4511,
+      "sha256": "28bb0c190f58e07f3d6879b5fc4c1bd9b05737b17091238fd880f0e5d3289320"
+    },
+    "metrics.csv": {
+      "path": "results/external_chembl/metrics.csv",
+      "bytes": 14716,
+      "sha256": "d783870f5ae35e76403d1bf22bbc40a20fcc5b545d1f6a620deaf4c15d8ced6b"
+    },
+    "metrics_by_protocol.csv": {
+      "path": "results/external_chembl/metrics_by_protocol.csv",
+      "bytes": 2325,
+      "sha256": "bd8ce927a3d51d5b3893c1be973be1be51fe2c8aabd4f91deb25ed57d40eb9ac"
+    },
+    "model_contrasts_holm.csv": {
+      "path": "results/external_chembl/model_contrasts_holm.csv",
+      "bytes": 3655,
+      "sha256": "42e406f91f1a2df42c849d2abaf318f587e72f4de712a4f34c9de241b0534984"
+    },
+    "paired_bootstrap.json": {
+      "path": "results/external_chembl/paired_bootstrap.json",
+      "bytes": 129843,
+      "sha256": "c47550c364fc2ba44a1217bb4b6c907a60df667fab375592f1368a240670c14c"
+    },
+    "predictions/chembl_cold_drug_mean_ligand_train_seed0.npz": {
+      "sha256": "6da4708b635c249a4a9e080d7f8e3f49dbcb485764e8099edc6638e9b327de7f"
+    },
+    "predictions/chembl_cold_drug_mean_seed0.npz": {
+      "sha256": "6da4708b635c249a4a9e080d7f8e3f49dbcb485764e8099edc6638e9b327de7f"
+    },
+    "predictions/chembl_cold_drug_mean_target_train_seed0.npz": {
+      "sha256": "a210d3a21b430a8e6b60e4b04e91f1e96cb0cb21458004394469caedcbccccaf"
+    },
+    "predictions/chembl_cold_drug_mlp_seed0.npz": {
+      "sha256": "504a32b49a9ebca975d730006e41de9d36e15ed00f194297f0ed067f4a08e309"
+    },
+    "predictions/chembl_cold_drug_mlp_seed1.npz": {
+      "sha256": "3959d2b987050f703e8d5991e0f8fb3991c97ea32e5eeecd7a3fe931981b2c5b"
+    },
+    "predictions/chembl_cold_drug_mlp_seed2.npz": {
+      "sha256": "e594bb0e3b984b896ea86e9262b0584ea445cf4d23de70f658569738792f15fb"
+    },
+    "predictions/chembl_cold_drug_randomforest_seed0.npz": {
+      "sha256": "0819c36f388d6cf7bac143d62d54d600ec8055d8a632b68a9a2517d5298735f8"
+    },
+    "predictions/chembl_cold_drug_randomforest_seed1.npz": {
+      "sha256": "62c69294d96a5504c403943540dad21df33e16ed3474fb90b2c82f0499a37b20"
+    },
+    "predictions/chembl_cold_drug_randomforest_seed2.npz": {
+      "sha256": "769b35ae06400e51bb9c2f76668d83d1bc441af2fc9a60d41688f33059047bb4"
+    },
+    "predictions/chembl_cold_drug_ridge_seed0.npz": {
+      "sha256": "db1c2f22181bf86622e35cfd99f8a776e610904cf6f21c40c5a61ef6ada49acf"
+    },
+    "predictions/chembl_cold_drug_ridge_seed1.npz": {
+      "sha256": "db1c2f22181bf86622e35cfd99f8a776e610904cf6f21c40c5a61ef6ada49acf"
+    },
+    "predictions/chembl_cold_drug_ridge_seed2.npz": {
+      "sha256": "db1c2f22181bf86622e35cfd99f8a776e610904cf6f21c40c5a61ef6ada49acf"
+    },
+    "predictions/chembl_cold_drug_xgboost_seed0.npz": {
+      "sha256": "5cd97d667a5c955b388672364c4175c7f487a566a71deab436df56ec8f2f360b"
+    },
+    "predictions/chembl_cold_drug_xgboost_seed1.npz": {
+      "sha256": "0a0f02bc26ddd92ddf9e0968c1356616d0d10c5713249f83acc38f137613a02c"
+    },
+    "predictions/chembl_cold_drug_xgboost_seed2.npz": {
+      "sha256": "38ee4fc3bce4baacec80a71388b68ae461f3030d6531a6e9f705f94178da7a41"
+    },
+    "predictions/chembl_cold_target_mean_ligand_train_seed0.npz": {
+      "sha256": "552be342eae24d2f99903a832dec7202a19a57f1106b01c6d7d3e4132ee61e0f"
+    },
+    "predictions/chembl_cold_target_mean_seed0.npz": {
+      "sha256": "029d688a1a3b5c521673714fbf8676f98db590ff8b6b3fc8a51a9de2e43f6f64"
+    },
+    "predictions/chembl_cold_target_mean_target_train_seed0.npz": {
+      "sha256": "029d688a1a3b5c521673714fbf8676f98db590ff8b6b3fc8a51a9de2e43f6f64"
+    },
+    "predictions/chembl_cold_target_mlp_seed0.npz": {
+      "sha256": "a5bb6aaf7717dc29255ee3ab2627001a6ad489e2b7d328ce3a82851a945d2d01"
+    },
+    "predictions/chembl_cold_target_mlp_seed1.npz": {
+      "sha256": "3a24ba78fd9efb59f0473016281412031a96bf857bb0c4599efe27047601e84a"
+    },
+    "predictions/chembl_cold_target_mlp_seed2.npz": {
+      "sha256": "337fc04e896d2b6434d69941ec995622a628f2b867df69b5fdbb721b8ba9d411"
+    },
+    "predictions/chembl_cold_target_randomforest_seed0.npz": {
+      "sha256": "11d5a2d1e5236529766b26f2d72e41e9ca906fb7bb39982bc7fd94155d8f105f"
+    },
+    "predictions/chembl_cold_target_randomforest_seed1.npz": {
+      "sha256": "81bf9affbc840602539a539e836b30dd81df34e42688aba90dca719b6acd8ebf"
+    },
+    "predictions/chembl_cold_target_randomforest_seed2.npz": {
+      "sha256": "ff72583a92777ff9bbe5ff7489741ffe340968156ab0ae36bbcea4839b60fd49"
+    },
+    "predictions/chembl_cold_target_ridge_seed0.npz": {
+      "sha256": "4dc7d1c8dd0658316bd439c952566fe736cc959fc2c87e511679d0a9016edc57"
+    },
+    "predictions/chembl_cold_target_ridge_seed1.npz": {
+      "sha256": "4dc7d1c8dd0658316bd439c952566fe736cc959fc2c87e511679d0a9016edc57"
+    },
+    "predictions/chembl_cold_target_ridge_seed2.npz": {
+      "sha256": "4dc7d1c8dd0658316bd439c952566fe736cc959fc2c87e511679d0a9016edc57"
+    },
+    "predictions/chembl_cold_target_xgboost_seed0.npz": {
+      "sha256": "8587d9fc5766b85ae2ba1f3cd5e475cfb77c2ebf8aa669c7bee25de3b8c348c8"
+    },
+    "predictions/chembl_cold_target_xgboost_seed1.npz": {
+      "sha256": "703ecac5bff9fcd324fb3e4483812a05a8a1f2e0c243958c04bf714162e0dd84"
+    },
+    "predictions/chembl_cold_target_xgboost_seed2.npz": {
+      "sha256": "1f73816a45c8ff02d7d4910b057abc9264f45d67b18c70f788ee39d28cabd250"
+    },
+    "predictions/chembl_random_mean_ligand_train_seed0.npz": {
+      "sha256": "763ee16d0a8d93c07fe79d03d0d4cd6a6fddc5528fc03ba7c9aba3e86ec78ae5"
+    },
+    "predictions/chembl_random_mean_seed0.npz": {
+      "sha256": "79ad9dcec5d9b8106f3cfd860b9204f64abc551b8dbfdc0c0d7c1f82898a4999"
+    },
+    "predictions/chembl_random_mean_target_train_seed0.npz": {
+      "sha256": "5d917c0ec718774780a581ac0b94bd11341c6b9c0c315f36a2a9978a1aed945c"
+    },
+    "predictions/chembl_random_mlp_seed0.npz": {
+      "sha256": "3154ed022121c463e5c281af63f175fe9a3e6fc945c140733d2fa9198947ea41"
+    },
+    "predictions/chembl_random_mlp_seed1.npz": {
+      "sha256": "7a8aeb44aedda9e1204f20e5fb110e39c37f0654f4a7fb3f94e2e272fd94d453"
+    },
+    "predictions/chembl_random_mlp_seed2.npz": {
+      "sha256": "cb5529c0469b6773af3cdc50a13225b69361a23736aece129b39e7a7758026d8"
+    },
+    "predictions/chembl_random_randomforest_seed0.npz": {
+      "sha256": "a25acd57de73ad910666d1e45cc71ffd9a4c6221193c643467185f3411602c8c"
+    },
+    "predictions/chembl_random_randomforest_seed1.npz": {
+      "sha256": "4ef8dacf0f4fb125dadd506af5269eff872e6c00ce44a1e43e45036d7e35da5b"
+    },
+    "predictions/chembl_random_randomforest_seed2.npz": {
+      "sha256": "a871454c2dc1f4b677779b0908a90f33d1d5c3d24ec9a84a3adad724a49e844b"
+    },
+    "predictions/chembl_random_ridge_seed0.npz": {
+      "sha256": "c45a3290d7fbfd0fa261155eb406b2dda36266d5562989f7adb7b505c5c7859a"
+    },
+    "predictions/chembl_random_ridge_seed1.npz": {
+      "sha256": "c45a3290d7fbfd0fa261155eb406b2dda36266d5562989f7adb7b505c5c7859a"
+    },
+    "predictions/chembl_random_ridge_seed2.npz": {
+      "sha256": "c45a3290d7fbfd0fa261155eb406b2dda36266d5562989f7adb7b505c5c7859a"
+    },
+    "predictions/chembl_random_xgboost_seed0.npz": {
+      "sha256": "6ad5e73ed4e19fd3849302827a9b6fa2d338c70104b76e001743e6c5ef832843"
+    },
+    "predictions/chembl_random_xgboost_seed1.npz": {
+      "sha256": "24c5fbd180dce01078cdef0b1c1635b97709d13ee98a991859c95dce25bb536f"
+    },
+    "predictions/chembl_random_xgboost_seed2.npz": {
+      "sha256": "c600f68d6cba4a05d2631e22df89dd1fdb637fd53134648af9b9913fe185e362"
+    },
+    "predictions/chembl_scaffold_mean_ligand_train_seed0.npz": {
+      "sha256": "7dfcf0ac34c82d105d356ac785f2746e701086921e4aca83c840ff8c7111bdc1"
+    },
+    "predictions/chembl_scaffold_mean_seed0.npz": {
+      "sha256": "7dfcf0ac34c82d105d356ac785f2746e701086921e4aca83c840ff8c7111bdc1"
+    },
+    "predictions/chembl_scaffold_mean_target_train_seed0.npz": {
+      "sha256": "ce1ce6d05a20b8f6a440ea7c66381b5f518b45f6b264f0e92d09cc3f98d1b2e6"
+    },
+    "predictions/chembl_scaffold_mlp_seed0.npz": {
+      "sha256": "7ce31f10ff9b2b9b5b0a00df8b0266dbbf5a1caafecd2bdc425057ca1ac6288d"
+    },
+    "predictions/chembl_scaffold_mlp_seed1.npz": {
+      "sha256": "63b22cf20149e2ff54a7194df3c67e9da86fec1c102702414d3c99a0a359d0e2"
+    },
+    "predictions/chembl_scaffold_mlp_seed2.npz": {
+      "sha256": "8d44420bc117a79148f8db78d39846d5cba5f2c61e7b5ae074fe66a90eeb07f3"
+    },
+    "predictions/chembl_scaffold_randomforest_seed0.npz": {
+      "sha256": "4aeaa5f91e1d72914b81e6f0d5b516f923911f3f44277b8337f69d09b64354bc"
+    },
+    "predictions/chembl_scaffold_randomforest_seed1.npz": {
+      "sha256": "7803e25fea63c283c4668511c49ef76f51c2cd5a23263bdaca306581e91b151f"
+    },
+    "predictions/chembl_scaffold_randomforest_seed2.npz": {
+      "sha256": "1094a075230d3f25b848eacdd8f6fb21e733242f4b2d3bddfca00aa32e096e4e"
+    },
+    "predictions/chembl_scaffold_ridge_seed0.npz": {
+      "sha256": "221aebf5127969825ea92b31c215eb8118cfe4c1bca32ff99e96d25caf78d720"
+    },
+    "predictions/chembl_scaffold_ridge_seed1.npz": {
+      "sha256": "221aebf5127969825ea92b31c215eb8118cfe4c1bca32ff99e96d25caf78d720"
+    },
+    "predictions/chembl_scaffold_ridge_seed2.npz": {
+      "sha256": "221aebf5127969825ea92b31c215eb8118cfe4c1bca32ff99e96d25caf78d720"
+    },
+    "predictions/chembl_scaffold_xgboost_seed0.npz": {
+      "sha256": "1cae30359d28a3a8c8fd9f2d4d4135e367d3cad7f2521a6c247e594b5c7bc8fd"
+    },
+    "predictions/chembl_scaffold_xgboost_seed1.npz": {
+      "sha256": "f2c23bd4301fcdb239cd66e06b075656311ef89b45d0aac3af23bde3f6e352d5"
+    },
+    "predictions/chembl_scaffold_xgboost_seed2.npz": {
+      "sha256": "41ad3ddfd245766058e59e89c1360655f59f54f5e49de0dacc358c69dfa9d973"
+    },
+    "predictions/chembl_temporal_mean_ligand_train_seed0.npz": {
+      "sha256": "2b15987659fb38b14fbd5edd91ab447cc8aeefe589b42c19ca48a4e53caac716"
+    },
+    "predictions/chembl_temporal_mean_seed0.npz": {
+      "sha256": "07053689ffb4f78e04fcaac090006366002af1d53d50ff97fd5916c8f36cd46b"
+    },
+    "predictions/chembl_temporal_mean_target_train_seed0.npz": {
+      "sha256": "ad28ac83a20e8a560719fad259da9d04558daadafb51f166d02eabeffc9e39b0"
+    },
+    "predictions/chembl_temporal_mlp_seed0.npz": {
+      "sha256": "f6bd20c468dc938f8ff4e58049edfaa9d614adce9460b15b4030af49795635cb"
+    },
+    "predictions/chembl_temporal_mlp_seed1.npz": {
+      "sha256": "d6b4cf3730fe45f883eef80d7cd25a8d5eaf86cbb8b6176cb6912fffc27f313b"
+    },
+    "predictions/chembl_temporal_mlp_seed2.npz": {
+      "sha256": "be9a6019301e0573546b3fb98c61a71c91ff466b53ac703bd677b015203dbf19"
+    },
+    "predictions/chembl_temporal_randomforest_seed0.npz": {
+      "sha256": "d6085aca6ed8c049e22c869d3ef200a5e9cc4bed1131b503ad4007643862b212"
+    },
+    "predictions/chembl_temporal_randomforest_seed1.npz": {
+      "sha256": "d1e782cb881f5f11a6f829fdfd442df9857d7c6618a6b496a7f098dc395c5e9c"
+    },
+    "predictions/chembl_temporal_randomforest_seed2.npz": {
+      "sha256": "9ebb608d37beefc05298175ebddb4715e7ccb70668049c52cfb5aa67afd883fc"
+    },
+    "predictions/chembl_temporal_ridge_seed0.npz": {
+      "sha256": "e10e7b9e19bffe4b058aab18859a9868968095420bf4c496bf13ab83149e3293"
+    },
+    "predictions/chembl_temporal_ridge_seed1.npz": {
+      "sha256": "e10e7b9e19bffe4b058aab18859a9868968095420bf4c496bf13ab83149e3293"
+    },
+    "predictions/chembl_temporal_ridge_seed2.npz": {
+      "sha256": "e10e7b9e19bffe4b058aab18859a9868968095420bf4c496bf13ab83149e3293"
+    },
+    "predictions/chembl_temporal_xgboost_seed0.npz": {
+      "sha256": "49d2ad7702a352d0cd22910fa18a194d9830fd0af5ef8bcc0ce6f09f15e0546a"
+    },
+    "predictions/chembl_temporal_xgboost_seed1.npz": {
+      "sha256": "ffcbcce7ced6fc6789bf90730a0b3978fd1bb12d254fe7722f22336ec4607855"
+    },
+    "predictions/chembl_temporal_xgboost_seed2.npz": {
+      "sha256": "e6d715a19f48bd259ddfd520f9772a8c9ee43cd40fb485c3d98ea73de47be7c2"
+    }
+  }
+}

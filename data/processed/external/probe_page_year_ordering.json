@@ -1,0 +1,64 @@
+{
+  "what": "Ordering probe on the ChEMBL activity endpoint: for the same target and the same server-side filter, does a page taken at offset 0 differ in publication year from a page taken deep in the result set?",
+  "why_it_matters": "13_fetch_chembl.py cannot download every Ki row of every target under the download cap, so it has to sample pages. If the API returns rows in deposition order, a head-only sample would silently over-represent old measurements and bias the temporal protocol. The measured answer is yes, the deep page is later, which is why the fetcher spreads its pages across the whole offset range instead of reading the head.",
+  "measured_at": "2026-11-04, live ChEMBL API, ChEMBL_37 (see data/processed/external/external_manifest.json)",
+  "provenance": "produced by a throwaway probe during the plumbing test of scripts/13_fetch_chembl.py; the smoke-output table it was run against (data/processed/external_plumbing/, 4 synthetic target ids XT000-XT003) was deleted; only this measurement is kept.",
+  "reading": {
+    "year_median": "median document_year over the rows on that page",
+    "later_at_depth": "true when the deep page has a higher median year than the head page"
+  },
+  "result": {
+    "CHEMBL262": {
+      "pages": {
+        "head": {
+          "offset": 0,
+          "rows": 1000,
+          "n_years": 382,
+          "year_min": 2004,
+          "year_max": 2023,
+          "year_median": 2011,
+          "activity_id_min": 281895,
+          "activity_id_max": 28349534
+        },
+        "deep": {
+          "offset": 269,
+          "rows": 1000,
+          "n_years": 437,
+          "year_min": 2007,
+          "year_max": 2023,
+          "year_median": 2021,
+          "activity_id_min": 9644572,
+          "activity_id_max": 28352003
+        }
+      },
+      "later_at_depth": true,
+      "n_ki_rows_total": 1269
+    },
+    "CHEMBL1862": {
+      "pages": {
+        "head": {
+          "offset": 0,
+          "rows": 1000,
+          "n_years": 763,
+          "year_min": 2006,
+          "year_max": 2016,
+          "year_median": 2014,
+          "activity_id_min": 1719112,
+          "activity_id_max": 17621392
+        },
+        "deep": {
+          "offset": 146,
+          "rows": 1000,
+          "n_years": 763,
+          "year_min": 2006,
+          "year_max": 2024,
+          "year_median": 2014,
+          "activity_id_min": 2504859,
+          "activity_id_max": 27240707
+        }
+      },
+      "later_at_depth": false,
+      "n_ki_rows_total": 1146
+    }
+  }
+}
