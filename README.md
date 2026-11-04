@@ -535,6 +535,10 @@ python run_all.py --stage external      # §9: fetch + hash-pin the ChEMBL panel
                                         # then features/splits/audit/grid/analyse on it.
                                         # Measured: fetch 77.5 MB transferred, features 38 s,
                                         # audit 50 s, grid 291 s, analyse 766 s (2,000 reps)
+python run_all.py --stage external --quick   # smoke version of the same two stages; runs in
+                                        # data/processed/external_quick/ +
+                                        # results/external_chembl_quick/ so it cannot overwrite
+                                        # the committed table or grid
 ```
 
 `run_all.py` recomputes the whole grid by default; `--resume-grid` is opt-in, because keeping
@@ -770,6 +774,17 @@ or `python run_all.py --stage external`, which runs both. Measured wall time on 
 8-core laptop: features 38.0 s, audit 50.3 s (202,980,503 similarity entries computed), grid
 291.0 s, analyse **765.5 s** (2,000 RMSE/MAE reps + 600 Harrell-CI reps, 5 protocol cells in
 parallel; the committed `results/external_chembl/` is the output of one such run).
+
+**A smoke run cannot overwrite the committed artifacts.** `13`/`14` take an `--out-tag` that
+moves the whole tree — table, features, splits, grid and results — to a sibling directory, and
+`--quick` implies `--out-tag _quick`, so `python run_all.py --stage external --quick` works in
+`data/processed/external_quick/` and `results/external_chembl_quick/` (both gitignored). This
+was not cosmetic: the untagged quick run originally wrote into the same directories as the
+19,088-pair table and the 75-row grid, and the bootstrap pool's worker processes re-imported
+the module in a fresh interpreter, so a child could read the *committed* prediction files while
+its parent wrote the smoke ones. Both are fixed — the tag is now applied inside the worker too —
+and the isolation is checked, not asserted: after a full quick run, all 27 committed files
+under `data/processed/external/` and `results/external_chembl/` are byte-identical.
 
 ## 10. Known limitations / next steps
 

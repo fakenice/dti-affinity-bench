@@ -24,6 +24,11 @@ results/uncertainty/intervals/
 # ---- the --quick smoke-test table (a subset run on subsampled rows; every
 #      number in README / 一页结论 comes from results/metrics.csv, never this one)
 results/metrics_quick.csv
+# ---- the same for the external table: a --quick run works in a tagged tree
+#      (data/processed/external_quick/ + results/external_chembl_quick/) so it can never
+#      overwrite the committed table and grid
+data/processed/external_quick/
+results/external_chembl_quick/
 
 # ---- scratch / logs
 _probe/

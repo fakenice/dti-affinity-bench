@@ -99,6 +99,25 @@ BASE_SEED = 20261104          # deterministic 31-bit per-cell seeds, same rule a
 STAGES = ["features", "splits", "audit", "grid", "analyse"]
 
 
+# --------------------------------------------------------------------------- path configuration
+
+def configure_paths(tag: str = "") -> None:
+    """Point the whole external tree at a tagged directory.
+
+    The committed table (data/processed/external/) and the committed grid
+    (results/external_chembl/) are the numbers the README quotes. A smoke run that
+    wrote into them would silently replace the 19,088-pair table and the 75-row grid
+    with a 4-target / 2-model subset, and both are git-tracked -- so a --quick run
+    must move the entire tree, input and output together. The tag is the same string
+    13_fetch_chembl.py's --out-tag takes, so the two scripts agree on one directory."""
+    global EXT, EXTFEAT, EXTSPL, OUT, PRED
+    EXT = PROC / ("external" + tag)
+    EXTFEAT = EXT / "features"
+    EXTSPL = EXT / "splits"
+    OUT = RESULTS / ("external_chembl" + tag)
+    PRED = OUT / "predictions"
+
+
 # --------------------------------------------------------------------------- reuse
 
 def load_sibling(name: str):
@@ -580,8 +599,14 @@ def run_cell_ext(job: dict) -> dict:
 
     Kept at module level, with every path derived from module constants, so it is picklable and
     re-runnable in a spawned child. Returns the (B x arms) draw matrices; the intervals, Holm
-    families and protocol contrasts are assembled by the parent, as in 12's assemble()."""
+    families and protocol contrasts are assembled by the parent, as in 12's assemble().
+
+    The child re-imports this module, so it does NOT inherit the parent's path configuration --
+    on Windows the pool uses 'spawn'. The tree tag therefore travels inside the job dict and is
+    re-applied here; without that, a child would read the untagged prediction directory and
+    score arms the parent never wrote."""
     proto, reps, ci_reps = job["protocol"], job["reps"], job["ci_reps"]
+    configure_paths(job["out_tag"])
     f12 = load_sibling("12_testset_bootstrap")
     import dti_core as core
     t0 = time.time()
@@ -727,7 +752,8 @@ def stage_analyse(args) -> dict:
     rmse_draws = {}
     cells_out = []
     protos = [p for p in PROTOCOLS if (PRED / f"{DATASET}_{p}_mean_seed0.npz").exists()]
-    jobs = [{"protocol": p, "reps": reps, "ci_reps": ci_reps, "arms_by_proto": {}} for p in protos]
+    jobs = [{"protocol": p, "reps": reps, "ci_reps": ci_reps, "arms_by_proto": {},
+             "out_tag": args.out_tag} for p in protos]
     workers = max(1, min(args.jobs, len(jobs)))
     print(f"{len(jobs)} protocol cells, reps={reps} (rmse/mae) / {ci_reps} (harrell ci), "
           f"jobs={workers}", flush=True)
@@ -978,7 +1004,17 @@ def main() -> int:
                     help="Harrell-CI bootstrap reps (>=400 needed for Holm over m=10)")
     ap.add_argument("--jobs", type=int, default=6, help="parallel protocol cells (one process each)")
     ap.add_argument("--selftest", action="store_true", help="check BlockTanimoto and exit")
+    ap.add_argument("--out-tag", default="",
+                    help="suffix for the whole external tree, e.g. '--out-tag _quick' reads "
+                         "data/processed/external_quick/ and writes results/external_chembl_quick/. "
+                         "Use it for smoke runs: the untagged tree holds the committed table and "
+                         "grid, and a --quick run must not be able to overwrite them. The tag "
+                         "must match 13_fetch_chembl.py's --out-tag.")
     args = ap.parse_args()
+    if args.quick and not args.out_tag:
+        # a smoke run must never write into the committed tree, so --quick implies a tag
+        args.out_tag = "_quick"
+    configure_paths(args.out_tag)
     if args.seeds:
         args.seeds = [int(s) for s in args.seeds.split(",")]
     if args.selftest:

@@ -149,7 +149,10 @@ def main() -> int:
         elif name == "extfetch":
             extra += ["--budget-mb", str(args.external_budget_mb)]
             if args.quick:
-                extra += ["--max-targets", "4", "--rows-per-target", "400"]
+                # the smoke fetch and the smoke grid both run in a tagged tree, so a quick run
+                # can never overwrite the committed table in data/processed/external/
+                extra += ["--max-targets", "4", "--rows-per-target", "400",
+                          "--out-tag", "_quick"]
         elif name == "external":
             extra += ["--quick"] if args.quick else [
                 "--reps", str(args.external_reps),
