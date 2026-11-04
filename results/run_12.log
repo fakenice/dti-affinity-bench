@@ -1,0 +1,26 @@
+10 cells, reps=2000 (rmse/mae) / 600 (harrell ci), jobs=6
+  davis/cold_drug: n=5746 targets=379 ligands=13 1096.6 s
+  davis/cold_target: n=5984 targets=25 ligands=68 1055.3 s
+  davis/random: n=6011 targets=379 ligands=68 1159.6 s
+  davis/scaffold: n=5746 targets=379 ligands=13 1077.2 s
+  davis/temporal: n=5304 targets=379 ligands=12 1008.9 s
+  kiba/cold_drug: n=23651 targets=216 ligands=166 3734.7 s
+  kiba/cold_target: n=23642 targets=22 ligands=2067 3852.5 s
+  kiba/random: n=23651 targets=227 ligands=2017 4469.0 s
+  kiba/scaffold: n=23651 targets=194 ligands=296 3793.6 s
+  kiba/temporal: n=9018 targets=221 ligands=116 1387.7 s
+
+wrote 1200 marginal rows, 800 model-contrast rows, 8400 paired rows, 4936.5 s wall
+point estimates agree with results/metrics.csv to 5.83e-05
+protocol RMSE spread across cells: [0.2171, 1.4746] (100% of model x dataset contrasts exclude zero)
+primary family = rmse under the target resample, m=10 per cell, reps=[2000], Holm resolvable=True
+model-vs-model RMSE gaps significant after Holm (primary family): 55/60
+learned model vs global-mean null on RMSE (primary family): 30/40 point estimates favour the model, 33/40 significant after Holm (0 of those contrasts sat in a block where Holm is unresolvable at this B)
+  exception: davis/cold_target ridge delta(mean - model)=+0.0723 holm_p=0.1599  [interval spans zero]
+  exception: davis/cold_target mlp delta(mean - model)=+0.0055 holm_p=0.9115  [interval spans zero]
+  exception: davis/scaffold ridge delta(mean - model)=-0.0264 holm_p=0.7896  [point estimate is WORSE than the null]
+  exception: davis/scaffold xgboost delta(mean - model)=+0.0419 holm_p=0.5677  [interval spans zero]
+  exception: davis/scaffold randomforest delta(mean - model)=+0.0412 holm_p=0.5677  [interval spans zero]
+  exception: davis/temporal xgboost delta(mean - model)=+0.0338 holm_p=0.07896  [interval spans zero]
+  exception: kiba/cold_target ridge delta(mean - model)=+0.0155 holm_p=0.6537  [interval spans zero]
+arm-level Holm (m=105) unresolvable in 80/80 cell x metric x resample blocks -- those blocks report ci_excludes_zero, not a verdict

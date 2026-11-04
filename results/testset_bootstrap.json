@@ -1,0 +1,1744 @@
+{
+  "generated_by": "scripts/12_testset_bootstrap.py",
+  "base_seed": 20261103,
+  "cells": [
+    {
+      "dataset": "davis",
+      "protocol": "cold_drug",
+      "n_test": 5746,
+      "n_target_clusters": 379,
+      "n_ligand_clusters": 13,
+      "reps_rmse_mae": 2000,
+      "reps_ci": 600,
+      "seconds": 1096.6,
+      "model_vs_model_rmse_holm": 5,
+      "model_vs_model_pairs": 6,
+      "largest_significant_model_vs_model_rmse": {
+        "a": "xgboost",
+        "b": "mlp",
+        "delta_point": -0.6942,
+        "lo95": -0.7326,
+        "hi95": -0.653,
+        "holm_p": 0.009995002498750623
+      },
+      "learned_beat_mean_null_rmse": {
+        "ridge": {
+          "delta_rmse_mean_minus_model": 0.0694,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "xgboost": {
+          "delta_rmse_mean_minus_model": 0.1301,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "randomforest": {
+          "delta_rmse_mean_minus_model": 0.1296,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "mlp": {
+          "delta_rmse_mean_minus_model": -0.5641,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": false
+        }
+      },
+      "ci_row_significant": {
+        "ridge-vs-mlp": 0.021,
+        "xgboost-vs-mlp": 0.0285,
+        "randomforest-vs-mlp": 0.025
+      },
+      "arm_pair_holm_resolvable": {
+        "mae/ligand": false,
+        "rmse/ligand": false,
+        "ci_harrell/row": false,
+        "mae/row": false,
+        "rmse/row": false,
+        "ci_harrell/target": false,
+        "mae/target": false,
+        "rmse/target": false
+      },
+      "arm_pair_ci_excludes_zero": {
+        "mae/ligand": "50/105",
+        "rmse/ligand": "52/105",
+        "ci_harrell/row": "78/105",
+        "mae/row": "88/105",
+        "rmse/row": "97/105",
+        "ci_harrell/target": "74/105",
+        "mae/target": "85/105",
+        "rmse/target": "89/105"
+      },
+      "arm_pair_sign_holm_significant": {
+        "mae/ligand": "50/105",
+        "rmse/ligand": "52/105",
+        "mae/row": "82/105",
+        "rmse/row": "87/105",
+        "mae/target": "79/105",
+        "rmse/target": "80/105"
+      }
+    },
+    {
+      "dataset": "davis",
+      "protocol": "cold_target",
+      "n_test": 5984,
+      "n_target_clusters": 25,
+      "n_ligand_clusters": 68,
+      "reps_rmse_mae": 2000,
+      "reps_ci": 600,
+      "seconds": 1055.3,
+      "model_vs_model_rmse_holm": 5,
+      "model_vs_model_pairs": 6,
+      "largest_significant_model_vs_model_rmse": {
+        "a": "xgboost",
+        "b": "mlp",
+        "delta_point": -0.1541,
+        "lo95": -0.1885,
+        "hi95": -0.1233,
+        "holm_p": 0.009995002498750623
+      },
+      "learned_beat_mean_null_rmse": {
+        "ridge": {
+          "delta_rmse_mean_minus_model": 0.0723,
+          "holm_p": 0.15992003998001,
+          "significant": false,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "xgboost": {
+          "delta_rmse_mean_minus_model": 0.1596,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "randomforest": {
+          "delta_rmse_mean_minus_model": 0.1209,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "mlp": {
+          "delta_rmse_mean_minus_model": 0.0055,
+          "holm_p": 0.9115442278860569,
+          "significant": false,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        }
+      },
+      "ci_row_significant": {
+        "ridge-vs-xgboost": -0.0876,
+        "ridge-vs-randomforest": -0.0706,
+        "xgboost-vs-randomforest": 0.017,
+        "xgboost-vs-mlp": 0.0861,
+        "randomforest-vs-mlp": 0.0691
+      },
+      "arm_pair_holm_resolvable": {
+        "mae/ligand": false,
+        "rmse/ligand": false,
+        "ci_harrell/row": false,
+        "mae/row": false,
+        "rmse/row": false,
+        "ci_harrell/target": false,
+        "mae/target": false,
+        "rmse/target": false
+      },
+      "arm_pair_ci_excludes_zero": {
+        "mae/ligand": "85/105",
+        "rmse/ligand": "85/105",
+        "ci_harrell/row": "93/105",
+        "mae/row": "96/105",
+        "rmse/row": "87/105",
+        "ci_harrell/target": "74/105",
+        "mae/target": "82/105",
+        "rmse/target": "73/105"
+      },
+      "arm_pair_sign_holm_significant": {
+        "mae/ligand": "81/105",
+        "rmse/ligand": "76/105",
+        "mae/row": "81/105",
+        "rmse/row": "77/105",
+        "mae/target": "79/105",
+        "rmse/target": "66/105"
+      }
+    },
+    {
+      "dataset": "davis",
+      "protocol": "random",
+      "n_test": 6011,
+      "n_target_clusters": 379,
+      "n_ligand_clusters": 68,
+      "reps_rmse_mae": 2000,
+      "reps_ci": 600,
+      "seconds": 1159.6,
+      "model_vs_model_rmse_holm": 5,
+      "model_vs_model_pairs": 6,
+      "largest_significant_model_vs_model_rmse": {
+        "a": "ridge",
+        "b": "xgboost",
+        "delta_point": 0.1864,
+        "lo95": 0.1177,
+        "hi95": 0.2526,
+        "holm_p": 0.009995002498750623
+      },
+      "learned_beat_mean_null_rmse": {
+        "ridge": {
+          "delta_rmse_mean_minus_model": 0.1663,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "xgboost": {
+          "delta_rmse_mean_minus_model": 0.3527,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "randomforest": {
+          "delta_rmse_mean_minus_model": 0.2666,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "mlp": {
+          "delta_rmse_mean_minus_model": 0.1973,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        }
+      },
+      "ci_row_significant": {
+        "ridge-vs-xgboost": -0.0777,
+        "ridge-vs-randomforest": -0.0538,
+        "xgboost-vs-randomforest": 0.024,
+        "xgboost-vs-mlp": 0.0703,
+        "randomforest-vs-mlp": 0.0463
+      },
+      "arm_pair_holm_resolvable": {
+        "mae/ligand": false,
+        "rmse/ligand": false,
+        "ci_harrell/row": false,
+        "mae/row": false,
+        "rmse/row": false,
+        "ci_harrell/target": false,
+        "mae/target": false,
+        "rmse/target": false
+      },
+      "arm_pair_ci_excludes_zero": {
+        "mae/ligand": "87/105",
+        "rmse/ligand": "91/105",
+        "ci_harrell/row": "84/105",
+        "mae/row": "93/105",
+        "rmse/row": "94/105",
+        "ci_harrell/target": "84/105",
+        "mae/target": "89/105",
+        "rmse/target": "85/105"
+      },
+      "arm_pair_sign_holm_significant": {
+        "mae/ligand": "85/105",
+        "rmse/ligand": "88/105",
+        "mae/row": "91/105",
+        "rmse/row": "91/105",
+        "mae/target": "88/105",
+        "rmse/target": "82/105"
+      }
+    },
+    {
+      "dataset": "davis",
+      "protocol": "scaffold",
+      "n_test": 5746,
+      "n_target_clusters": 379,
+      "n_ligand_clusters": 13,
+      "reps_rmse_mae": 2000,
+      "reps_ci": 600,
+      "seconds": 1077.2,
+      "model_vs_model_rmse_holm": 5,
+      "model_vs_model_pairs": 6,
+      "largest_significant_model_vs_model_rmse": {
+        "a": "xgboost",
+        "b": "mlp",
+        "delta_point": -0.802,
+        "lo95": -0.836,
+        "hi95": -0.76,
+        "holm_p": 0.009995002498750623
+      },
+      "learned_beat_mean_null_rmse": {
+        "ridge": {
+          "delta_rmse_mean_minus_model": -0.0264,
+          "holm_p": 0.7896051974012993,
+          "significant": false,
+          "holm_resolvable": true,
+          "point_estimate_better": false
+        },
+        "xgboost": {
+          "delta_rmse_mean_minus_model": 0.0419,
+          "holm_p": 0.5677161419290355,
+          "significant": false,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "randomforest": {
+          "delta_rmse_mean_minus_model": 0.0412,
+          "holm_p": 0.5677161419290355,
+          "significant": false,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "mlp": {
+          "delta_rmse_mean_minus_model": -0.7601,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": false
+        }
+      },
+      "ci_row_significant": {
+        "ridge-vs-randomforest": -0.0195,
+        "ridge-vs-mlp": 0.088,
+        "xgboost-vs-randomforest": -0.0182,
+        "xgboost-vs-mlp": 0.0893,
+        "randomforest-vs-mlp": 0.1075
+      },
+      "arm_pair_holm_resolvable": {
+        "mae/ligand": false,
+        "rmse/ligand": false,
+        "ci_harrell/row": false,
+        "mae/row": false,
+        "rmse/row": false,
+        "ci_harrell/target": false,
+        "mae/target": false,
+        "rmse/target": false
+      },
+      "arm_pair_ci_excludes_zero": {
+        "mae/ligand": "38/105",
+        "rmse/ligand": "47/105",
+        "ci_harrell/row": "81/105",
+        "mae/row": "84/105",
+        "rmse/row": "92/105",
+        "ci_harrell/target": "80/105",
+        "mae/target": "78/105",
+        "rmse/target": "69/105"
+      },
+      "arm_pair_sign_holm_significant": {
+        "mae/ligand": "38/105",
+        "rmse/ligand": "47/105",
+        "mae/row": "81/105",
+        "rmse/row": "87/105",
+        "mae/target": "75/105",
+        "rmse/target": "64/105"
+      }
+    },
+    {
+      "dataset": "davis",
+      "protocol": "temporal",
+      "n_test": 5304,
+      "n_target_clusters": 379,
+      "n_ligand_clusters": 12,
+      "reps_rmse_mae": 2000,
+      "reps_ci": 600,
+      "seconds": 1008.9,
+      "model_vs_model_rmse_holm": 6,
+      "model_vs_model_pairs": 6,
+      "largest_significant_model_vs_model_rmse": {
+        "a": "randomforest",
+        "b": "mlp",
+        "delta_point": -1.1364,
+        "lo95": -1.1891,
+        "hi95": -1.0788,
+        "holm_p": 0.009995002498750623
+      },
+      "learned_beat_mean_null_rmse": {
+        "ridge": {
+          "delta_rmse_mean_minus_model": -0.0412,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": false
+        },
+        "xgboost": {
+          "delta_rmse_mean_minus_model": 0.0338,
+          "holm_p": 0.07896051974012994,
+          "significant": false,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "randomforest": {
+          "delta_rmse_mean_minus_model": 0.0571,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "mlp": {
+          "delta_rmse_mean_minus_model": -1.0793,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": false
+        }
+      },
+      "ci_row_significant": {
+        "ridge-vs-xgboost": -0.1275,
+        "ridge-vs-randomforest": -0.1131,
+        "ridge-vs-mlp": 0.0278,
+        "xgboost-vs-randomforest": 0.0144,
+        "xgboost-vs-mlp": 0.1554,
+        "randomforest-vs-mlp": 0.1409
+      },
+      "arm_pair_holm_resolvable": {
+        "mae/ligand": false,
+        "rmse/ligand": false,
+        "ci_harrell/row": false,
+        "mae/row": false,
+        "rmse/row": false,
+        "ci_harrell/target": false,
+        "mae/target": false,
+        "rmse/target": false
+      },
+      "arm_pair_ci_excludes_zero": {
+        "mae/ligand": "40/105",
+        "rmse/ligand": "51/105",
+        "ci_harrell/row": "92/105",
+        "mae/row": "94/105",
+        "rmse/row": "94/105",
+        "ci_harrell/target": "87/105",
+        "mae/target": "89/105",
+        "rmse/target": "89/105"
+      },
+      "arm_pair_sign_holm_significant": {
+        "mae/ligand": "40/105",
+        "rmse/ligand": "51/105",
+        "mae/row": "83/105",
+        "rmse/row": "84/105",
+        "mae/target": "78/105",
+        "rmse/target": "80/105"
+      }
+    },
+    {
+      "dataset": "kiba",
+      "protocol": "cold_drug",
+      "n_test": 23651,
+      "n_target_clusters": 216,
+      "n_ligand_clusters": 166,
+      "reps_rmse_mae": 2000,
+      "reps_ci": 600,
+      "seconds": 3734.7,
+      "model_vs_model_rmse_holm": 6,
+      "model_vs_model_pairs": 6,
+      "largest_significant_model_vs_model_rmse": {
+        "a": "randomforest",
+        "b": "mlp",
+        "delta_point": -0.3901,
+        "lo95": -0.4027,
+        "hi95": -0.3771,
+        "holm_p": 0.009995002498750623
+      },
+      "learned_beat_mean_null_rmse": {
+        "ridge": {
+          "delta_rmse_mean_minus_model": 0.053,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "xgboost": {
+          "delta_rmse_mean_minus_model": 0.12,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "randomforest": {
+          "delta_rmse_mean_minus_model": 0.1529,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "mlp": {
+          "delta_rmse_mean_minus_model": -0.2373,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": false
+        }
+      },
+      "ci_row_significant": {
+        "ridge-vs-xgboost": -0.0486,
+        "ridge-vs-randomforest": -0.079,
+        "ridge-vs-mlp": 0.0568,
+        "xgboost-vs-randomforest": -0.0303,
+        "xgboost-vs-mlp": 0.1054,
+        "randomforest-vs-mlp": 0.1357
+      },
+      "arm_pair_holm_resolvable": {
+        "mae/ligand": false,
+        "rmse/ligand": false,
+        "ci_harrell/row": false,
+        "mae/row": false,
+        "rmse/row": false,
+        "ci_harrell/target": false,
+        "mae/target": false,
+        "rmse/target": false
+      },
+      "arm_pair_ci_excludes_zero": {
+        "mae/ligand": "86/105",
+        "rmse/ligand": "90/105",
+        "ci_harrell/row": "98/105",
+        "mae/row": "99/105",
+        "rmse/row": "101/105",
+        "ci_harrell/target": "97/105",
+        "mae/target": "98/105",
+        "rmse/target": "101/105"
+      },
+      "arm_pair_sign_holm_significant": {
+        "mae/ligand": "86/105",
+        "rmse/ligand": "88/105",
+        "mae/row": "95/105",
+        "rmse/row": "95/105",
+        "mae/target": "95/105",
+        "rmse/target": "95/105"
+      }
+    },
+    {
+      "dataset": "kiba",
+      "protocol": "cold_target",
+      "n_test": 23642,
+      "n_target_clusters": 22,
+      "n_ligand_clusters": 2067,
+      "reps_rmse_mae": 2000,
+      "reps_ci": 600,
+      "seconds": 3852.5,
+      "model_vs_model_rmse_holm": 6,
+      "model_vs_model_pairs": 6,
+      "largest_significant_model_vs_model_rmse": {
+        "a": "xgboost",
+        "b": "mlp",
+        "delta_point": -0.4095,
+        "lo95": -0.528,
+        "hi95": -0.2914,
+        "holm_p": 0.009995002498750623
+      },
+      "learned_beat_mean_null_rmse": {
+        "ridge": {
+          "delta_rmse_mean_minus_model": 0.0155,
+          "holm_p": 0.6536731634182908,
+          "significant": false,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "xgboost": {
+          "delta_rmse_mean_minus_model": 0.2344,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "randomforest": {
+          "delta_rmse_mean_minus_model": 0.1182,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "mlp": {
+          "delta_rmse_mean_minus_model": -0.1751,
+          "holm_p": 0.04597701149425287,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": false
+        }
+      },
+      "ci_row_significant": {
+        "ridge-vs-xgboost": -0.0977,
+        "ridge-vs-randomforest": -0.0507,
+        "ridge-vs-mlp": -0.0062,
+        "xgboost-vs-randomforest": 0.047,
+        "xgboost-vs-mlp": 0.0915,
+        "randomforest-vs-mlp": 0.0445
+      },
+      "arm_pair_holm_resolvable": {
+        "mae/ligand": false,
+        "rmse/ligand": false,
+        "ci_harrell/row": false,
+        "mae/row": false,
+        "rmse/row": false,
+        "ci_harrell/target": false,
+        "mae/target": false,
+        "rmse/target": false
+      },
+      "arm_pair_ci_excludes_zero": {
+        "mae/ligand": "101/105",
+        "rmse/ligand": "97/105",
+        "ci_harrell/row": "100/105",
+        "mae/row": "101/105",
+        "rmse/row": "98/105",
+        "ci_harrell/target": "83/105",
+        "mae/target": "85/105",
+        "rmse/target": "83/105"
+      },
+      "arm_pair_sign_holm_significant": {
+        "mae/ligand": "98/105",
+        "rmse/ligand": "95/105",
+        "mae/row": "98/105",
+        "rmse/row": "96/105",
+        "mae/target": "85/105",
+        "rmse/target": "83/105"
+      }
+    },
+    {
+      "dataset": "kiba",
+      "protocol": "random",
+      "n_test": 23651,
+      "n_target_clusters": 227,
+      "n_ligand_clusters": 2017,
+      "reps_rmse_mae": 2000,
+      "reps_ci": 600,
+      "seconds": 4469.0,
+      "model_vs_model_rmse_holm": 6,
+      "model_vs_model_pairs": 6,
+      "largest_significant_model_vs_model_rmse": {
+        "a": "xgboost",
+        "b": "mlp",
+        "delta_point": -0.2487,
+        "lo95": -0.2585,
+        "hi95": -0.2391,
+        "holm_p": 0.009995002498750623
+      },
+      "learned_beat_mean_null_rmse": {
+        "ridge": {
+          "delta_rmse_mean_minus_model": 0.1437,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "xgboost": {
+          "delta_rmse_mean_minus_model": 0.32,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "randomforest": {
+          "delta_rmse_mean_minus_model": 0.2489,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "mlp": {
+          "delta_rmse_mean_minus_model": 0.0713,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        }
+      },
+      "ci_row_significant": {
+        "ridge-vs-xgboost": -0.087,
+        "ridge-vs-randomforest": -0.0746,
+        "ridge-vs-mlp": 0.0231,
+        "xgboost-vs-randomforest": 0.0124,
+        "xgboost-vs-mlp": 0.1101,
+        "randomforest-vs-mlp": 0.0976
+      },
+      "arm_pair_holm_resolvable": {
+        "mae/ligand": false,
+        "rmse/ligand": false,
+        "ci_harrell/row": false,
+        "mae/row": false,
+        "rmse/row": false,
+        "ci_harrell/target": false,
+        "mae/target": false,
+        "rmse/target": false
+      },
+      "arm_pair_ci_excludes_zero": {
+        "mae/ligand": "97/105",
+        "rmse/ligand": "95/105",
+        "ci_harrell/row": "94/105",
+        "mae/row": "97/105",
+        "rmse/row": "96/105",
+        "ci_harrell/target": "92/105",
+        "mae/target": "96/105",
+        "rmse/target": "94/105"
+      },
+      "arm_pair_sign_holm_significant": {
+        "mae/ligand": "93/105",
+        "rmse/ligand": "92/105",
+        "mae/row": "93/105",
+        "rmse/row": "92/105",
+        "mae/target": "93/105",
+        "rmse/target": "91/105"
+      }
+    },
+    {
+      "dataset": "kiba",
+      "protocol": "scaffold",
+      "n_test": 23651,
+      "n_target_clusters": 194,
+      "n_ligand_clusters": 296,
+      "reps_rmse_mae": 2000,
+      "reps_ci": 600,
+      "seconds": 3793.6,
+      "model_vs_model_rmse_holm": 5,
+      "model_vs_model_pairs": 6,
+      "largest_significant_model_vs_model_rmse": {
+        "a": "randomforest",
+        "b": "mlp",
+        "delta_point": -0.324,
+        "lo95": -0.3415,
+        "hi95": -0.308,
+        "holm_p": 0.009995002498750623
+      },
+      "learned_beat_mean_null_rmse": {
+        "ridge": {
+          "delta_rmse_mean_minus_model": 0.1449,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "xgboost": {
+          "delta_rmse_mean_minus_model": 0.2508,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "randomforest": {
+          "delta_rmse_mean_minus_model": 0.2556,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "mlp": {
+          "delta_rmse_mean_minus_model": -0.0684,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": false
+        }
+      },
+      "ci_row_significant": {
+        "ridge-vs-xgboost": -0.064,
+        "ridge-vs-randomforest": -0.0968,
+        "ridge-vs-mlp": 0.0434,
+        "xgboost-vs-randomforest": -0.0328,
+        "xgboost-vs-mlp": 0.1074,
+        "randomforest-vs-mlp": 0.1402
+      },
+      "arm_pair_holm_resolvable": {
+        "mae/ligand": false,
+        "rmse/ligand": false,
+        "ci_harrell/row": false,
+        "mae/row": false,
+        "rmse/row": false,
+        "ci_harrell/target": false,
+        "mae/target": false,
+        "rmse/target": false
+      },
+      "arm_pair_ci_excludes_zero": {
+        "mae/ligand": "96/105",
+        "rmse/ligand": "90/105",
+        "ci_harrell/row": "99/105",
+        "mae/row": "98/105",
+        "rmse/row": "94/105",
+        "ci_harrell/target": "95/105",
+        "mae/target": "98/105",
+        "rmse/target": "90/105"
+      },
+      "arm_pair_sign_holm_significant": {
+        "mae/ligand": "96/105",
+        "rmse/ligand": "88/105",
+        "mae/row": "97/105",
+        "rmse/row": "91/105",
+        "mae/target": "97/105",
+        "rmse/target": "89/105"
+      }
+    },
+    {
+      "dataset": "kiba",
+      "protocol": "temporal",
+      "n_test": 9018,
+      "n_target_clusters": 221,
+      "n_ligand_clusters": 116,
+      "reps_rmse_mae": 2000,
+      "reps_ci": 600,
+      "seconds": 1387.7,
+      "model_vs_model_rmse_holm": 6,
+      "model_vs_model_pairs": 6,
+      "largest_significant_model_vs_model_rmse": {
+        "a": "randomforest",
+        "b": "mlp",
+        "delta_point": -1.0588,
+        "lo95": -1.0884,
+        "hi95": -1.0307,
+        "holm_p": 0.009995002498750623
+      },
+      "learned_beat_mean_null_rmse": {
+        "ridge": {
+          "delta_rmse_mean_minus_model": -0.1649,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": false
+        },
+        "xgboost": {
+          "delta_rmse_mean_minus_model": 0.0566,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "randomforest": {
+          "delta_rmse_mean_minus_model": 0.0905,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": true
+        },
+        "mlp": {
+          "delta_rmse_mean_minus_model": -0.9683,
+          "holm_p": 0.009995002498750623,
+          "significant": true,
+          "holm_resolvable": true,
+          "point_estimate_better": false
+        }
+      },
+      "ci_row_significant": {
+        "ridge-vs-xgboost": -0.0976,
+        "ridge-vs-randomforest": -0.1239,
+        "ridge-vs-mlp": 0.026,
+        "xgboost-vs-randomforest": -0.0262,
+        "xgboost-vs-mlp": 0.1237,
+        "randomforest-vs-mlp": 0.1499
+      },
+      "arm_pair_holm_resolvable": {
+        "mae/ligand": false,
+        "rmse/ligand": false,
+        "ci_harrell/row": false,
+        "mae/row": false,
+        "rmse/row": false,
+        "ci_harrell/target": false,
+        "mae/target": false,
+        "rmse/target": false
+      },
+      "arm_pair_ci_excludes_zero": {
+        "mae/ligand": "92/105",
+        "rmse/ligand": "88/105",
+        "ci_harrell/row": "94/105",
+        "mae/row": "97/105",
+        "rmse/row": "101/105",
+        "ci_harrell/target": "92/105",
+        "mae/target": "96/105",
+        "rmse/target": "100/105"
+      },
+      "arm_pair_sign_holm_significant": {
+        "mae/ligand": "92/105",
+        "rmse/ligand": "88/105",
+        "mae/row": "95/105",
+        "rmse/row": "95/105",
+        "mae/target": "95/105",
+        "rmse/target": "95/105"
+      }
+    }
+  ],
+  "model_contrast_family": [
+    [
+      "ridge",
+      "xgboost"
+    ],
+    [
+      "ridge",
+      "randomforest"
+    ],
+    [
+      "ridge",
+      "mlp"
+    ],
+    [
+      "xgboost",
+      "randomforest"
+    ],
+    [
+      "xgboost",
+      "mlp"
+    ],
+    [
+      "randomforest",
+      "mlp"
+    ],
+    [
+      "ridge",
+      "mean"
+    ],
+    [
+      "xgboost",
+      "mean"
+    ],
+    [
+      "randomforest",
+      "mean"
+    ],
+    [
+      "mlp",
+      "mean"
+    ]
+  ],
+  "primary_family": {
+    "resample": "target",
+    "metric": "rmse"
+  },
+  "protocol_contrasts_rmse": [
+    {
+      "dataset": "davis",
+      "model": "mean_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "scaffold",
+      "easiest_rmse": 0.8522,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.2116,
+      "spread_point": 0.3594,
+      "spread_lo95": 0.315,
+      "spread_hi95": 0.404,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "davis",
+      "model": "mean_ligand_train_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.8106,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.1357,
+      "spread_point": 0.3251,
+      "spread_lo95": 0.2766,
+      "spread_hi95": 0.3698,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "davis",
+      "model": "mean_target_train_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "scaffold",
+      "easiest_rmse": 0.7783,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.2116,
+      "spread_point": 0.4333,
+      "spread_lo95": 0.391,
+      "spread_hi95": 0.4772,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "davis",
+      "model": "ridge_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.7561,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.1393,
+      "spread_point": 0.3832,
+      "spread_lo95": 0.337,
+      "spread_hi95": 0.4256,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "davis",
+      "model": "ridge_seed1",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.7561,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.1393,
+      "spread_point": 0.3832,
+      "spread_lo95": 0.337,
+      "spread_hi95": 0.4256,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "davis",
+      "model": "ridge_seed2",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.7561,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.1393,
+      "spread_point": 0.3832,
+      "spread_lo95": 0.337,
+      "spread_hi95": 0.4256,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "davis",
+      "model": "xgboost_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.5686,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.0591,
+      "spread_point": 0.4906,
+      "spread_lo95": 0.4506,
+      "spread_hi95": 0.528,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "davis",
+      "model": "xgboost_seed1",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.5699,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.0554,
+      "spread_point": 0.4855,
+      "spread_lo95": 0.4469,
+      "spread_hi95": 0.5215,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "davis",
+      "model": "xgboost_seed2",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.5707,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.0414,
+      "spread_point": 0.4708,
+      "spread_lo95": 0.4329,
+      "spread_hi95": 0.5062,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "davis",
+      "model": "randomforest_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.6568,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.0925,
+      "spread_point": 0.4357,
+      "spread_lo95": 0.3926,
+      "spread_hi95": 0.4763,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "davis",
+      "model": "randomforest_seed1",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.6549,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.0878,
+      "spread_point": 0.4329,
+      "spread_lo95": 0.3906,
+      "spread_hi95": 0.4727,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "davis",
+      "model": "randomforest_seed2",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.6559,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 1.0919,
+      "spread_point": 0.4359,
+      "spread_lo95": 0.3938,
+      "spread_hi95": 0.4762,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "davis",
+      "model": "mlp_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.7228,
+      "hardest_protocol": "temporal",
+      "hardest_rmse": 2.0175,
+      "spread_point": 1.2947,
+      "spread_lo95": 1.2526,
+      "spread_hi95": 1.3367,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "davis",
+      "model": "mlp_seed1",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.731,
+      "hardest_protocol": "temporal",
+      "hardest_rmse": 2.0331,
+      "spread_point": 1.3021,
+      "spread_lo95": 1.2607,
+      "spread_hi95": 1.3454,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "davis",
+      "model": "mlp_seed2",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.7214,
+      "hardest_protocol": "temporal",
+      "hardest_rmse": 2.1961,
+      "spread_point": 1.4746,
+      "spread_lo95": 1.4328,
+      "spread_hi95": 1.5174,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "kiba",
+      "model": "mean_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "cold_drug",
+      "easiest_rmse": 0.7225,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 0.9396,
+      "spread_point": 0.2171,
+      "spread_lo95": 0.1985,
+      "spread_hi95": 0.2352,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "kiba",
+      "model": "mean_ligand_train_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.6481,
+      "hardest_protocol": "scaffold",
+      "hardest_rmse": 0.8701,
+      "spread_point": 0.222,
+      "spread_lo95": 0.2048,
+      "spread_hi95": 0.2401,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "kiba",
+      "model": "mean_target_train_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "cold_drug",
+      "easiest_rmse": 0.6538,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 0.9396,
+      "spread_point": 0.2858,
+      "spread_lo95": 0.2674,
+      "spread_hi95": 0.3031,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "kiba",
+      "model": "ridge_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "cold_drug",
+      "easiest_rmse": 0.6695,
+      "hardest_protocol": "temporal",
+      "hardest_rmse": 0.9798,
+      "spread_point": 0.3103,
+      "spread_lo95": 0.2904,
+      "spread_hi95": 0.3302,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "kiba",
+      "model": "ridge_seed1",
+      "metric": "rmse",
+      "easiest_protocol": "cold_drug",
+      "easiest_rmse": 0.6695,
+      "hardest_protocol": "temporal",
+      "hardest_rmse": 0.9798,
+      "spread_point": 0.3103,
+      "spread_lo95": 0.2904,
+      "spread_hi95": 0.3302,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "kiba",
+      "model": "ridge_seed2",
+      "metric": "rmse",
+      "easiest_protocol": "cold_drug",
+      "easiest_rmse": 0.6695,
+      "hardest_protocol": "temporal",
+      "hardest_rmse": 0.9798,
+      "spread_point": 0.3103,
+      "spread_lo95": 0.2904,
+      "spread_hi95": 0.3302,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "kiba",
+      "model": "xgboost_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.5144,
+      "hardest_protocol": "temporal",
+      "hardest_rmse": 0.7677,
+      "spread_point": 0.2533,
+      "spread_lo95": 0.2318,
+      "spread_hi95": 0.273,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "kiba",
+      "model": "xgboost_seed1",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.5141,
+      "hardest_protocol": "temporal",
+      "hardest_rmse": 0.7609,
+      "spread_point": 0.2467,
+      "spread_lo95": 0.2257,
+      "spread_hi95": 0.266,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "kiba",
+      "model": "xgboost_seed2",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.5144,
+      "hardest_protocol": "temporal",
+      "hardest_rmse": 0.7463,
+      "spread_point": 0.2319,
+      "spread_lo95": 0.2101,
+      "spread_hi95": 0.2523,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "kiba",
+      "model": "randomforest_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "cold_drug",
+      "easiest_rmse": 0.5694,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 0.8196,
+      "spread_point": 0.2502,
+      "spread_lo95": 0.2333,
+      "spread_hi95": 0.2664,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "kiba",
+      "model": "randomforest_seed1",
+      "metric": "rmse",
+      "easiest_protocol": "cold_drug",
+      "easiest_rmse": 0.5712,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 0.8204,
+      "spread_point": 0.2491,
+      "spread_lo95": 0.2322,
+      "spread_hi95": 0.2653,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "kiba",
+      "model": "randomforest_seed2",
+      "metric": "rmse",
+      "easiest_protocol": "cold_drug",
+      "easiest_rmse": 0.5683,
+      "hardest_protocol": "cold_target",
+      "hardest_rmse": 0.8241,
+      "spread_point": 0.2557,
+      "spread_lo95": 0.2386,
+      "spread_hi95": 0.272,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "kiba",
+      "model": "mlp_seed0",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.7474,
+      "hardest_protocol": "temporal",
+      "hardest_rmse": 1.7047,
+      "spread_point": 0.9573,
+      "spread_lo95": 0.9306,
+      "spread_hi95": 0.9842,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "kiba",
+      "model": "mlp_seed1",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.7193,
+      "hardest_protocol": "temporal",
+      "hardest_rmse": 1.7711,
+      "spread_point": 1.0518,
+      "spread_lo95": 1.0252,
+      "spread_hi95": 1.079,
+      "excludes_zero": true,
+      "reps_used": 2000
+    },
+    {
+      "dataset": "kiba",
+      "model": "mlp_seed2",
+      "metric": "rmse",
+      "easiest_protocol": "random",
+      "easiest_rmse": 0.8223,
+      "hardest_protocol": "temporal",
+      "hardest_rmse": 1.8737,
+      "spread_point": 1.0515,
+      "spread_lo95": 1.0238,
+      "spread_hi95": 1.0798,
+      "excludes_zero": true,
+      "reps_used": 2000
+    }
+  ],
+  "protocol_spread_range_rmse": [
+    0.2171,
+    1.4746
+  ],
+  "protocol_spread_excludes_zero_frac": 1.0,
+  "point_estimate_max_abs_deviation_vs_metrics_csv": 5.830707178833272e-05,
+  "cells_with_significant_model_vs_model_rmse_target_bootstrap": [
+    "davis/cold_drug",
+    "davis/cold_target",
+    "davis/random",
+    "davis/scaffold",
+    "davis/temporal",
+    "kiba/cold_drug",
+    "kiba/cold_target",
+    "kiba/random",
+    "kiba/scaffold",
+    "kiba/temporal"
+  ],
+  "model_vs_model_rmse_pairs_tested_per_cell": 6,
+  "total_model_vs_model_significant": 55,
+  "total_model_vs_model_tested": 60,
+  "learned_beat_mean_null_point_estimate_all_cells": false,
+  "learned_beat_mean_null_significant_all_cells": false,
+  "learned_beat_mean_null_counts": {
+    "tested": 40,
+    "point_estimate_better": 30,
+    "significant_after_holm": 33,
+    "holm_unresolvable_blocks": 0
+  },
+  "learned_beat_mean_null_all_cells": false,
+  "learned_beat_mean_null_exceptions": [
+    {
+      "cell": "davis/cold_target",
+      "model": "ridge",
+      "delta_rmse_mean_minus_model": 0.0723,
+      "holm_p": 0.15992003998001,
+      "holm_resolvable": true,
+      "point_estimate_worse_than_null": false
+    },
+    {
+      "cell": "davis/cold_target",
+      "model": "mlp",
+      "delta_rmse_mean_minus_model": 0.0055,
+      "holm_p": 0.9115442278860569,
+      "holm_resolvable": true,
+      "point_estimate_worse_than_null": false
+    },
+    {
+      "cell": "davis/scaffold",
+      "model": "ridge",
+      "delta_rmse_mean_minus_model": -0.0264,
+      "holm_p": 0.7896051974012993,
+      "holm_resolvable": true,
+      "point_estimate_worse_than_null": true
+    },
+    {
+      "cell": "davis/scaffold",
+      "model": "xgboost",
+      "delta_rmse_mean_minus_model": 0.0419,
+      "holm_p": 0.5677161419290355,
+      "holm_resolvable": true,
+      "point_estimate_worse_than_null": false
+    },
+    {
+      "cell": "davis/scaffold",
+      "model": "randomforest",
+      "delta_rmse_mean_minus_model": 0.0412,
+      "holm_p": 0.5677161419290355,
+      "holm_resolvable": true,
+      "point_estimate_worse_than_null": false
+    },
+    {
+      "cell": "davis/temporal",
+      "model": "xgboost",
+      "delta_rmse_mean_minus_model": 0.0338,
+      "holm_p": 0.07896051974012994,
+      "holm_resolvable": true,
+      "point_estimate_worse_than_null": false
+    },
+    {
+      "cell": "kiba/cold_target",
+      "model": "ridge",
+      "delta_rmse_mean_minus_model": 0.0155,
+      "holm_p": 0.6536731634182908,
+      "holm_resolvable": true,
+      "point_estimate_worse_than_null": false
+    }
+  ],
+  "arm_level_holm_resolvable": {
+    "davis/cold_drug mae/ligand": false,
+    "davis/cold_drug rmse/ligand": false,
+    "davis/cold_drug ci_harrell/row": false,
+    "davis/cold_drug mae/row": false,
+    "davis/cold_drug rmse/row": false,
+    "davis/cold_drug ci_harrell/target": false,
+    "davis/cold_drug mae/target": false,
+    "davis/cold_drug rmse/target": false,
+    "davis/cold_target mae/ligand": false,
+    "davis/cold_target rmse/ligand": false,
+    "davis/cold_target ci_harrell/row": false,
+    "davis/cold_target mae/row": false,
+    "davis/cold_target rmse/row": false,
+    "davis/cold_target ci_harrell/target": false,
+    "davis/cold_target mae/target": false,
+    "davis/cold_target rmse/target": false,
+    "davis/random mae/ligand": false,
+    "davis/random rmse/ligand": false,
+    "davis/random ci_harrell/row": false,
+    "davis/random mae/row": false,
+    "davis/random rmse/row": false,
+    "davis/random ci_harrell/target": false,
+    "davis/random mae/target": false,
+    "davis/random rmse/target": false,
+    "davis/scaffold mae/ligand": false,
+    "davis/scaffold rmse/ligand": false,
+    "davis/scaffold ci_harrell/row": false,
+    "davis/scaffold mae/row": false,
+    "davis/scaffold rmse/row": false,
+    "davis/scaffold ci_harrell/target": false,
+    "davis/scaffold mae/target": false,
+    "davis/scaffold rmse/target": false,
+    "davis/temporal mae/ligand": false,
+    "davis/temporal rmse/ligand": false,
+    "davis/temporal ci_harrell/row": false,
+    "davis/temporal mae/row": false,
+    "davis/temporal rmse/row": false,
+    "davis/temporal ci_harrell/target": false,
+    "davis/temporal mae/target": false,
+    "davis/temporal rmse/target": false,
+    "kiba/cold_drug mae/ligand": false,
+    "kiba/cold_drug rmse/ligand": false,
+    "kiba/cold_drug ci_harrell/row": false,
+    "kiba/cold_drug mae/row": false,
+    "kiba/cold_drug rmse/row": false,
+    "kiba/cold_drug ci_harrell/target": false,
+    "kiba/cold_drug mae/target": false,
+    "kiba/cold_drug rmse/target": false,
+    "kiba/cold_target mae/ligand": false,
+    "kiba/cold_target rmse/ligand": false,
+    "kiba/cold_target ci_harrell/row": false,
+    "kiba/cold_target mae/row": false,
+    "kiba/cold_target rmse/row": false,
+    "kiba/cold_target ci_harrell/target": false,
+    "kiba/cold_target mae/target": false,
+    "kiba/cold_target rmse/target": false,
+    "kiba/random mae/ligand": false,
+    "kiba/random rmse/ligand": false,
+    "kiba/random ci_harrell/row": false,
+    "kiba/random mae/row": false,
+    "kiba/random rmse/row": false,
+    "kiba/random ci_harrell/target": false,
+    "kiba/random mae/target": false,
+    "kiba/random rmse/target": false,
+    "kiba/scaffold mae/ligand": false,
+    "kiba/scaffold rmse/ligand": false,
+    "kiba/scaffold ci_harrell/row": false,
+    "kiba/scaffold mae/row": false,
+    "kiba/scaffold rmse/row": false,
+    "kiba/scaffold ci_harrell/target": false,
+    "kiba/scaffold mae/target": false,
+    "kiba/scaffold rmse/target": false,
+    "kiba/temporal mae/ligand": false,
+    "kiba/temporal rmse/ligand": false,
+    "kiba/temporal ci_harrell/row": false,
+    "kiba/temporal mae/row": false,
+    "kiba/temporal rmse/row": false,
+    "kiba/temporal ci_harrell/target": false,
+    "kiba/temporal mae/target": false,
+    "kiba/temporal rmse/target": false
+  },
+  "arm_level_ci_excludes_zero": {
+    "davis/cold_drug mae/ligand": "50/105",
+    "davis/cold_drug rmse/ligand": "52/105",
+    "davis/cold_drug ci_harrell/row": "78/105",
+    "davis/cold_drug mae/row": "88/105",
+    "davis/cold_drug rmse/row": "97/105",
+    "davis/cold_drug ci_harrell/target": "74/105",
+    "davis/cold_drug mae/target": "85/105",
+    "davis/cold_drug rmse/target": "89/105",
+    "davis/cold_target mae/ligand": "85/105",
+    "davis/cold_target rmse/ligand": "85/105",
+    "davis/cold_target ci_harrell/row": "93/105",
+    "davis/cold_target mae/row": "96/105",
+    "davis/cold_target rmse/row": "87/105",
+    "davis/cold_target ci_harrell/target": "74/105",
+    "davis/cold_target mae/target": "82/105",
+    "davis/cold_target rmse/target": "73/105",
+    "davis/random mae/ligand": "87/105",
+    "davis/random rmse/ligand": "91/105",
+    "davis/random ci_harrell/row": "84/105",
+    "davis/random mae/row": "93/105",
+    "davis/random rmse/row": "94/105",
+    "davis/random ci_harrell/target": "84/105",
+    "davis/random mae/target": "89/105",
+    "davis/random rmse/target": "85/105",
+    "davis/scaffold mae/ligand": "38/105",
+    "davis/scaffold rmse/ligand": "47/105",
+    "davis/scaffold ci_harrell/row": "81/105",
+    "davis/scaffold mae/row": "84/105",
+    "davis/scaffold rmse/row": "92/105",
+    "davis/scaffold ci_harrell/target": "80/105",
+    "davis/scaffold mae/target": "78/105",
+    "davis/scaffold rmse/target": "69/105",
+    "davis/temporal mae/ligand": "40/105",
+    "davis/temporal rmse/ligand": "51/105",
+    "davis/temporal ci_harrell/row": "92/105",
+    "davis/temporal mae/row": "94/105",
+    "davis/temporal rmse/row": "94/105",
+    "davis/temporal ci_harrell/target": "87/105",
+    "davis/temporal mae/target": "89/105",
+    "davis/temporal rmse/target": "89/105",
+    "kiba/cold_drug mae/ligand": "86/105",
+    "kiba/cold_drug rmse/ligand": "90/105",
+    "kiba/cold_drug ci_harrell/row": "98/105",
+    "kiba/cold_drug mae/row": "99/105",
+    "kiba/cold_drug rmse/row": "101/105",
+    "kiba/cold_drug ci_harrell/target": "97/105",
+    "kiba/cold_drug mae/target": "98/105",
+    "kiba/cold_drug rmse/target": "101/105",
+    "kiba/cold_target mae/ligand": "101/105",
+    "kiba/cold_target rmse/ligand": "97/105",
+    "kiba/cold_target ci_harrell/row": "100/105",
+    "kiba/cold_target mae/row": "101/105",
+    "kiba/cold_target rmse/row": "98/105",
+    "kiba/cold_target ci_harrell/target": "83/105",
+    "kiba/cold_target mae/target": "85/105",
+    "kiba/cold_target rmse/target": "83/105",
+    "kiba/random mae/ligand": "97/105",
+    "kiba/random rmse/ligand": "95/105",
+    "kiba/random ci_harrell/row": "94/105",
+    "kiba/random mae/row": "97/105",
+    "kiba/random rmse/row": "96/105",
+    "kiba/random ci_harrell/target": "92/105",
+    "kiba/random mae/target": "96/105",
+    "kiba/random rmse/target": "94/105",
+    "kiba/scaffold mae/ligand": "96/105",
+    "kiba/scaffold rmse/ligand": "90/105",
+    "kiba/scaffold ci_harrell/row": "99/105",
+    "kiba/scaffold mae/row": "98/105",
+    "kiba/scaffold rmse/row": "94/105",
+    "kiba/scaffold ci_harrell/target": "95/105",
+    "kiba/scaffold mae/target": "98/105",
+    "kiba/scaffold rmse/target": "90/105",
+    "kiba/temporal mae/ligand": "92/105",
+    "kiba/temporal rmse/ligand": "88/105",
+    "kiba/temporal ci_harrell/row": "94/105",
+    "kiba/temporal mae/row": "97/105",
+    "kiba/temporal rmse/row": "101/105",
+    "kiba/temporal ci_harrell/target": "92/105",
+    "kiba/temporal mae/target": "96/105",
+    "kiba/temporal rmse/target": "100/105"
+  },
+  "arm_level_sign_holm_significant": {
+    "davis/cold_drug mae/ligand": "50/105",
+    "davis/cold_drug rmse/ligand": "52/105",
+    "davis/cold_drug mae/row": "82/105",
+    "davis/cold_drug rmse/row": "87/105",
+    "davis/cold_drug mae/target": "79/105",
+    "davis/cold_drug rmse/target": "80/105",
+    "davis/cold_target mae/ligand": "81/105",
+    "davis/cold_target rmse/ligand": "76/105",
+    "davis/cold_target mae/row": "81/105",
+    "davis/cold_target rmse/row": "77/105",
+    "davis/cold_target mae/target": "79/105",
+    "davis/cold_target rmse/target": "66/105",
+    "davis/random mae/ligand": "85/105",
+    "davis/random rmse/ligand": "88/105",
+    "davis/random mae/row": "91/105",
+    "davis/random rmse/row": "91/105",
+    "davis/random mae/target": "88/105",
+    "davis/random rmse/target": "82/105",
+    "davis/scaffold mae/ligand": "38/105",
+    "davis/scaffold rmse/ligand": "47/105",
+    "davis/scaffold mae/row": "81/105",
+    "davis/scaffold rmse/row": "87/105",
+    "davis/scaffold mae/target": "75/105",
+    "davis/scaffold rmse/target": "64/105",
+    "davis/temporal mae/ligand": "40/105",
+    "davis/temporal rmse/ligand": "51/105",
+    "davis/temporal mae/row": "83/105",
+    "davis/temporal rmse/row": "84/105",
+    "davis/temporal mae/target": "78/105",
+    "davis/temporal rmse/target": "80/105",
+    "kiba/cold_drug mae/ligand": "86/105",
+    "kiba/cold_drug rmse/ligand": "88/105",
+    "kiba/cold_drug mae/row": "95/105",
+    "kiba/cold_drug rmse/row": "95/105",
+    "kiba/cold_drug mae/target": "95/105",
+    "kiba/cold_drug rmse/target": "95/105",
+    "kiba/cold_target mae/ligand": "98/105",
+    "kiba/cold_target rmse/ligand": "95/105",
+    "kiba/cold_target mae/row": "98/105",
+    "kiba/cold_target rmse/row": "96/105",
+    "kiba/cold_target mae/target": "85/105",
+    "kiba/cold_target rmse/target": "83/105",
+    "kiba/random mae/ligand": "93/105",
+    "kiba/random rmse/ligand": "92/105",
+    "kiba/random mae/row": "93/105",
+    "kiba/random rmse/row": "92/105",
+    "kiba/random mae/target": "93/105",
+    "kiba/random rmse/target": "91/105",
+    "kiba/scaffold mae/ligand": "96/105",
+    "kiba/scaffold rmse/ligand": "88/105",
+    "kiba/scaffold mae/row": "97/105",
+    "kiba/scaffold rmse/row": "91/105",
+    "kiba/scaffold mae/target": "97/105",
+    "kiba/scaffold rmse/target": "89/105",
+    "kiba/temporal mae/ligand": "92/105",
+    "kiba/temporal rmse/ligand": "88/105",
+    "kiba/temporal mae/row": "95/105",
+    "kiba/temporal rmse/row": "95/105",
+    "kiba/temporal mae/target": "95/105",
+    "kiba/temporal rmse/target": "95/105"
+  },
+  "sign_test_caveat": "exact sign tests treat test rows as exchangeable and therefore ignore within-target / within-ligand correlation; they are anti-conservative relative to the cluster bootstraps and are reported alongside, not instead of, them",
+  "closest_learned_pair_per_cell_primary_family": [
+    {
+      "cell": "davis/cold_drug",
+      "closest_pair": "xgboost-randomforest",
+      "delta_rmse": -0.0005,
+      "ci_lo95": -0.0309,
+      "ci_hi95": 0.022,
+      "holm_p": 0.92454,
+      "significant": false
+    },
+    {
+      "cell": "davis/cold_target",
+      "closest_pair": "xgboost-randomforest",
+      "delta_rmse": -0.0387,
+      "ci_lo95": -0.0741,
+      "ci_hi95": -0.0054,
+      "holm_p": 0.02999,
+      "significant": true
+    },
+    {
+      "cell": "davis/random",
+      "closest_pair": "ridge-mlp",
+      "delta_rmse": 0.031,
+      "ci_lo95": -0.0309,
+      "ci_hi95": 0.0883,
+      "holm_p": 0.34183,
+      "significant": false
+    },
+    {
+      "cell": "davis/scaffold",
+      "closest_pair": "xgboost-randomforest",
+      "delta_rmse": -0.0006,
+      "ci_lo95": -0.0108,
+      "ci_hi95": 0.011,
+      "holm_p": 0.82059,
+      "significant": false
+    },
+    {
+      "cell": "davis/temporal",
+      "closest_pair": "xgboost-randomforest",
+      "delta_rmse": 0.0233,
+      "ci_lo95": 0.0074,
+      "ci_hi95": 0.0393,
+      "holm_p": 0.01199,
+      "significant": true
+    },
+    {
+      "cell": "kiba/cold_drug",
+      "closest_pair": "xgboost-randomforest",
+      "delta_rmse": 0.0328,
+      "ci_lo95": 0.0284,
+      "ci_hi95": 0.0375,
+      "holm_p": 0.01,
+      "significant": true
+    },
+    {
+      "cell": "kiba/cold_target",
+      "closest_pair": "ridge-randomforest",
+      "delta_rmse": 0.1027,
+      "ci_lo95": 0.0404,
+      "ci_hi95": 0.1704,
+      "holm_p": 0.01,
+      "significant": true
+    },
+    {
+      "cell": "kiba/random",
+      "closest_pair": "xgboost-randomforest",
+      "delta_rmse": -0.0711,
+      "ci_lo95": -0.0845,
+      "ci_hi95": -0.0602,
+      "holm_p": 0.01,
+      "significant": true
+    },
+    {
+      "cell": "kiba/scaffold",
+      "closest_pair": "xgboost-randomforest",
+      "delta_rmse": 0.0048,
+      "ci_lo95": -0.0005,
+      "ci_hi95": 0.0101,
+      "holm_p": 0.07196,
+      "significant": false
+    },
+    {
+      "cell": "kiba/temporal",
+      "closest_pair": "xgboost-randomforest",
+      "delta_rmse": 0.0339,
+      "ci_lo95": 0.027,
+      "ci_hi95": 0.041,
+      "holm_p": 0.01,
+      "significant": true
+    }
+  ],
+  "primary_family_learned_vs_learned_significant": "55/60",
+  "primary_family_holm_resolvable": true,
+  "primary_family_reps": [
+    2000
+  ],
+  "wall_seconds": 4936.5,
+  "n_ci_rows": 1200,
+  "n_model_rows": 800,
+  "n_pair_rows": 8400
+}

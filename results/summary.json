@@ -81,5 +81,88 @@
     "kiba_cold_drug_scaffold_present_in_train": 0.4879,
     "davis_cold_target_targets_absent_from_train": 1.0,
     "davis_label_tie_fraction_mean": 0.9340771898988699
+  },
+  "testset_bootstrap": {
+    "source": "derived from results/testset_bootstrap.json by scripts/07_report.py",
+    "wall_seconds": 4936.5,
+    "n_ci_rows": 1200,
+    "n_model_rows": 800,
+    "n_pair_rows": 8400,
+    "point_estimate_max_abs_deviation_vs_metrics_csv": 5.830707178833272e-05,
+    "primary_family": {
+      "resample": "target",
+      "metric": "rmse"
+    },
+    "learned_vs_learned_significant_primary_family": "55/60",
+    "learned_vs_mean_null": {
+      "tested": 40,
+      "point_estimate_better": 30,
+      "significant_after_holm": 33,
+      "significant_in_models_favour": 24,
+      "significant_in_nulls_favour": 9,
+      "nulls_favour_list": [
+        {
+          "cell": "davis/cold_drug",
+          "model": "mlp",
+          "delta_rmse_mean_minus_model": -0.5641,
+          "holm_p": 0.009995002498750623
+        },
+        {
+          "cell": "davis/scaffold",
+          "model": "mlp",
+          "delta_rmse_mean_minus_model": -0.7601,
+          "holm_p": 0.009995002498750623
+        },
+        {
+          "cell": "davis/temporal",
+          "model": "ridge",
+          "delta_rmse_mean_minus_model": -0.0412,
+          "holm_p": 0.009995002498750623
+        },
+        {
+          "cell": "davis/temporal",
+          "model": "mlp",
+          "delta_rmse_mean_minus_model": -1.0793,
+          "holm_p": 0.009995002498750623
+        },
+        {
+          "cell": "kiba/cold_drug",
+          "model": "mlp",
+          "delta_rmse_mean_minus_model": -0.2373,
+          "holm_p": 0.009995002498750623
+        },
+        {
+          "cell": "kiba/cold_target",
+          "model": "mlp",
+          "delta_rmse_mean_minus_model": -0.1751,
+          "holm_p": 0.04597701149425287
+        },
+        {
+          "cell": "kiba/scaffold",
+          "model": "mlp",
+          "delta_rmse_mean_minus_model": -0.0684,
+          "holm_p": 0.009995002498750623
+        },
+        {
+          "cell": "kiba/temporal",
+          "model": "ridge",
+          "delta_rmse_mean_minus_model": -0.1649,
+          "holm_p": 0.009995002498750623
+        },
+        {
+          "cell": "kiba/temporal",
+          "model": "mlp",
+          "delta_rmse_mean_minus_model": -0.9683,
+          "holm_p": 0.009995002498750623
+        }
+      ]
+    },
+    "protocol_spread_range_rmse": [
+      0.2171,
+      1.4746
+    ],
+    "protocol_spread_excludes_zero_frac": 1.0,
+    "arm_level_blocks": 80,
+    "arm_level_holm_resolvable_blocks": 0
   }
 }

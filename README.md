@@ -25,15 +25,26 @@ claim and its evidence are one `jq` apart.
    tabular models, not about architecture in general.
    `readme_numbers.json → protocol_spread_of_the_best_model`,
    `model_spread_within_protocol_trained3`, `variance_decomposition`.
+   The whole grid is now bootstrapped (script 12, 2000 reps over the stored test predictions, no
+   refitting): the protocol contrast survives on every model × dataset cell — hardest-minus-easiest
+   protocol RMSE spread runs **0.2171–1.4746** and **100 %** of those intervals exclude zero under
+   row resampling — while 55 of the 60 within-protocol learned-vs-learned gaps are also significant
+   under target-cluster resampling, because n ≈ 6–24 k test rows resolves differences as small as
+   0.005 pKd. Significance is not the same as magnitude: the gaps that clear Holm are routinely
+   an order of magnitude below the protocol effect they are being compared to.
 2. **A two-line lookup beats a trained model, in the cell nobody checks.** On DAVIS `scaffold`
    the *per-target train mean* scores **0.7783** and beats every learned model in the grid,
    XGBoost by 0.032; Ridge is worse than the global-mean null on DAVIS `scaffold` (0.8786 vs
-   0.8522), DAVIS `temporal` (1.0442 vs 1.0030) and KIBA `temporal` (0.9798 vs 0.8149).
+   0.8522), DAVIS `temporal` (1.0442 vs 1.0030) and KIBA `temporal` (0.9798 vs 0.8149) — but
+   the paired bootstrap resolves only the last two (Holm p = 0.010 each); the `scaffold` gap
+   of −0.0264 does not clear Holm (p = 0.79), so it is a point estimate, not a shown loss.
    `learned_models_worse_than_the_global_mean` lists **10 of 40** learned cells that lose to a
-   mean.
+   mean on a point estimate — and 9 of the 10 are significant after Holm.
 3. **The neural baseline is the least robust thing here.** A DeepDTA-style MLP is worse than
    "predict the training mean" on **3 of 5** DAVIS protocols and **4 of 5** KIBA protocols
-   (worst 2.0822 vs 1.0030 pKd) — kept in the tables, not deleted.
+   (worst 2.0822 vs 1.0030 pKd), and unlike the Ridge case above all **7** of those cells clear
+   Holm in the paired bootstrap (ΔRMSE −0.068 to −1.079, Holm p ≤ 0.046) — the collapse is not
+   sampling noise. Kept in the tables, not deleted.
 4. **Concordance has to be reported twice or it is inflated.** 69.64 % of DAVIS labels sit on
    the assay's censoring ceiling, which makes **36.4–48.7 % of the label pairs inside each
    DAVIS test block exact ties** (KIBA: 5.1–6.7 %) — and the two standard calibres differ by
@@ -210,19 +221,36 @@ Four readings, each traceable to `results/metrics_by_protocol.csv` and
    2.6–7.9× what changing the model buys.* The per-protocol winner also flips, and some flips
    are not resolvable: XGBoost wins four of five DAVIS protocols, but on `cold_drug` it beats
    random forest by 0.0005 while its own three seeds span 0.7395–0.8304 — at 3 seeds that
-   "win" is noise. Random forest wins DAVIS `temporal` and three of five KIBA protocols. There
+   "win" is noise. Script 12's paired bootstrap puts an interval on it directly:
+   ΔRMSE = −0.0005, 95 % CI [−0.0309, 0.0220], Holm p = 0.93 — unresolved, as claimed. It also
+   shows the converse: 6 of the 10 cells' *closest* pairs do clear Holm, at gaps of
+   0.0233–0.1027 RMSE, because n ≈ 6–24 k test rows is a lot of resolving power
+   (results/report.md §7.1). Of the 4 that stay unresolved, 3 are gaps of ≤ 0.005 and the
+   fourth is DAVIS `random`'s Ridge–MLP pair at 0.0310 — a gap of the same size as the ones
+   that cleared, wide interval because the MLP's own seed span is 0.18. So "not resolvable" is
+   a property of the gap size and of the noisier member of the pair, not of the sample size.
+   Random forest wins DAVIS `temporal` and three of five KIBA protocols. There
    is no "best model" row in this table, only best-model-per-protocol rows, and the
    best-model-per-protocol rows are sometimes ties.
-3. **Two honest negative results.** (a) The **MLP is worse than predicting the training mean**
+3. **Two honest negative results — and the bootstrap now says which of them are shown.**
+   (a) The **MLP is worse than predicting the training mean**
    on 3 of 5 DAVIS protocols and 4 of 5 KIBA protocols (DAVIS 1.6124 / 1.4814 / 2.0822 vs
    nulls 0.8522 / 0.9173 / 1.0030; KIBA 0.9385 / 0.9598 / 1.1147 / 1.7832 vs 0.8701 / 0.7225 /
    0.9396 / 0.8149) — only `random` rescues it, in both datasets. A DeepDTA-style network on
    hand-made features is not a free win; it is the least robust entry in the grid, and also
    the least reproducible one (seed span up to 0.179 vs ≤ 0.013 for random forest, §9).
+   Script 12's paired bootstrap resolves **all seven** of those cells: ΔRMSE −0.0684 to
+   −1.0793, every one significant after Holm (worst p = 0.046).
    (b) **Ridge loses to the global-mean null** on DAVIS `scaffold` (0.8786 vs 0.8522) and
    `temporal` (1.0442 vs 1.0030), and on KIBA `temporal` (0.9798 vs 0.8149) — a linear model
    fitted to the older decade of deposition dates does not extrapolate forward, and the tree
-   models that do beat the null there buy only 0.03–0.09.
+   models that do beat the null there buy only 0.03–0.09. Only two of the three losses are
+   resolvable: `temporal` clears Holm in both datasets (ΔRMSE −0.0412 and −0.1649, p = 0.010),
+   while the DAVIS `scaffold` gap of −0.0264 does **not** (p = 0.79). The same cell's
+   "wins" are equally unresolved — XGBoost (+0.0419) and random forest (+0.0412) over the null
+   both sit at p = 0.57 — so the honest reading of the whole DAVIS `scaffold` column is that
+   the null and five of six learned models are inside each other's noise, and only the MLP's
+   −0.76 is outside it.
 4. **The entity nulls degenerate exactly where the protocols say they should**, which doubles
    as a check that the splits are what they claim. The per-ligand train mean is bit-identical
    to the global mean on `scaffold`, `cold_drug` *and* `temporal`, in **both** datasets — 6 of
@@ -239,6 +267,13 @@ Four readings, each traceable to `results/metrics_by_protocol.csv` and
    which drug you are holding — beats a trained linear model.** A paper that reports a
    protocol number without the matching entity null next to it is hiding the number's most
    important rival.
+   Script 12 puts that on a formal footing, in a form worth reading carefully because it is
+   easy to misreport: of the 40 trained-model × cell contrasts against the global-mean null
+   (4 models × 10 cells), 30 favour the model on a point estimate and **33 clear Holm** — but a
+   two-sided test does not say *whose* side the rejection is on. Split by sign, 24 of the 33
+   favour the model and **9 favour the null**, i.e. nine learned models are significantly
+   *worse* than predicting the training mean. Printing "33/40 significant" as a win tally would
+   mis-state 9 of 33 of them.
 
 **A variance decomposition, not two ranges.** `11_variance_decomposition.py` fits
 `metric ~ protocol + model + protocol×model` on the cell means (interaction as residual,
@@ -444,19 +479,26 @@ records its version, size and sha256, and the script refuses to start without it
 ```
 data/processed/    committed tidy tables (davis.csv, kiba.csv, ligands.csv, targets.csv)
                    + the five split files per dataset + feature arrays
-results/           committed metrics, leakage audit, docking tables, figures, report.md
-scripts/00…09      one stage per script, run in order
+results/           committed metrics, leakage audit, docking tables, bootstrap tables
+                   (testset_bootstrap_ci/models/pairs + .json), figures, report.md
+scripts/00…12      one stage per script, run in order
 run_all.py         one-command reproduction
 docs/data_sources.md  endpoints, sha256 of every raw file, vina binary hash, versions
 ```
 
 ```bash
 pip install -r requirements.txt
-python run_all.py                       # ~2 h on an 8-core laptop; 03 is 70 min of measured
-                                        # fit time (sum of the `seconds` column in metrics.csv)
+python run_all.py                       # order of 2 h on an 8-core laptop; the measured part is
+                                        # 03's 69.8 min of summed fit time (metrics.csv `seconds`)
 python run_all.py --quick               # ~7 min smoke test
 python run_all.py --with-docking        # adds the Vina arm (needs tools/vina.exe)
 python run_all.py --with-sensitivity    # adds 09: the three standardisation guards re-fitted
+python run_all.py --stage bootstrap     # adds 12: intervals for all 150 fits, no refitting.
+                                        # Measured 82 min wall (4,936 s) at reps 2000 /
+                                        # ci-reps 600 / 6 parallel cells on the same laptop;
+                                        # needs results/predictions/*.npz from a prior 03 run
+                                        # (that directory is gitignored, so a fresh clone must
+                                        # run the grid before this stage alone will work)
 python run_all.py --stage report        # re-render tables + figures from committed CSVs
 ```
 
@@ -474,6 +516,7 @@ old rows is exactly how `results/metrics.csv` once ended up mixing two code vers
 | test information reaching the scaler | `standardize()` computes mean/sd from training rows only, drops the columns that are constant on training rows, and clips the rest — the drop mask and the clip are both train-only |
 | a metric table that silently drifts from the code that made it | `04_uncertainty.py` re-fits the point predictions and asserts its own test RMSE against `results/metrics.csv` to 1e-5; `08_notebook.py` executes the notebook and fails the build on any error output. **The assert has fired for real**: it reported davis/scaffold/ridge as 1.4973 recomputed vs 0.8409 stored, which is how a table holding rows from two code versions was caught — the grid was then re-run from scratch instead of patched with `--resume` |
 | a long grid run dying half-way | `03_models.py` rewrites `results/metrics.csv` after **every** seed and supports `--resume`, so a crash costs one row, not two hours |
+| a bootstrap reporting "no significant difference" that is only an artefact of its own rep count | a percentile-bootstrap two-sided p cannot fall below `2/(B+1)`, and Holm over `m` tests needs `0.05/m`; over the 105 arm pairs in a cell that requires `B > 2095`, so at B=2000 **nothing can ever be rejected**. `12_testset_bootstrap.py` computes this check (`holm_resolvable`), stamps `holm_underpowered=True` on every arm-level row instead of a verdict, and takes its claims from a model-level family of 10 (needs only `B > 398`). The first version of that script printed "0/660 model-vs-model RMSE gaps significant" and the number was arithmetic, not data |
 
 Two bugs found this way are documented rather than hidden — and the second one is a
 preprocessing decision that changed a headline number, so it gets its own ablation
@@ -562,10 +605,26 @@ lower bound on real chemical duplication.
 target sequences (442 names). Both `scaffold` and `cold_drug` hold out 13 of those 68
 ligands, and only 3 ligands are shared between the two held-out sets, so a one-point RMSE
 difference between the two protocols is a difference between *which* 13 drugs were hidden,
-not a proven property of the split family. Nothing in the grid is bootstrapped across ligand
-subsets, so no per-protocol RMSE comparison should be read as significant; §6's paired
-docking test is the one place where a paired interval is computed, and it is limited to the
-docked subset.
+not a proven property of the split family. Script 12 now puts that worry on a measured
+footing rather than an asserted one: every cell in the grid carries marginal intervals under
+three resamples — test `row`, `target` cluster and `ligand` cluster — for RMSE and MAE
+(1,200 rows in `results/testset_bootstrap_ci.csv`). Resampling *compounds* instead of rows
+widens those intervals by a median factor of **5.11 on DAVIS and 3.10 on KIBA** for RMSE
+(6.82 and 4.04 for MAE), which is what 68 ligands costs you. Applied to the exact contrast
+above — DAVIS `scaffold` vs `cold_drug` — the point difference is small (−0.085 to +0.179
+RMSE) *and flips sign with the model*: `scaffold` comes out the easier protocol for the three
+nulls and one XGBoost seed, and the harder one for all three seeds of Ridge, random forest and
+the MLP plus the other two XGBoost seeds.
+Under row resampling the two protocols' 95 % intervals are disjoint for 7 of those 15
+model × seed arms; under ligand resampling they are disjoint for **0 of 15**. The biggest-
+spread contrast does survive either resample: the hardest-minus-easiest protocol difference
+per arm (0.2171–1.4746 RMSE) excludes zero in 30 of 30 dataset × arm contrasts under row
+resampling (`protocol_spread_excludes_zero_frac = 1.0` in `results/testset_bootstrap.json`),
+and those same 30 easiest-vs-hardest pairs stay disjoint under ligand resampling too. Both
+checks compare *marginal* intervals, not a paired ligand-level contrast; disjointness is
+sufficient but not necessary for separation, so "0 of 15" records the absence of unpaired
+evidence under compound resampling, not a tested null. The paired ligand-level protocol
+contrast is not computed.
 
 **KIBA is a consensus score, not a physical unit.** Its 0–17.2 scale is a
 kinase-inhibitor activity consensus, not a pKd, and the matrix is only 24.97 % filled. One
@@ -606,8 +665,13 @@ absence of evidence, not evidence of equivalence; the cells that do exclude zero
 §6 names. The two-way
 decomposition in §4 treats the 20 protocol × model cells as fixed levels and resamples only
 the three seeds within each cell, so its intervals describe refit stability, not sampling
-variability over ligands, targets or assay batches. Neither addition replaces a test-set
-bootstrap over the full grid, which would be the next experiment.
+variability over ligands, targets or assay batches. Script 12 now supplies the test-set
+bootstrap over the full grid that decomposition was not a substitute for — but the two measure
+different noise and neither retires the other. Script 12's intervals carry test-set sampling
+only, not refit randomness: every contrast in it is between two *fixed* fitted models, so an
+unresolved gap there is unresolved for these fits on these rows, not for the method. The §4
+seed intervals do the opposite — hold the test set fixed and move the fit. Reading either one
+alone would overstate what it licenses.
 
 **Seed spread is real only for the stochastic models, and it is not uniform across them.**
 Ridge's three seeds are bit-identical rows in all 10 dataset × protocol cells, so `rmse_sd = 0`

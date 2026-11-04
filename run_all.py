@@ -8,10 +8,18 @@
     python run_all.py --quick              # smoke test: davis/random, 2 models, 1 seed
     python run_all.py --stage report       # re-render tables + figures from results/*.csv
     python run_all.py --stage notebook     # regenerate and EXECUTE notebook/*.ipynb
+    python run_all.py --stage bootstrap    # intervals for all 150 fits (no refitting, CPU only)
 
 Stages run in dependency order and each one is a separate script, so a failure tells you
-exactly which step broke. Wall time on an 8-core laptop: ~4 h for the full grid (03 is
-the bottleneck), ~7 min with --quick.
+exactly which step broke. Wall time on an 8-core laptop: ~4 h for the full grid is an
+estimate, not a measurement -- the measured stages are 03 (69.8 min summed fit time, from
+the `seconds` column of results/metrics.csv) and the stage-12 test-set bootstrap (82 min,
+4,936 s at 6 cells in parallel, 2000 RMSE/MAE reps + 600 Harrell-CI reps; ~7 min with
+--quick). The 600 ci-reps is a floor, not a preference -- Holm over the 10-contrast model
+family cannot reject below B=398, and the 105-pair arm-level family is not resolvable at
+all within this budget (the script stamps those blocks `holm_underpowered` instead of
+printing a verdict). Use --bootstrap-ci-reps 0 to skip the CI part entirely. Stage 12 reads
+results/predictions/*.npz, which is gitignored, so a fresh clone needs stage `models` first.
 """
 from __future__ import annotations
 
@@ -31,6 +39,7 @@ STAGES = [
     ("docking",   "05_docking.py",        "AutoDock Vina arm (panel + decoy control)"),
     ("dockstats", "06_docking_analysis.py", "Vina vs labels vs the 03 models on identical rows"),
     ("variance",  "11_variance_decomposition.py", "protocol vs model variance shares (ANOVA)"),
+    ("bootstrap", "12_testset_bootstrap.py", "test-set bootstrap intervals over all 150 fits"),
     ("paired",    "10_paired_headtohead.py", "paired bootstraps for the Vina head-to-head"),
     ("report",    "07_report.py",         "figures + results/report.md + results/summary.json"),
     ("notebook",  "08_notebook.py",       "writes and executes notebook/dti_affinity_bench.ipynb"),
@@ -61,6 +70,14 @@ def main() -> int:
                     help="let 03 keep existing results/metrics.csv rows instead of recomputing "
                          "the grid (fast, but only correct if the code has not changed)")
     ap.add_argument("--jobs", type=int, default=4, help="parallel vina jobs")
+    ap.add_argument("--bootstrap-jobs", type=int, default=6,
+                    help="parallel cells for 12_testset_bootstrap.py (one process each)")
+    ap.add_argument("--bootstrap-reps", type=int, default=2000,
+                    help="RMSE/MAE bootstrap reps in stage `bootstrap`")
+    ap.add_argument("--bootstrap-ci-reps", type=int, default=600,
+                    help="Harrell-CI bootstrap reps in stage `bootstrap` (the expensive part; "
+                         "must exceed 398 for Holm over the 10-contrast model family to be "
+                         "resolvable, see scripts/12_testset_bootstrap.py)")
     args = ap.parse_args()
 
     want = args.stage
@@ -101,6 +118,13 @@ def main() -> int:
         elif name == "notebook" and args.quick:
             extra.append("--timeout")
             extra.append("300")
+        elif name == "bootstrap":
+            # the Harrell-CI reps are the expensive part (ci_harrell is a per-row Python loop),
+            # so they are a separate knob from the cheap RMSE/MAE reps
+            extra += (["--quick"] if args.quick else
+                      ["--reps", str(args.bootstrap_reps),
+                       "--ci-reps", str(args.bootstrap_ci_reps),
+                       "--jobs", str(args.bootstrap_jobs)])
         run(script, extra)
     print("\nall requested stages finished")
     return 0

@@ -263,3 +263,176 @@ Two-way ANOVA on cell means (protocol x model, interaction = residual; seed-only
 | kiba | trained3 | ci_harrell | 0.6103 | 0.3406 | 0.0492 | 0.00015 |
 | kiba | all4 | rmse | 0.3163 | 0.4727 | 0.2110 | 0.019 |
 | kiba | all4 | ci_harrell | 0.5000 | 0.4531 | 0.0469 | 2.6e-06 |
+
+## 7. Test-set bootstrap over the whole grid (script 12)
+
+Every point estimate in sections 2-4 is a single number per cell. This section resamples the stored test predictions (no model is refitted) so each one carries an interval, and each within-cell model-vs-model difference is tested *as a difference* rather than by comparing two intervals. `row` resamples test rows, `target` resamples kinase targets as clusters and `ligand` resamples compounds as clusters.
+
+**Two families, because only one of them is testable.** A percentile-bootstrap two-sided p-value cannot fall below `2/(B+1)`, and Holm's smallest threshold over `m` tests is `0.05/m`. Over all 105 arm pairs in a cell that needs `B > 2095`; at B=2000 the floor (1.0e-3) is already above the threshold (4.8e-4), so *no* difference can be declared significant whatever its size. The first version of this section reported "0/660 significant" and that was a property of B and m, not of the data. The claims below are therefore read off a **model-level family of 10 per cell** (6 learned-vs-learned + 4 learned-vs-global-mean, seeds averaged), which needs only `B > 398`. The 105-pair arm table is kept as an artifact with `holm_underpowered=True` and a `ci_excludes_zero` column instead of a verdict.
+
+Reps: 2000 for RMSE/MAE, 600 for the Harrell CI. Point estimates reproduce `results/metrics.csv` to 5.8e-05. Multiplicity is controlled *within* each cell x metric x resample family; it is not controlled across the 10 cells (a whole-grid family of 100 would need B > 4000).
+
+Seeds are averaged, and the same three fits appear in every bootstrap draw, so these intervals carry test-set sampling variability only -- not refit randomness. Seed-to-seed spread is in section 6's variance decomposition and in the arm-level `seed_i` vs `seed_j` rows.
+
+### 7.1 Within-protocol model differences (target-cluster bootstrap, RMSE)
+
+Model-level family, m=6 learned-vs-learned contrasts per cell, Holm-adjusted within the family of 10. Holm resolvable at this B: **True**. 'Significant' means Holm-adjusted paired bootstrap p < 0.05 on the same resampled targets.
+
+| dataset | protocol | n_test | target clusters | ligand clusters | significant learned-vs-learned RMSE gaps | largest such gap |
+|---|---|---|---|---|---|---|
+| davis | cold_drug | 5746 | 379 | 13 | 5 / 6 | xgboost vs mlp: -0.6942 [-0.7326, -0.653], Holm p=0.01 |
+| davis | cold_target | 5984 | 25 | 68 | 5 / 6 | xgboost vs mlp: -0.1541 [-0.1885, -0.1233], Holm p=0.01 |
+| davis | random | 6011 | 379 | 68 | 5 / 6 | ridge vs xgboost: +0.1864 [0.1177, 0.2526], Holm p=0.01 |
+| davis | scaffold | 5746 | 379 | 13 | 5 / 6 | xgboost vs mlp: -0.8020 [-0.836, -0.76], Holm p=0.01 |
+| davis | temporal | 5304 | 379 | 12 | 6 / 6 | randomforest vs mlp: -1.1364 [-1.1891, -1.0788], Holm p=0.01 |
+| kiba | cold_drug | 23651 | 216 | 166 | 6 / 6 | randomforest vs mlp: -0.3901 [-0.4027, -0.3771], Holm p=0.01 |
+| kiba | cold_target | 23642 | 22 | 2067 | 6 / 6 | xgboost vs mlp: -0.4095 [-0.528, -0.2914], Holm p=0.01 |
+| kiba | random | 23651 | 227 | 2017 | 6 / 6 | xgboost vs mlp: -0.2487 [-0.2585, -0.2391], Holm p=0.01 |
+| kiba | scaffold | 23651 | 194 | 296 | 5 / 6 | randomforest vs mlp: -0.3240 [-0.3415, -0.308], Holm p=0.01 |
+| kiba | temporal | 9018 | 221 | 116 | 6 / 6 | randomforest vs mlp: -1.0588 [-1.0884, -1.0307], Holm p=0.01 |
+
+Across the grid: 55 of 60 learned-vs-learned RMSE gaps survive Holm under target clustering. Cells with at least one: davis/cold_drug, davis/cold_target, davis/random, davis/scaffold, davis/temporal, kiba/cold_drug, kiba/cold_target, kiba/random, kiba/scaffold, kiba/temporal.
+
+The *closest* pair per cell is the one the README's "the models that do not collapse differ by at most X" sentence rests on, and the contrast most likely to fail Holm:
+
+| cell | closest pair | delta RMSE | 95% interval | Holm p | significant |
+|---|---|---|---|---|---|
+| davis/cold_drug | xgboost-randomforest | -0.0005 | [-0.0309, 0.022] | 0.925 | no |
+| davis/cold_target | xgboost-randomforest | -0.0387 | [-0.0741, -0.0054] | 0.03 | yes |
+| davis/random | ridge-mlp | +0.0310 | [-0.0309, 0.0883] | 0.342 | no |
+| davis/scaffold | xgboost-randomforest | -0.0006 | [-0.0108, 0.011] | 0.821 | no |
+| davis/temporal | xgboost-randomforest | +0.0233 | [0.0074, 0.0393] | 0.012 | yes |
+| kiba/cold_drug | xgboost-randomforest | +0.0328 | [0.0284, 0.0375] | 0.01 | yes |
+| kiba/cold_target | ridge-randomforest | +0.1027 | [0.0404, 0.1704] | 0.01 | yes |
+| kiba/random | xgboost-randomforest | -0.0711 | [-0.0845, -0.0602] | 0.01 | yes |
+| kiba/scaffold | xgboost-randomforest | +0.0048 | [-0.0005, 0.0101] | 0.072 | no |
+| kiba/temporal | xgboost-randomforest | +0.0339 | [0.027, 0.041] | 0.01 | yes |
+
+Learned-vs-learned contrasts significant in the primary family: 55/60.
+
+### 7.2 Does each learned model beat the global-mean null?
+
+Two separate columns on purpose: a point estimate can favour the model while the Holm-adjusted interval still spans zero, and collapsing the two into one boolean is what made the first run of this section unreadable.
+
+| dataset | protocol | model | RMSE(null mean - model) | Holm p | Holm resolvable | point estimate better | significant |
+|---|---|---|---|---|---|---|---|
+| davis | cold_drug | mlp | -0.5641 | 0.01 | yes | NO | yes |
+| davis | cold_drug | randomforest | +0.1296 | 0.01 | yes | yes | yes |
+| davis | cold_drug | ridge | +0.0694 | 0.01 | yes | yes | yes |
+| davis | cold_drug | xgboost | +0.1301 | 0.01 | yes | yes | yes |
+| davis | cold_target | mlp | +0.0055 | 0.912 | yes | yes | NO |
+| davis | cold_target | randomforest | +0.1209 | 0.01 | yes | yes | yes |
+| davis | cold_target | ridge | +0.0723 | 0.16 | yes | yes | NO |
+| davis | cold_target | xgboost | +0.1596 | 0.01 | yes | yes | yes |
+| davis | random | mlp | +0.1973 | 0.01 | yes | yes | yes |
+| davis | random | randomforest | +0.2666 | 0.01 | yes | yes | yes |
+| davis | random | ridge | +0.1663 | 0.01 | yes | yes | yes |
+| davis | random | xgboost | +0.3527 | 0.01 | yes | yes | yes |
+| davis | scaffold | mlp | -0.7601 | 0.01 | yes | NO | yes |
+| davis | scaffold | randomforest | +0.0412 | 0.568 | yes | yes | NO |
+| davis | scaffold | ridge | -0.0264 | 0.79 | yes | NO | NO |
+| davis | scaffold | xgboost | +0.0419 | 0.568 | yes | yes | NO |
+| davis | temporal | mlp | -1.0793 | 0.01 | yes | NO | yes |
+| davis | temporal | randomforest | +0.0571 | 0.01 | yes | yes | yes |
+| davis | temporal | ridge | -0.0412 | 0.01 | yes | NO | yes |
+| davis | temporal | xgboost | +0.0338 | 0.079 | yes | yes | NO |
+| kiba | cold_drug | mlp | -0.2373 | 0.01 | yes | NO | yes |
+| kiba | cold_drug | randomforest | +0.1529 | 0.01 | yes | yes | yes |
+| kiba | cold_drug | ridge | +0.0530 | 0.01 | yes | yes | yes |
+| kiba | cold_drug | xgboost | +0.1200 | 0.01 | yes | yes | yes |
+| kiba | cold_target | mlp | -0.1751 | 0.046 | yes | NO | yes |
+| kiba | cold_target | randomforest | +0.1182 | 0.01 | yes | yes | yes |
+| kiba | cold_target | ridge | +0.0155 | 0.654 | yes | yes | NO |
+| kiba | cold_target | xgboost | +0.2344 | 0.01 | yes | yes | yes |
+| kiba | random | mlp | +0.0713 | 0.01 | yes | yes | yes |
+| kiba | random | randomforest | +0.2489 | 0.01 | yes | yes | yes |
+| kiba | random | ridge | +0.1437 | 0.01 | yes | yes | yes |
+| kiba | random | xgboost | +0.3200 | 0.01 | yes | yes | yes |
+| kiba | scaffold | mlp | -0.0684 | 0.01 | yes | NO | yes |
+| kiba | scaffold | randomforest | +0.2556 | 0.01 | yes | yes | yes |
+| kiba | scaffold | ridge | +0.1449 | 0.01 | yes | yes | yes |
+| kiba | scaffold | xgboost | +0.2508 | 0.01 | yes | yes | yes |
+| kiba | temporal | mlp | -0.9683 | 0.01 | yes | NO | yes |
+| kiba | temporal | randomforest | +0.0905 | 0.01 | yes | yes | yes |
+| kiba | temporal | ridge | -0.1649 | 0.01 | yes | NO | yes |
+| kiba | temporal | xgboost | +0.0566 | 0.01 | yes | yes | yes |
+
+Point estimates favour the learned model in 30/40 cell x model contrasts; 33/40 are significant after Holm — and because the test is two-sided, that number is not a win tally: 24 of the significant contrasts favour the model and **9 favour the global-mean null**, i.e. those models are significantly *worse* than predicting the training mean.
+
+* significantly worse than the null: davis/cold_drug `mlp` — RMSE(mean - model) = -0.5641, Holm p = 0.01
+* significantly worse than the null: davis/scaffold `mlp` — RMSE(mean - model) = -0.7601, Holm p = 0.01
+* significantly worse than the null: davis/temporal `ridge` — RMSE(mean - model) = -0.0412, Holm p = 0.01
+* significantly worse than the null: davis/temporal `mlp` — RMSE(mean - model) = -1.0793, Holm p = 0.01
+* significantly worse than the null: kiba/cold_drug `mlp` — RMSE(mean - model) = -0.2373, Holm p = 0.01
+* significantly worse than the null: kiba/cold_target `mlp` — RMSE(mean - model) = -0.1751, Holm p = 0.046
+* significantly worse than the null: kiba/scaffold `mlp` — RMSE(mean - model) = -0.0684, Holm p = 0.01
+* significantly worse than the null: kiba/temporal `ridge` — RMSE(mean - model) = -0.1649, Holm p = 0.01
+* significantly worse than the null: kiba/temporal `mlp` — RMSE(mean - model) = -0.9683, Holm p = 0.01
+
+Exceptions where the contrast did *not* clear Holm:
+
+* davis/cold_target ridge: +0.0723 (Holm p=0.16) -- interval spans zero
+* davis/cold_target mlp: +0.0055 (Holm p=0.912) -- interval spans zero
+* davis/scaffold ridge: -0.0264 (Holm p=0.79) -- point estimate is worse than the null
+* davis/scaffold xgboost: +0.0419 (Holm p=0.568) -- interval spans zero
+* davis/scaffold randomforest: +0.0412 (Holm p=0.568) -- interval spans zero
+* davis/temporal xgboost: +0.0338 (Holm p=0.079) -- interval spans zero
+* kiba/cold_target ridge: +0.0155 (Holm p=0.654) -- interval spans zero
+
+### 7.3 Protocol spread per model (RMSE, row bootstrap)
+
+Hardest minus easiest protocol for one fixed model. The five protocols of a dataset share test rows, so combining two cells' bootstrap draws as independent makes this interval wider than a joint resampling would: it is conservative.
+
+| dataset | model | easiest | hardest | spread | 95% interval | excludes 0 |
+|---|---|---|---|---|---|---|
+| davis | mean_seed0 | scaffold (0.8522) | cold_target (1.2116) | 0.3594 | [0.315, 0.404] | yes |
+| davis | mean_ligand_train_seed0 | random (0.8106) | cold_target (1.1357) | 0.3251 | [0.2766, 0.3698] | yes |
+| davis | mean_target_train_seed0 | scaffold (0.7783) | cold_target (1.2116) | 0.4333 | [0.391, 0.4772] | yes |
+| davis | ridge_seed0 | random (0.7561) | cold_target (1.1393) | 0.3832 | [0.337, 0.4256] | yes |
+| davis | ridge_seed1 | random (0.7561) | cold_target (1.1393) | 0.3832 | [0.337, 0.4256] | yes |
+| davis | ridge_seed2 | random (0.7561) | cold_target (1.1393) | 0.3832 | [0.337, 0.4256] | yes |
+| davis | xgboost_seed0 | random (0.5686) | cold_target (1.0591) | 0.4906 | [0.4506, 0.528] | yes |
+| davis | xgboost_seed1 | random (0.5699) | cold_target (1.0554) | 0.4855 | [0.4469, 0.5215] | yes |
+| davis | xgboost_seed2 | random (0.5707) | cold_target (1.0414) | 0.4708 | [0.4329, 0.5062] | yes |
+| davis | randomforest_seed0 | random (0.6568) | cold_target (1.0925) | 0.4357 | [0.3926, 0.4763] | yes |
+| davis | randomforest_seed1 | random (0.6549) | cold_target (1.0878) | 0.4329 | [0.3906, 0.4727] | yes |
+| davis | randomforest_seed2 | random (0.6559) | cold_target (1.0919) | 0.4359 | [0.3938, 0.4762] | yes |
+| davis | mlp_seed0 | random (0.7228) | temporal (2.0175) | 1.2947 | [1.2526, 1.3367] | yes |
+| davis | mlp_seed1 | random (0.731) | temporal (2.0331) | 1.3021 | [1.2607, 1.3454] | yes |
+| davis | mlp_seed2 | random (0.7214) | temporal (2.1961) | 1.4746 | [1.4328, 1.5174] | yes |
+| kiba | mean_seed0 | cold_drug (0.7225) | cold_target (0.9396) | 0.2171 | [0.1985, 0.2352] | yes |
+| kiba | mean_ligand_train_seed0 | random (0.6481) | scaffold (0.8701) | 0.222 | [0.2048, 0.2401] | yes |
+| kiba | mean_target_train_seed0 | cold_drug (0.6538) | cold_target (0.9396) | 0.2858 | [0.2674, 0.3031] | yes |
+| kiba | ridge_seed0 | cold_drug (0.6695) | temporal (0.9798) | 0.3103 | [0.2904, 0.3302] | yes |
+| kiba | ridge_seed1 | cold_drug (0.6695) | temporal (0.9798) | 0.3103 | [0.2904, 0.3302] | yes |
+| kiba | ridge_seed2 | cold_drug (0.6695) | temporal (0.9798) | 0.3103 | [0.2904, 0.3302] | yes |
+| kiba | xgboost_seed0 | random (0.5144) | temporal (0.7677) | 0.2533 | [0.2318, 0.273] | yes |
+| kiba | xgboost_seed1 | random (0.5141) | temporal (0.7609) | 0.2467 | [0.2257, 0.266] | yes |
+| kiba | xgboost_seed2 | random (0.5144) | temporal (0.7463) | 0.2319 | [0.2101, 0.2523] | yes |
+| kiba | randomforest_seed0 | cold_drug (0.5694) | cold_target (0.8196) | 0.2502 | [0.2333, 0.2664] | yes |
+| kiba | randomforest_seed1 | cold_drug (0.5712) | cold_target (0.8204) | 0.2491 | [0.2322, 0.2653] | yes |
+| kiba | randomforest_seed2 | cold_drug (0.5683) | cold_target (0.8241) | 0.2557 | [0.2386, 0.272] | yes |
+| kiba | mlp_seed0 | random (0.7474) | temporal (1.7047) | 0.9573 | [0.9306, 0.9842] | yes |
+| kiba | mlp_seed1 | random (0.7193) | temporal (1.7711) | 1.0518 | [1.0252, 1.079] | yes |
+| kiba | mlp_seed2 | random (0.8223) | temporal (1.8737) | 1.0515 | [1.0238, 1.0798] | yes |
+
+Protocol spread range across all model x dataset cells: [0.2171, 1.4746]; 100% of them exclude zero.
+
+### 7.4 The arm-level table: what it can and cannot say
+
+All 105 arm-vs-arm differences per cell, under each of the three resampling schemes. The bootstrap Holm over m=105 is underpowered by construction, so the table carries `ci_excludes_zero` and, for RMSE/MAE, an **exact paired sign test** Holm-adjusted over the same 105 pairs. The exact binomial p has no resolution floor, so that column is testable -- but it treats test rows as exchangeable and therefore ignores within-target and within-ligand correlation, which makes it anti-conservative relative to the cluster bootstraps. Read it alongside them, not instead of them.
+
+| metric | resample | pairs | bootstrap Holm resolvable | 95% interval excludes 0 | significant by exact sign test + Holm |
+|---|---|---|---|---|---|
+| ci_harrell | row | 1050 | no | 913 | n/a |
+| ci_harrell | target | 1050 | no | 858 | n/a |
+| mae | ligand | 1050 | no | 772 | 759 |
+| mae | row | 1050 | no | 947 | 896 |
+| mae | target | 1050 | no | 896 | 864 |
+| rmse | ligand | 1050 | no | 786 | 765 |
+| rmse | row | 1050 | no | 954 | 895 |
+| rmse | target | 1050 | no | 873 | 825 |
+
+(counts are summed over all cells)
+
+Marginal intervals for all 1200 arm x metric x resample combinations are in `results/testset_bootstrap_ci.csv`, the 800 model-level contrasts in `results/testset_bootstrap_models.csv` and the 8400 paired arm differences in `results/testset_bootstrap_pairs.csv`.

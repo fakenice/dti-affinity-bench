@@ -390,7 +390,8 @@ def readme_numbers(m, cfwide, comp):
     # Optional statistical follow-ups (10/11). They are merged here rather than quoted
     # from their own files so every number in the README remains one key in this JSON.
     for key, path in [("variance_decomposition", RES / "variance_decomposition.json"),
-                      ("docking_paired", RES / "docking" / "paired_headtohead.json")]:
+                      ("docking_paired", RES / "docking" / "paired_headtohead.json"),
+                      ("testset_bootstrap", RES / "testset_bootstrap.json")]:
         if path.exists():
             out[key] = json.loads(path.read_text(encoding="utf-8"))
     return out
@@ -529,6 +530,181 @@ def main() -> int:
         L += ["Two-way ANOVA on cell means (protocol x model, interaction = residual; "
               "seed-only bootstrap intervals are in `results/variance_decomposition.json`).",
               "", md_table(pd.DataFrame(rows)), ""]
+    tb_json = RES / "testset_bootstrap.json"
+    tb_ci = RES / "testset_bootstrap_ci.csv"
+    tb_pr = RES / "testset_bootstrap_pairs.csv"
+    tb_md = RES / "testset_bootstrap_models.csv"
+    tb = None                      # summary.json reads this back; it must exist even when
+    if tb_json.exists() and tb_ci.exists() and tb_pr.exists():   # the bootstrap never ran
+        tb = json.loads(tb_json.read_text(encoding="utf-8"))
+        ci = pd.read_csv(tb_ci)
+        pr = pd.read_csv(tb_pr)
+        md = pd.read_csv(tb_md) if tb_md.exists() else None
+        n_cells = len(tb["cells"])
+        L += ["## 7. Test-set bootstrap over the whole grid (script 12)", "",
+              "Every point estimate in sections 2-4 is a single number per cell. This section "
+              "resamples the stored test predictions (no model is refitted) so each one carries "
+              "an interval, and each within-cell model-vs-model difference is tested *as a "
+              "difference* rather than by comparing two intervals. `row` resamples test rows, "
+              "`target` resamples kinase targets as clusters and `ligand` resamples compounds as "
+              "clusters.", "",
+              "**Two families, because only one of them is testable.** A percentile-bootstrap "
+              "two-sided p-value cannot fall below `2/(B+1)`, and Holm's smallest threshold over "
+              "`m` tests is `0.05/m`. Over all 105 arm pairs in a cell that needs `B > 2095`; at "
+              "B=2000 the floor (1.0e-3) is already above the threshold (4.8e-4), so *no* "
+              "difference can be declared significant whatever its size. The first version of "
+              "this section reported \"0/660 significant\" and that was a property of B and m, "
+              "not of the data. The claims below are therefore read off a **model-level family of "
+              "10 per cell** (6 learned-vs-learned + 4 learned-vs-global-mean, seeds averaged), "
+              "which needs only `B > 398`. The 105-pair arm table is kept as an artifact with "
+              "`holm_underpowered=True` and a `ci_excludes_zero` column instead of a verdict.", "",
+              f"Reps: {tb['cells'][0]['reps_rmse_mae']} for RMSE/MAE, "
+              f"{tb['cells'][0]['reps_ci']} for the Harrell CI. Point estimates reproduce "
+              f"`results/metrics.csv` to "
+              f"{tb['point_estimate_max_abs_deviation_vs_metrics_csv']:.1e}. "
+              f"Multiplicity is controlled *within* each cell x metric x resample family; it is "
+              f"not controlled across the {n_cells} cell"
+              f"{'s' if n_cells != 1 else ''} (a whole-grid family of "
+              f"{10 * n_cells} would need B > {int(2 * 10 * n_cells / 0.05)}).", "",
+              "Seeds are averaged, and the same three fits appear in every bootstrap draw, so "
+              "these intervals carry test-set sampling variability only -- not refit randomness. "
+              "Seed-to-seed spread is in section 6's variance decomposition and in the arm-level "
+              "`seed_i` vs `seed_j` rows.", ""]
+
+        resolvable = tb.get("primary_family_holm_resolvable")
+        L += ["### 7.1 Within-protocol model differences (target-cluster bootstrap, RMSE)", "",
+              f"Model-level family, m=6 learned-vs-learned contrasts per cell, Holm-adjusted "
+              f"within the family of 10. Holm resolvable at this B: **{resolvable}**. "
+              f"'Significant' means Holm-adjusted paired bootstrap p < 0.05 on the same "
+              f"resampled targets.", "",
+              "| dataset | protocol | n_test | target clusters | ligand clusters | "
+              "significant learned-vs-learned RMSE gaps | largest such gap |",
+              "|---|---|---|---|---|---|---|"]
+        for c in tb["cells"]:
+            big = c["largest_significant_model_vs_model_rmse"]
+            L.append(f"| {c['dataset']} | {c['protocol']} | {c['n_test']} | "
+                     f"{c['n_target_clusters']} | {c['n_ligand_clusters']} | "
+                     f"{c['model_vs_model_rmse_holm']} / {c['model_vs_model_pairs']} | "
+                     + ("none" if big is None else
+                        f"{big['a']} vs {big['b']}: {big['delta_point']:+.4f} "
+                        f"[{big['lo95']}, {big['hi95']}], Holm p={big['holm_p']:.3g}") + " |")
+        L += ["", f"Across the grid: {tb['total_model_vs_model_significant']} of "
+              f"{tb['total_model_vs_model_tested']} learned-vs-learned RMSE gaps survive Holm "
+              "under target clustering. Cells with at least one: "
+              + (", ".join(tb["cells_with_significant_model_vs_model_rmse_target_bootstrap"])
+                 or "none") + ".", ""]
+        closest = tb.get("closest_learned_pair_per_cell_primary_family") or []
+        if closest:
+            L += ["The *closest* pair per cell is the one the README's \"the models that do not "
+                  "collapse differ by at most X\" sentence rests on, and the contrast most "
+                  "likely to fail Holm:", "",
+                  "| cell | closest pair | delta RMSE | 95% interval | Holm p | significant |",
+                  "|---|---|---|---|---|---|"]
+            for r0 in closest:
+                L.append(f"| {r0['cell']} | {r0['closest_pair']} | {r0['delta_rmse']:+.4f} | "
+                         f"[{r0['ci_lo95']}, {r0['ci_hi95']}] | {r0['holm_p']:.3g} | "
+                         f"{'yes' if r0['significant'] else 'no'} |")
+            L += ["", f"Learned-vs-learned contrasts significant in the primary family: "
+                  f"{tb.get('primary_family_learned_vs_learned_significant')}.", ""]
+
+        nb = dict(tb.get("learned_beat_mean_null_counts") or {})
+        # derive the direction split here rather than trusting the JSON key, so the section
+        # renders correctly for artifacts written before script 12 started emitting it
+        _flat = [(f"{c['dataset']}/{c['protocol']}", m, v) for c in tb["cells"]
+                 for m, v in (c.get("learned_beat_mean_null_rmse") or {}).items()]
+        nb["significant_in_models_favour"] = sum(
+            1 for _, _, v in _flat if v.get("significant") and v["delta_rmse_mean_minus_model"] > 0)
+        nb["significant_in_nulls_favour"] = sum(
+            1 for _, _, v in _flat if v.get("significant") and v["delta_rmse_mean_minus_model"] < 0)
+        nb["nulls_favour_list"] = [(cell, m, v) for cell, m, v in _flat
+                                   if v.get("significant") and v["delta_rmse_mean_minus_model"] < 0]
+        L += ["### 7.2 Does each learned model beat the global-mean null?", "",
+              "Two separate columns on purpose: a point estimate can favour the model while the "
+              "Holm-adjusted interval still spans zero, and collapsing the two into one boolean "
+              "is what made the first run of this section unreadable.", "",
+              "| dataset | protocol | model | RMSE(null mean - model) | Holm p | Holm "
+              "resolvable | point estimate better | significant |",
+              "|---|---|---|---|---|---|---|---|"]
+        for c in tb["cells"]:
+            for learner, v in sorted(c["learned_beat_mean_null_rmse"].items()):
+                L.append(f"| {c['dataset']} | {c['protocol']} | {learner} | "
+                         f"{v['delta_rmse_mean_minus_model']:+.4f} | {v['holm_p']:.3g} | "
+                         f"{'yes' if v.get('holm_resolvable') else 'NO'} | "
+                         f"{'yes' if v.get('point_estimate_better') else 'NO'} | "
+                         f"{'yes' if v['significant'] else 'NO'} |")
+        L += ["", f"Point estimates favour the learned model in "
+              f"{nb.get('point_estimate_better')}/{nb.get('tested')} cell x model contrasts; "
+              f"{nb.get('significant_after_holm')}/{nb.get('tested')} are significant after "
+              f"Holm — and because the test is two-sided, that number is not a win tally: "
+              f"{nb['significant_in_models_favour']} of the significant contrasts favour the "
+              f"model and **{nb['significant_in_nulls_favour']} favour the global-mean null**, "
+              "i.e. those models are significantly *worse* than predicting the training mean.", ""]
+        # NB: not `for cell, m, v` -- `m` is the metrics DataFrame in this scope, and rebinding
+        # it here used to crash the summary.json block ~90 lines further down
+        for cell_nm, mdl, vv in nb["nulls_favour_list"]:
+            L.append(f"* significantly worse than the null: {cell_nm} `{mdl}` — "
+                     f"RMSE(mean - model) = {vv['delta_rmse_mean_minus_model']:+.4f}, "
+                     f"Holm p = {vv['holm_p']:.3g}")
+        L += ["", "Exceptions where the contrast did *not* clear Holm:", ""]
+        for e in tb.get("learned_beat_mean_null_exceptions") or []:
+            why = ("point estimate is worse than the null" if e["point_estimate_worse_than_null"]
+                   else "Holm unresolvable at this B -- not a null result"
+                   if not e.get("holm_resolvable") else "interval spans zero")
+            L.append(f"* {e['cell']} {e['model']}: "
+                     f"{e['delta_rmse_mean_minus_model']:+.4f} "
+                     f"(Holm p={e['holm_p']:.3g}) -- {why}")
+        L += [""]
+
+        L += ["### 7.3 Protocol spread per model (RMSE, row bootstrap)", "",
+              "Hardest minus easiest protocol for one fixed model. The five protocols of a "
+              "dataset share test rows, so combining two cells' bootstrap draws as independent "
+              "makes this interval wider than a joint resampling would: it is conservative.", "",
+              "| dataset | model | easiest | hardest | spread | 95% interval | excludes 0 |",
+              "|---|---|---|---|---|---|---|"]
+        for c in tb["protocol_contrasts_rmse"]:
+            L.append(f"| {c['dataset']} | {c['model']} | {c['easiest_protocol']} "
+                     f"({c['easiest_rmse']}) | {c['hardest_protocol']} ({c['hardest_rmse']}) | "
+                     f"{c['spread_point']} | [{c['spread_lo95']}, {c['spread_hi95']}] | "
+                     f"{'yes' if c['excludes_zero'] else 'no'} |")
+        spread_frac = tb["protocol_spread_excludes_zero_frac"]
+        L += ["", f"Protocol spread range across all model x dataset cells: "
+              f"{tb['protocol_spread_range_rmse']}"
+              + ("" if spread_frac is None else
+                 f"; {spread_frac:.0%} of them exclude zero") + ".", ""]
+
+        if md is not None:
+            L += ["### 7.4 The arm-level table: what it can and cannot say", "",
+                  "All 105 arm-vs-arm differences per cell, under each of the three resampling "
+                  "schemes. The bootstrap Holm over m=105 is underpowered by construction, so "
+                  "the table carries `ci_excludes_zero` and, for RMSE/MAE, an **exact paired "
+                  "sign test** Holm-adjusted over the same 105 pairs. The exact binomial p has "
+                  "no resolution floor, so that column is testable -- but it treats test rows as "
+                  "exchangeable and therefore ignores within-target and within-ligand "
+                  "correlation, which makes it anti-conservative relative to the cluster "
+                  "bootstraps. Read it alongside them, not instead of them.", "",
+                  "| metric | resample | pairs | bootstrap Holm resolvable | 95% interval "
+                  "excludes 0 | significant by exact sign test + Holm |",
+                  "|---|---|---|---|---|---|"]
+            for (metric, resample), blk in pr.groupby(["metric", "resample"]):
+                n_under = int(blk["holm_underpowered"].sum()) if "holm_underpowered" in blk \
+                    else len(blk)
+                excl = int(blk["ci_excludes_zero"].sum()) if "ci_excludes_zero" in blk else 0
+                # the sign test is only defined for the two error metrics; for ci_harrell the
+                # column exists but is all-NaN, and pandas' NaN-skipping sum would print a
+                # misleading 0 instead of "not computed"
+                sig = None
+                if "significant_sign_holm05" in blk and blk["significant_sign_holm05"].notna().any():
+                    sig = int(blk["significant_sign_holm05"].sum())
+                L.append(f"| {metric} | {resample} | {len(blk)} | "
+                         f"{'no' if n_under == len(blk) else 'yes' if n_under == 0 else 'mixed'} "
+                         f"| {excl} | {'n/a' if sig is None else sig} |")
+            L += ["", "(counts are summed over all cells)", "",
+                  f"Marginal intervals for all {len(ci)} arm x metric x resample combinations "
+                  "are in `results/testset_bootstrap_ci.csv`, "
+                  f"the {len(md)} model-level contrasts in "
+                  "`results/testset_bootstrap_models.csv` and the "
+                  f"{len(pr)} paired arm differences in "
+                  "`results/testset_bootstrap_pairs.csv`.", ""]
     (RES / "report.md").write_text("\n".join(L), encoding="utf-8")
 
     # ------------------------------------------------------------------ summary.json
@@ -565,6 +741,39 @@ def main() -> int:
                 "davis_label_tie_fraction_mean":
                     float(m[m.dataset == "davis"].label_tie_fraction.mean()),
             }
+    if tb is not None:
+        # The direction split is written here as well as by script 12 itself, because the
+        # committed results/testset_bootstrap.json was produced before 12 started emitting
+        # those keys. These values are *derived* from that file's per-cell deltas and holm_p,
+        # not re-bootstrapped, so the source note travels with them.
+        s["testset_bootstrap"] = {
+            "source": "derived from results/testset_bootstrap.json by scripts/07_report.py",
+            "wall_seconds": tb.get("wall_seconds"),
+            "n_ci_rows": tb.get("n_ci_rows"),
+            "n_model_rows": tb.get("n_model_rows"),
+            "n_pair_rows": tb.get("n_pair_rows"),
+            "point_estimate_max_abs_deviation_vs_metrics_csv":
+                tb.get("point_estimate_max_abs_deviation_vs_metrics_csv"),
+            "primary_family": tb.get("primary_family"),
+            "learned_vs_learned_significant_primary_family":
+                tb.get("primary_family_learned_vs_learned_significant"),
+            "learned_vs_mean_null": {
+                "tested": nb.get("tested"),
+                "point_estimate_better": nb.get("point_estimate_better"),
+                "significant_after_holm": nb.get("significant_after_holm"),
+                "significant_in_models_favour": nb["significant_in_models_favour"],
+                "significant_in_nulls_favour": nb["significant_in_nulls_favour"],
+                "nulls_favour_list": [
+                    {"cell": cel, "model": mdl,
+                     "delta_rmse_mean_minus_model": val["delta_rmse_mean_minus_model"],
+                     "holm_p": val["holm_p"]}
+                    for cel, mdl, val in nb["nulls_favour_list"]]},
+            "protocol_spread_range_rmse": tb.get("protocol_spread_range_rmse"),
+            "protocol_spread_excludes_zero_frac": tb.get("protocol_spread_excludes_zero_frac"),
+            "arm_level_blocks": len(tb.get("arm_level_holm_resolvable") or {}),
+            "arm_level_holm_resolvable_blocks": sum(
+                1 for v in (tb.get("arm_level_holm_resolvable") or {}).values() if v),
+        }
     (RES / "summary.json").write_text(json.dumps(s, indent=2, default=float), encoding="utf-8")
     rn = readme_numbers(m, cfwide, comp)
     (RES / "readme_numbers.json").write_text(json.dumps(rn, indent=2, default=float),
