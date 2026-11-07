@@ -1,0 +1,23 @@
+panel: 16 targets from the ChEMBL external panel (same UniProt accessions)
+  O60674 (Tyrosine-protein kinase JAK2): 25079 rows fetched, 3093 exact-Ki kept (off-target 1, censored 1030, non-Ki 20953)
+  P23458 (Tyrosine-protein kinase JAK1): 20297 rows fetched, 3150 exact-Ki kept (off-target 1, censored 747, non-Ki 16399)
+  P11309 (Serine/threonine-protein kinase pim-): 7414 rows fetched, 1760 exact-Ki kept (off-target 0, censored 74, non-Ki 5580)
+  Q13535 (Serine/threonine-protein kinase ATR): 8300 rows fetched, 3515 exact-Ki kept (off-target 32, censored 749, non-Ki 4004)
+  P29597 (Non-receptor tyrosine-protein kinase): 18296 rows fetched, 1347 exact-Ki kept (off-target 1, censored 594, non-Ki 16354)
+  P52333 (Tyrosine-protein kinase JAK3): 15055 rows fetched, 1265 exact-Ki kept (off-target 1, censored 174, non-Ki 13615)
+  Q92918 (Mitogen-activated protein kinase kin): 14378 rows fetched, 2116 exact-Ki kept (off-target 0, censored 1491, non-Ki 10771)
+  P42336 (Phosphatidylinositol 4,5-bisphosphat): 18902 rows fetched, 1786 exact-Ki kept (off-target 268, censored 150, non-Ki 16698)
+  P49841 (Glycogen synthase kinase-3 beta): 12871 rows fetched, 984 exact-Ki kept (off-target 0, censored 90, non-Ki 11797)
+  P00519 (Tyrosine-protein kinase ABL1): 8969 rows fetched, 966 exact-Ki kept (off-target 0, censored 52, non-Ki 7951)
+  Q99558 (Mitogen-activated protein kinase kin): 2066 rows fetched, 834 exact-Ki kept (off-target 0, censored 69, non-Ki 1163)
+  Q9NWZ3 (Interleukin-1 receptor-associated ki): 15054 rows fetched, 775 exact-Ki kept (off-target 0, censored 27, non-Ki 14252)
+  Q5S007 (Leucine-rich repeat serine/threonine): 10288 rows fetched, 756 exact-Ki kept (off-target 0, censored 5, non-Ki 9524)
+  Q12852 (Mitogen-activated protein kinase kin): 619 rows fetched, 315 exact-Ki kept (off-target 0, censored 6, non-Ki 298)
+  Q13464 (Rho-associated protein kinase 1): 4130 rows fetched, 425 exact-Ki kept (off-target 0, censored 42, non-Ki 3663)
+  P00749 (Urokinase-type plasminogen activator): 1672 rows fetched, 1030 exact-Ki kept (off-target 0, censored 121, non-Ki 506)
+dropped rows (all targets): {'wrong_affinity_type': 153528, 'off_target_query': 304, 'censored_relation': 5421, 'non_numeric': 20, 'non_positive_or_nan': 0, 'no_smiles': 0, 'unparseable_smiles': 7}
+ligands: 15012 unique InChIKeys from 24110 kept rows
+years: 298/298 distinct pmids resolved to a publication year
+
+wrote E:\Desktop\dti-affinity-bench\data\processed\external_bindingdb  (completed=True)
+pairs 18478  ligands 15012  targets 16  undated pairs 14906  requests 16  41.9 MB  190.8 s

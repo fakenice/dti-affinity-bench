@@ -4,11 +4,14 @@
 validation of the headline claim ("the split protocol moves the number more than the
 model does").
 
-Why ChEMBL and not BindingDB: BindingDB's REST endpoint requires an emailed API key and
-its bulk TSV paths return 404 from this host, so it cannot be pulled reproducibly here.
-ChEMBL's REST API is open, filterable and versioned. This script verifies every filter it
-relies on against the live API and records the verified response shapes in the manifest --
-nothing here is written against a guessed schema.
+Why ChEMBL here: ChEMBL's REST API is open, filterable and versioned. (An earlier version of
+this note claimed BindingDB's REST endpoint "requires an emailed API key" and could not be
+pulled reproducibly -- the API-key claim was FALSE: the official bindingdb.org/rest API is open
+and needs no key, verified against the live service on 2026-11-07, raw evidence under
+results/bindingdb_probe/. BindingDB was subsequently pulled as the fourth external table by
+15_fetch_bindingdb.py.) This script verifies every filter it relies on against the live API and
+records the verified response shapes in the manifest -- nothing here is written against a
+guessed schema.
 
 What is pulled (and the budget, which is enforced, not aspirational):
 

@@ -1,0 +1,125 @@
+{
+  "getLindsByUniprotsResponse" : {
+    "affinities" : [ {
+      "query" : "Cytochrome P450 2B1",
+      "monomerid" : "50027784",
+      "smile" : "C#Cc1cc2ccccc2c2ccccc12",
+      "affinity_type" : "Ki",
+      "affinity" : "140",
+      "pmid" : "16248836",
+      "doi" : "10.2174/138920005774330639"
+    }, {
+      "query" : "Cytochrome P450 2B1",
+      "monomerid" : "50003140",
+      "smile" : "CCCCCC(C)N(C)CC#C",
+      "affinity_type" : "Ki",
+      "affinity" : "800",
+      "pmid" : "16248836",
+      "doi" : "10.2174/138920005774330639"
+    }, {
+      "query" : "Cytochrome P450 2B1",
+      "monomerid" : "50240520",
+      "smile" : "S=C=NCc1ccccc1",
+      "affinity_type" : "Ki",
+      "affinity" : "5800",
+      "pmid" : "16248836",
+      "doi" : "10.2174/138920005774330639"
+    }, {
+      "query" : "Cytochrome P450 2B1",
+      "monomerid" : "50027787",
+      "smile" : "Cn1c2ccccc2c2ccccc12",
+      "affinity_type" : "Ki",
+      "affinity" : "5200",
+      "pmid" : "16248836",
+      "doi" : "10.2174/138920005774330639"
+    }, {
+      "query" : "Cytochrome P450 2B1",
+      "monomerid" : "15579",
+      "smile" : "C[C@H](Cc1ccccc1)N(C)CC#C |r|",
+      "affinity_type" : "Ki",
+      "affinity" : "1050",
+      "pmid" : "16248836",
+      "doi" : "10.2174/138920005774330639"
+    }, {
+      "query" : "Cytochrome P450 2B1",
+      "monomerid" : "15581",
+      "smile" : "C[N@](CCCOc1ccc(cc1Cl)Cl)CC#C",
+      "affinity_type" : "Ki",
+      "affinity" : "1500",
+      "pmid" : "16248836",
+      "doi" : "10.2174/138920005774330639"
+    }, {
+      "query" : "Cytochrome P450 2B1",
+      "monomerid" : "50027783",
+      "smile" : "C#Cc1ccc2ccccc2c1",
+      "affinity_type" : "Ki",
+      "affinity" : "80",
+      "pmid" : "16248836",
+      "doi" : "10.2174/138920005774330639"
+    }, {
+      "query" : "Cytochrome P450 2B1",
+      "monomerid" : "50310823",
+      "smile" : "CC(C)=CCC/C(C)=C/COc1c2ccoc2cc2oc(=O)ccc12",
+      "affinity_type" : "Ki",
+      "affinity" : "2400",
+      "pmid" : "16248836",
+      "doi" : "10.2174/138920005774330639"
+    }, {
+      "query" : "Cytochrome P450 2B1",
+      "monomerid" : "24656",
+      "smile" : "c1ccc(-c2c[nH]cn2)cc1",
+      "affinity_type" : "IC50",
+      "affinity" : "7400",
+      "pmid" : "7097715",
+      "doi" : "10.1021/jm00348a003"
+    }, {
+      "query" : "Cytochrome P450 2B1",
+      "monomerid" : "50017716",
+      "smile" : "CCCC(C(=O)OCCN(CC)CC)(c1ccccc1)c1ccccc1",
+      "affinity_type" : "IC50",
+      "affinity" : "8200",
+      "pmid" : "7097715",
+      "doi" : "10.1021/jm00348a003"
+    }, {
+      "query" : "Camphor 5-monooxygenase",
+      "monomerid" : "50149347",
+      "smile" : "C(C1CC1)n1ccnc1",
+      "affinity_type" : "IC50",
+      "affinity" : "4000",
+      "pmid" : "15214784",
+      "doi" : "10.1021/jm030608t"
+    }, {
+      "query" : "Camphor 5-monooxygenase",
+      "monomerid" : "50149348",
+      "smile" : "CCC(CC)Cn1ccnc1",
+      "affinity_type" : "IC50",
+      "affinity" : "800",
+      "pmid" : "15214784",
+      "doi" : "10.1021/jm030608t"
+    }, {
+      "query" : "Camphor 5-monooxygenase",
+      "monomerid" : "50149352",
+      "smile" : "C(C1CCCCC1)n1ccnc1",
+      "affinity_type" : "IC50",
+      "affinity" : "1500",
+      "pmid" : "15214784",
+      "doi" : "10.1021/jm030608t"
+    }, {
+      "query" : "Camphor 5-monooxygenase",
+      "monomerid" : "50149354",
+      "smile" : "CCCc1cncn1C1CCCC1",
+      "affinity_type" : "IC50",
+      "affinity" : "6500",
+      "pmid" : "15214784",
+      "doi" : "10.1021/jm030608t"
+    }, {
+      "query" : "Cytochrome P450 2B1",
+      "monomerid" : "50330386",
+      "smile" : "OC(=O)CCC(=O)Nc1ccc(O)cc1",
+      "affinity_type" : "Kd",
+      "affinity" : "1120",
+      "pmid" : "20813430",
+      "doi" : "10.1016/j.ejmech.2010.07.055"
+    } ]
+  }
+}

@@ -3,9 +3,10 @@
 DAVIS (30,056 kinase–inhibitor $K_d$ rows) and KIBA (118,254 rows) scored with
 RDKit ECFP4 fingerprints + amino-acid/dipeptide composition, evaluated under **five
 different split protocols** with RMSE and both concordance calibres, plus an
-AutoDock Vina arm on the same compounds — and then re-checked on a **third,
-independently curated table** (a ChEMBL kinase Ki panel, §9) to make sure the
-headline is not a property of the two shipped benchmarks.
+AutoDock Vina arm on the same compounds — and then re-checked on **two further,
+independently curated tables** (a ChEMBL kinase Ki panel and a BindingDB kinase Ki panel, §9)
+to make sure the headline is not a property of the two shipped benchmarks or of one curator's
+binning.
 
 Every table and figure here is produced by the code in this repository from committed
 inputs — `results/report.md`, `results/summary.json` and
@@ -14,9 +15,10 @@ inputs — `results/report.md`, `results/summary.json` and
 ## Headline
 
 Every number below is a key in `results/summary.json` or `results/readme_numbers.json`, so the
-claim and its evidence are one `jq` apart. The one exception is the external-validation block
-(§9), which lives in its own tree — `results/external_chembl/paired_bootstrap.json` — because
-it must not be able to touch the shipped grid.
+claim and its evidence are one `jq` apart. The exception is the external-validation block
+(§9), which lives in its own trees — `results/external_chembl/paired_bootstrap.json` and
+`results/external_bindingdb/paired_bootstrap.json` — because it must not be able to touch the
+shipped grid.
 
 1. **The split protocol moves the result more than the model does — for the models that
    work.** With identical features, code and seeds, the best achievable DAVIS test RMSE runs
@@ -98,6 +100,20 @@ it must not be able to touch the shipped grid.
    consensus score are different scales, so **RMSE magnitudes are not compared across tables —
    only the protocol-vs-model structure is.** `results/external_chembl/paired_bootstrap.json`,
    §9.
+9. **The structure survives a second independent curator, on BindingDB.** The same protocols,
+   nulls, models, seeds and bootstrap families were re-run on a **BindingDB kinase Ki panel**
+   (18,478 pairs, 15,012 ligands, 16 targets; open REST, no API key, 41.9 MB, every page sha256
+   -pinned) through `15_external_bindingdb.py`, an adapter over the *unchanged* `14_external_chembl.py`
+   that runs in a separate tree and cannot move `results/metrics.csv`. **η²(protocol) = 0.894**
+   ([0.880, 0.896]) against **η²(model) = 0.056** ([0.047, 0.076]) — non-overlapping CIs that match
+   ChEMBL's 0.866 / 0.020, best-achievable RMSE 0.6342 (`random`) → 1.2400 (`temporal`), the three
+   stable trained models spread by at most 0.2752 inside a protocol, and every per-arm protocol
+   contrast excluding zero. The MLP collapse on `cold_target` reproduces; the ChEMBL-specific
+   "per-target lookup beats every model on `temporal`" does **not** reproduce — on BindingDB the best
+   of the three nulls loses to the best learned model in all five protocols (closest 1.5756 vs
+   1.2400; 3 individual cells are still beaten by a lookup, §9b item 3), which
+   is itself the point — the invariant is the protocol-vs-model *ratio*, not any one table's quirk.
+   `results/external_bindingdb/`, §9b.
 
 The audit trail is part of the result: `04_uncertainty.py` recomputes `03_models.py`'s point
 predictions and asserts the RMSE match (40/40 rows pass on the shipped grid), and that assert is
@@ -506,13 +522,21 @@ data/processed/    committed tidy tables (davis.csv, kiba.csv, ligands.csv, targ
                    + the five split files per dataset + feature arrays
                    + external/ : the ChEMBL kinase Ki table of §9 (tables, hashes, features,
                      splits) — a self-contained tree that the main pipeline never reads
+                   + external_bindingdb/ : the BindingDB kinase Ki table of §9b, likewise isolated
 results/           committed metrics, leakage audit, docking tables, bootstrap tables
                    (testset_bootstrap_ci/models/pairs + .json), figures, report.md
 results/external_chembl/  §9's own results (metrics, leakage audit, Holm contrasts,
                    bootstrap json, run manifest) — never written by scripts 00…12
+results/external_bindingdb/  §9b's BindingDB results, same shape, same isolation
 scripts/00…12      one stage per script, run in order
 scripts/13, 14     the external table: fetch + hash-pin (13), then features/splits/audit/
                    grid/analyse on it (14); imported by the same modules, not re-implemented
+scripts/15_fetch, 15_external  the second external table (BindingDB): fetch + hash-pin, then an
+                   adapter that re-runs script 14's five stages in-process on that tree
+tests/             test_bindingdb_aggregation.py (row filters, InChIKey de-duplication, pair
+                   aggregation, year parsing) + test_bindingdb_adapter.py (that the redirect
+                   lands on the BindingDB tree and restores ChEMBL exactly); 25 tests, run with
+                   `python -m unittest discover -s tests -p "test_*.py"`
 run_all.py         one-command reproduction
 docs/data_sources.md  endpoints, sha256 of every raw file, vina binary hash, versions
 ```
@@ -539,6 +563,11 @@ python run_all.py --stage external --quick   # smoke version of the same two sta
                                         # data/processed/external_quick/ +
                                         # results/external_chembl_quick/ so it cannot overwrite
                                         # the committed table or grid
+python scripts/15_fetch_bindingdb.py --budget-mb 175    # §9b BindingDB fetch (network); this
+python scripts/15_external_bindingdb.py --stage all     # pair is run directly, not via run_all
+                                        # (run_all --stage external covers ChEMBL only). Measured:
+                                        # fetch 41.9 MB / 191 s, grid+in-process bootstrap 2,061 s.
+                                        # --out-tag / --quick isolate it the same way as §9.
 ```
 
 `run_all.py` recomputes the whole grid by default; `--resume-grid` is opt-in, because keeping
@@ -622,7 +651,7 @@ preprocessing decision that changed a headline number, so it gets its own ablati
   kept working from the pre-edit bytecode — which is how a crash got misread as "stale
   cache". It is fixed, and it is the reason the per-row `metrics.csv` flush exists.
 
-## 9. External validation on a third table (ChEMBL kinase Ki)
+## 9. External validation on two independently-curated tables (ChEMBL and BindingDB kinase Ki)
 
 **Why a third table at all.** DAVIS and KIBA share exactly the properties that make a
 protocol artefact look like a property of the field: both are kinase-centred, both are small
@@ -742,8 +771,8 @@ about 1.35–1.62.
 
 6. **The scale caveat, stated once and applied everywhere.** pKi shares the 9 − log₁₀(nM)
    *definition* with DAVIS pKd but not the measurement process; KIBA's 0–17.2 consensus score
-   shares neither. **RMSE magnitudes are therefore not comparable across the three tables**,
-   and nothing above compares them. What is comparable is the *structure* — the protocol-vs-model
+   shares neither. **RMSE magnitudes are therefore not comparable across the shipped and external
+   tables**, and nothing above compares them. What is comparable is the *structure* — the protocol-vs-model
    variance share, the sign and resolvability of paired contrasts, which nulls win which cells
    — and that structure is what was tested.
 
@@ -785,6 +814,128 @@ the module in a fresh interpreter, so a child could read the *committed* predict
 its parent wrote the smoke ones. Both are fixed — the tag is now applied inside the worker too —
 and the isolation is checked, not asserted: after a full quick run, all 27 committed files
 under `data/processed/external/` and `results/external_chembl/` are byte-identical.
+
+### 9b. A fourth table: BindingDB — a second, independent external replication
+
+ChEMBL is a different *curation pipeline* but still one organisation's take on the same public
+recordings. A single external agreement could in principle be an artefact of how that one
+curator bins Ki values. So the headline was re-run a second time, on a second table, with a
+second curator and a different access path: **BindingDB** — an independently curated affinity
+database pulled from its open REST endpoint (`bindingdb.org/rest/getLigandsByUniprots`; no API
+key is required — an earlier note in `13_fetch_chembl.py` claimed the opposite and was checked
+against the live service on 2026-11-07 and corrected). Raw probe evidence (homepage, API docs, a
+7.3 MB single-target JSON with its response headers) is kept under `results/bindingdb_probe/`.
+
+**Why this is a real second test and not a re-skin.** A BindingDB row is one curated
+measurement with its own `affinity_type`, so the panel keeps only `Ki` rows, drops censored
+bounds (`<0.1`, `>10000`) — those are limits, not values, and averaging them biases the median —
+and de-duplicates ligands by standard InChIKey so one structure can never straddle train and test.
+A single-UniProt response also carries **off-target selectivity rows for other proteins**, so rows
+are attributed by the reported protein `query` name, not assumed to all belong to the queried
+target. `scripts/15_fetch_bindingdb.py` builds a 16-target Ki panel
+(**18,478 pairs, 15,012 ligands, 16 targets**; 183,390 rows fetched → 24,110 kept), labels each
+pair **pKi = 9 − log₁₀(median Ki / nM)** — the same scale convention as the ChEMBL arm and DAVIS
+pKd — and hashes every output table and cached page before modelling
+(`data/processed/external_bindingdb/external_manifest.json`: 19 per-page `raw_cache_sha256` +
+sha256 of the four CSVs). Download footprint **41.9 MB** over 16 HTTP requests — 14 target pages +
+2 PubMed pages, the other two target pages having been served from the local cache — with 0 retries
+and `budget_exceeded: false`, well inside the ≤ 200 MB the run was authorised under
+(`docs/data_sources.md` §1c decomposes the wire bytes against the on-disk cache).
+
+**Reused by import, not by copy.** `scripts/15_external_bindingdb.py` is an adapter: it loads
+`14_external_chembl.py` unchanged and redirects that module's tree globals — `EXT`, `EXTFEAT`,
+`EXTSPL`, `OUT`, `PRED`, `DATASET` — plus its `external_pairs()` reader, its `configure_paths()`
+entry point (which 14's own bootstrap worker calls), and a `pd.read_csv` wrapper that maps only the
+pair-table filename `chembl_ki.csv` to `bindingdb_ki.csv` inside the redirected directory. Every
+other path 14 reads, and every other `read_csv` call in the repo, passes through untouched. It then
+runs script 14's features → splits → audit → grid → analyse verbatim. The one non-trivial wrinkle is the
+bootstrap: script 14 spreads its protocol cells across a Windows `spawn` `ProcessPoolExecutor`,
+and a spawned child re-imports script 14 fresh, so it cannot inherit an in-process monkeypatch —
+the adapter therefore forces `jobs=1` (in-process bootstrap) for the external run. That script 14
+and the committed ChEMBL tree are untouched is verified, not asserted — after the full BindingDB
+run this prints nothing:
+`git status --porcelain data/processed/external/ results/external_chembl/ scripts/14_external_chembl.py`.
+
+**The grid** (75 rows: 4 learned × 3 seeds + 3 nulls × 5 protocols; RMSE in pKi, 3-seed mean):
+
+| protocol | global-mean null | per-ligand null | per-target null | Ridge | XGBoost | Rand. forest | MLP | best learned |
+|---|---|---|---|---|---|---|---|---|
+| random | 1.3839 | 1.3386 | **1.1252** | 0.8505 | 0.6342 | 0.7148 | 0.9642 | XGBoost 0.6342 |
+| scaffold | 1.3375 | 1.3375 | **1.1207** | 0.8175 | 0.6612 | 0.6969 | 0.9789 | XGBoost 0.6612 |
+| cold_drug | 1.2040 | 1.2040 | 1.2645 | 1.2078 | **0.9326** | 0.9701 | 1.1172 | XGBoost 0.9326 |
+| cold_target | 1.4343 | 1.2564 | 1.4343 | 1.3347 | 1.2858 | **1.1527** | 2.6229 | Rand. forest 1.1527 |
+| temporal | 1.6721 | 1.6741 | **1.5756** | 1.2400 | 1.3156 | 1.2624 | 1.8164 | Ridge 1.2400 |
+
+**What the second external table adds.**
+
+1. **The protocol-vs-model structure reproduces, and a touch stronger.** Two-way decomposition:
+   **η²(protocol) = 0.8941** (seed-bootstrap CI [0.8802, 0.8965]) against **η²(model) = 0.0560**
+   ([0.0467, 0.0757]) — CIs that do not overlap, matching ChEMBL's 0.8657 / 0.0197. Adding the
+   collapsed MLP (all4) gives η²(protocol) 0.5408 / η²(model) 0.2460 / interaction 0.2132, the
+   same "this is a statement about trained tabular models, not about architecture" pattern.
+2. **The protocol spread survives on every arm.** Best-achievable RMSE runs **0.6342** (`random`)
+   → **1.2400** (`temporal`), and the per-arm hardest-minus-easiest RMSE spread runs
+   **0.4548–1.7527** across the 15 arms (3 nulls on their seed-0 cell + 4 models × 3 seeds; the
+   minimum is the per-target null on `scaffold`→`temporal`, the maximum the MLP on
+   `random`→`cold_target`), with **15 of 15** intervals excluding zero under row resampling
+   (`protocol_spread_excludes_zero_frac = 1.0`). Inside one protocol the three stable trained
+   models differ by at most **0.2752** — about 2× below the best-achievable protocol range of
+   0.6058 pKi, and 16× smaller in variance share (η² 0.0560 vs 0.8941) — while the
+   MLP again collapses on `cold_target` (2.6229 vs a 1.4343 null).
+3. **The one protocol where a lookup won did *not* reproduce, and that is reported too.** On ChEMBL
+   the per-target training mean beat every learned model on `temporal` (1.2397 against a best learned
+   1.3514) — the only win among that table's 15 null × protocol comparisons. On BindingDB
+   there is none: the best of the three nulls loses to the best learned model in all five protocols,
+   closest on `temporal` (1.5756 vs 1.2400) — that 15-comparison count is not stored as a field, it
+   is read off `metrics.csv` by averaging each cell over its seeds and taking, per protocol,
+   `min(3 nulls)` against `min(4 models)`. Two things that claim does *not* say, stated so it can
+   be checked. (a) *It is not the manifest field.*
+   `paired_bootstrap.json → protocols_where_no_learned_model_beats_the_global_mean` is 0 of 5 on
+   *both* tables, but it compares only the **global-mean** null, so it cannot see the ChEMBL
+   per-target win at all; `external_run_manifest.json` stores the same summary renamed
+   `headline.protocols_where_null_wins` (script 14's field mapping), which is why the ChEMBL win is
+   quoted here against the per-target null instead. (b) *It is not "a null never beats a model".*
+   `learned_models_worse_than_the_global_mean` lists 3 BindingDB cells a single lookup does beat —
+   `cold_drug` Ridge 1.2078 vs 1.2040, and the collapsed MLP on `cold_target` 2.6229 vs 1.4343 and
+   on `temporal` 1.8164 vs 1.6721 (ChEMBL has 3 of the same kind). The claim is strictly
+   protocol-level: no null wins a protocol against the best learned model. The "a two-line lookup
+   wins a cell" effect was thus table-specific, not a law; the invariant that held across both
+   curators is the protocol-vs-model *ratio*, not that particular win.
+4. **Leakage is again a property of the protocol, measured by the same imported `02_splits.audit`.**
+   `scaffold`: 0.000 % of test scaffolds appear in train; `cold_drug`: 100.00 % of test ligands
+   unseen in train; `cold_target`: 100.00 % of test targets unseen in train. (Full per-protocol
+   twin/unseen fractions in `results/external_bindingdb/leakage_audit.json`.)
+
+**Two honest limitations specific to this table.** (i) *Temporal is a proxy on a small dated
+subset.* BindingDB rows are mostly DOI-only with an empty `pmid`, so only the pmid-bearing rows
+get a PubMed year: **3,572 of 18,478 pairs (19.3 %)** are dated, and the `temporal` arm runs on
+that subset (n_test 770) rather than the full panel — the same exclude-undated-and-count-them
+treatment script 14 uses for ChEMBL. The publication year is a substitute for a deposition date,
+not the same quantity, and `external_manifest.json → temporal_proxy` records it. (ii) *No version
+stamp.* BindingDB's REST endpoint exposes no release identifier, so this snapshot is pinned by
+fetch time + a 100,000 nM cutoff rather than a version string, and `files` + `raw_cache_sha256`
+carry the per-page hashes so a reviewer can re-verify exactly what was fetched.
+
+**Where the numbers live.** `results/external_bindingdb/` — `metrics.csv` (75 rows),
+`metrics_by_protocol.csv`, `leakage_audit.csv`/`.json`, `model_contrasts_holm.csv`,
+`arm_marginal_intervals.csv`, `paired_bootstrap.json` (sha256 recorded in the manifest) and
+`external_run_manifest.json`. The headline block there also flags `bindingdb_adapter` (engine =
+`scripts/14_external_chembl.py`, imported unchanged) and corrects script 14's hardcoded
+"ChEMBL" source label to "BindingDB via scripts/15_fetch_bindingdb.py". As everywhere in §9, the
+pKi scale is shared *by definition* with DAVIS pKd and ChEMBL but the measurement process is not,
+so **RMSE magnitudes are not compared across tables — only the protocol-vs-model structure.**
+
+**How to run it.**
+
+```bash
+python scripts/15_fetch_bindingdb.py --budget-mb 175              # network; caches every page it reads
+python scripts/15_external_bindingdb.py --stage all               # adapter over script 14's five stages
+```
+
+Measured wall time on the same 8-core laptop: fetch 190.8 s; the grid + in-process bootstrap
+(`jobs=1`, forced by the `spawn` limitation above) ran features → splits → audit → grid → analyse
+end-to-end in **2,061 s**. `--out-tag` / `--quick` move the whole BindingDB tree to a sibling
+directory exactly as they do for ChEMBL, so a smoke run cannot overwrite the committed artifacts.
 
 ## 10. Known limitations / next steps
 
@@ -891,20 +1042,27 @@ so §4's negative result for the MLP is not a seeding artifact. Per-seed rows ar
 `results/metrics.csv`. That file is the record of the run that produced the figures and the
 tables above, on Python 3.13.7 / i7-9700 / 32 GB with the versions in `requirements.txt`.
 
-**The external table has three limitations of its own, and they are not the same as the
+**The external tables have limitations of their own, and they are not the same as the
 shipped ones.** (i) *Scale*: pKi = 9 − log₁₀(median Ki / nM) shares the **definition** of
 DAVIS pKd but not the measurement process, and KIBA's 0–17.2 consensus score shares neither —
-so RMSE magnitudes are comparable **within** the ChEMBL table and **not across** the three
+so RMSE magnitudes are comparable **within** each external table and **not across** the four
 tables; §9 compares structure, never magnitude. (ii) *The temporal protocol is a proxy*: the
 public ChEMBL API exposes no per-activity deposition date, so the temporal split uses the
 **source publication year**, at one-year resolution, and the 2,829 pairs with no year at all
 (14.8 % of the table) are excluded from that protocol — 16,259 of 19,088 pairs enter it, and
 the cutoff is 2021-01-01. That is a documented substitute for DAVIS's `deposited` date, not
-the same quantity. (iii) *Row sampling*: the download cap forces the fetcher to sample activity
-pages, and three of the sixteen targets are still incompletely covered
-(`complete: false` in the manifest). The panel is also a **single chemical family** (human
+the same quantity. BindingDB's proxy is coarser still: most of its rows are DOI-only with an
+empty `pmid`, so only **3,572 of 18,478 pairs (19.3 %)** carry a PubMed year and its `temporal`
+arm runs on that dated subset (n_test 770), the same exclude-undated-and-count-them treatment —
+and BindingDB REST exposes **no release version**, so that snapshot is pinned by fetch time + a
+100,000 nM cutoff plus per-page sha256, not a version string. (iii) *Row sampling — ChEMBL only*:
+its activity rows are paged, so the download cap forces the fetcher to sample pages, and three of
+the sixteen targets are still incompletely covered
+(`complete: false` in the manifest). BindingDB's endpoint returns a whole target per request
+(`coverage_per_target`: 16 targets, `failed_targets: []`, no sampling), so that limit does not
+transfer. The panel is also a **single chemical family** (human
 kinases), so §9 tests whether the protocol effect is a property of *affinity prediction* or
-only of *kinases*; the latter is not excluded by this table.
+only of *kinases*; the latter is not excluded by these tables.
 
 Next steps that would actually change the conclusions: a censored likelihood for DAVIS; a
 held-out fourth split so the conformal guarantee is real; ≥3 structures per target with

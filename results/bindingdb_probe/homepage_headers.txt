@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+date: Sat, 07 Nov 2026 03:30:51 GMT
+server: Apache/2.4.62 (AlmaLinux) OpenSSL/3.5.8
+last-modified: Thu, 27 Mar 2025 19:06:24 GMT
+etag: "11e-63157a6720274"
+accept-ranges: bytes
+content-length: 286
+content-type: text/html; charset=UTF-8
+

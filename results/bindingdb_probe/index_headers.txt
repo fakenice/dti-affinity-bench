@@ -1,0 +1,7 @@
+HTTP/1.1 200 
+date: Sat, 07 Nov 2026 03:31:01 GMT
+server: Apache/2.4.62 (AlmaLinux) OpenSSL/3.5.8
+content-type: text/html;charset=UTF-8
+set-cookie: JSESSIONID=97DDE7192B67600F24B95D3C116D0126; Path=/rwd; Secure; HttpOnly
+transfer-encoding: chunked
+

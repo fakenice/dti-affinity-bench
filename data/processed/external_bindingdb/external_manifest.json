@@ -1,0 +1,215 @@
+{
+  "generated_by": "scripts/15_fetch_bindingdb.py",
+  "generated_at_utc": "2026-11-07T04:06:24Z",
+  "completed": true,
+  "source": "BindingDB RESTful API (bindingdb.org/rest/getLigandsByUniprots), open, no key + PubMed E-utilities esummary for publication years",
+  "chembl_release": {
+    "ok": true,
+    "source": "BindingDB",
+    "bindingdb_release": null,
+    "note": "BindingDB REST exposes no version stamp; fetch time + cutoff identify this snapshot",
+    "cutoff_nM": 100000,
+    "checked_at_utc": "2026-11-07T04:06:24Z"
+  },
+  "params": {
+    "budget_mb": 175.0,
+    "per_file_mb": 50.0,
+    "cutoff": 100000,
+    "max_targets": 16,
+    "min_rows": 50,
+    "out_tag": ""
+  },
+  "selection_rule": "the 16 human kinases of the ChEMBL external panel (data/processed/external/targets.csv), same UniProt accessions; a target is kept if it has >= --min-rows exact-Ki rows naming it",
+  "label_definition": "pKi = 9 - log10(median Ki / nM); same 9-log10(nM) scale as DAVIS pKd and the ChEMBL table, not comparable to KIBA's 0-17.2 score",
+  "aggregation": "median of the exact Ki rows for one (InChIKey, target) pair; n_rows / ki_iqr_nM carried alongside so the aggregation is auditable",
+  "ligand_identity": "RDKit standard InChIKey; different SMILES/monomer ids for one structure are one ligand, so a duplicate cannot straddle train/test",
+  "target_attribution": "a single-UniProt BindingDB response also carries selectivity rows for other proteins (measured on O60674: TYK2/JAK1/PDGFR-beta rows); a row is kept only when query == the target's UniProt name",
+  "temporal_proxy": "PubMed publication year (esummary pubdate) of the row's pmid. Most BindingDB rows are doi-only with empty pmid and stay undated; the temporal arm excludes undated pairs and reports the count. A substitution, not the same quantity as a deposition date.",
+  "row_filters_applied": {
+    "wrong_affinity_type": 153528,
+    "off_target_query": 304,
+    "censored_relation": 5421,
+    "non_numeric": 20,
+    "non_positive_or_nan": 0,
+    "no_smiles": 0,
+    "unparseable_smiles": 7
+  },
+  "coverage_per_target": {
+    "O60674": {
+      "rows_fetched": 25079,
+      "exact_ki_kept": 3093,
+      "in_table": true
+    },
+    "P23458": {
+      "rows_fetched": 20297,
+      "exact_ki_kept": 3150,
+      "in_table": true
+    },
+    "P11309": {
+      "rows_fetched": 7414,
+      "exact_ki_kept": 1760,
+      "in_table": true
+    },
+    "Q13535": {
+      "rows_fetched": 8300,
+      "exact_ki_kept": 3515,
+      "in_table": true
+    },
+    "P29597": {
+      "rows_fetched": 18296,
+      "exact_ki_kept": 1347,
+      "in_table": true
+    },
+    "P52333": {
+      "rows_fetched": 15055,
+      "exact_ki_kept": 1265,
+      "in_table": true
+    },
+    "Q92918": {
+      "rows_fetched": 14378,
+      "exact_ki_kept": 2116,
+      "in_table": true
+    },
+    "P42336": {
+      "rows_fetched": 18902,
+      "exact_ki_kept": 1786,
+      "in_table": true
+    },
+    "P49841": {
+      "rows_fetched": 12871,
+      "exact_ki_kept": 984,
+      "in_table": true
+    },
+    "P00519": {
+      "rows_fetched": 8969,
+      "exact_ki_kept": 966,
+      "in_table": true
+    },
+    "Q99558": {
+      "rows_fetched": 2066,
+      "exact_ki_kept": 834,
+      "in_table": true
+    },
+    "Q9NWZ3": {
+      "rows_fetched": 15054,
+      "exact_ki_kept": 775,
+      "in_table": true
+    },
+    "Q5S007": {
+      "rows_fetched": 10288,
+      "exact_ki_kept": 756,
+      "in_table": true
+    },
+    "Q12852": {
+      "rows_fetched": 619,
+      "exact_ki_kept": 315,
+      "in_table": true
+    },
+    "Q13464": {
+      "rows_fetched": 4130,
+      "exact_ki_kept": 425,
+      "in_table": true
+    },
+    "P00749": {
+      "rows_fetched": 1672,
+      "exact_ki_kept": 1030,
+      "in_table": true
+    }
+  },
+  "failed_targets": [],
+  "pmid_coverage": {
+    "distinct_pmids_on_kept_rows": 298,
+    "resolved_to_year": 298,
+    "kept_rows_with_pmid": 4113,
+    "kept_rows_total": 24110,
+    "pairs_without_any_year": 14906
+  },
+  "counts": {
+    "pairs": 18478,
+    "ligands": 15012,
+    "targets": 16,
+    "documents": 298,
+    "rows_fetched": 183390,
+    "rows_kept": 24110,
+    "pairs_per_target": {
+      "XT000": 2729,
+      "XT001": 2842,
+      "XT002": 1537,
+      "XT003": 1046,
+      "XT004": 860,
+      "XT005": 952,
+      "XT006": 1955,
+      "XT007": 1674,
+      "XT008": 589,
+      "XT009": 800,
+      "XT010": 611,
+      "XT011": 717,
+      "XT012": 632,
+      "XT013": 309,
+      "XT014": 372,
+      "XT015": 853
+    },
+    "pairs_with_multiple_rows": 3021,
+    "pairs_without_any_year": 14906,
+    "year_min": 1983,
+    "year_max": 2024,
+    "pki_min": 4.0,
+    "pki_max": 12.238072,
+    "pki_mean": 8.172788354259119,
+    "pki_sd": 1.3857824944233883
+  },
+  "transfer": {
+    "http_requests": 16,
+    "bytes_downloaded": 41948907,
+    "cached_responses_reused": 2,
+    "retries": 0,
+    "budget_mb": 175.0,
+    "per_file_mb": 50.0,
+    "budget_exceeded": false,
+    "wall_seconds": 190.8,
+    "raw_cache_bytes_on_disk": 55254947
+  },
+  "files": {
+    "bindingdb_ki.csv": {
+      "path": "data/processed/external_bindingdb/bindingdb_ki.csv",
+      "rows": 18478,
+      "sha256": "8adaf2b24c035056dba4e2590105f6180a955f90d68e5ac5d038ea1887bb1424"
+    },
+    "ligands.csv": {
+      "path": "data/processed/external_bindingdb/ligands.csv",
+      "rows": 15012,
+      "sha256": "f22aa60658cc4eacc2ca374a3fac762d86a21716cf6f3e49be9329a67dfd13c8"
+    },
+    "targets.csv": {
+      "path": "data/processed/external_bindingdb/targets.csv",
+      "rows": 16,
+      "sha256": "312034edb836a0b414337f484770515b1dcbfc74a81d0da72a9e031a359b8218"
+    },
+    "documents.csv": {
+      "path": "data/processed/external_bindingdb/documents.csv",
+      "rows": 298,
+      "sha256": "30c9f9ff2e6e39e8bd2ed8b7f9a609c7c8756d6aab9186e8e03c6310c4f6daf1"
+    }
+  },
+  "raw_cache_sha256": [
+    "data/raw/bindingdb/esummary_191751fa4f19ae27.json: 05280e06b8ffee77cd1500fad946fc237eb2ae466b64e5f9ca88a7285a11788f",
+    "data/raw/bindingdb/esummary_800191f63da0ea25.json: 372c9d34e0362034b0c506ab2d00b7055a08bbc37bc2d88dedf45c723758ee03",
+    "data/raw/bindingdb/esummary_e50cb9fa0fc65670.json: 50094a9724bf680265d32d333baa7becc5a9133a2c018ca1acd4bd62c5017011",
+    "data/raw/bindingdb/uniprot_O60674_cutoff100000.json: dfb3b124b3f89ca727ed354f758b48ef7f669349f05fdafce06711ffa769d22d",
+    "data/raw/bindingdb/uniprot_P00519_cutoff100000.json: 2aef856c88c0726dc1e866f96f6a38c31c6de2b4868cf78d83521c9ef58d0e66",
+    "data/raw/bindingdb/uniprot_P00749_cutoff100000.json: 19d6de0ab893c3a58c839aa3af7a18b462b34c37755b30359227641a62176588",
+    "data/raw/bindingdb/uniprot_P11309_cutoff100000.json: 28841b2a8adbd119b6b37eff50e47e3eb63894b51e3597620b44c791edfa3c9f",
+    "data/raw/bindingdb/uniprot_P23458_cutoff100000.json: a9664d89d0238332155c5639724a798f6fa5c174f11cc735f8cc2b3dc0992663",
+    "data/raw/bindingdb/uniprot_P29597_cutoff100000.json: 2dea34d52b24cc8646e61873980a36f300ec50b44a3e6dff71bec1fb746cdbbd",
+    "data/raw/bindingdb/uniprot_P42336_cutoff100000.json: 8a204a08e49da8df29fabe4b89b0ff3c7fbadfcdfb110c0706d32115f055311a",
+    "data/raw/bindingdb/uniprot_P49841_cutoff100000.json: 0095e385e8d48b05a29120a60a4a753931d0252adb14cb9f8c715ae65d96b6d1",
+    "data/raw/bindingdb/uniprot_P52333_cutoff100000.json: a8a3f1921f0c84a7484cfc13ed714ffa75cce577789dd29b1b76a02c9f65ed70",
+    "data/raw/bindingdb/uniprot_Q12852_cutoff100000.json: 790fa96df90f357ac63b369c758a0fefa27dd6af1706e593dbb4cd9dbcdf97e6",
+    "data/raw/bindingdb/uniprot_Q13464_cutoff100000.json: 8a7574f6e205eb2a666c22b0e04d81a4965490b9abdee67cec4884839e6ec8ce",
+    "data/raw/bindingdb/uniprot_Q13535_cutoff100000.json: 90dd53dc2c955155631b79fa1468a02d185289611f1d9583946782d2f4031508",
+    "data/raw/bindingdb/uniprot_Q5S007_cutoff100000.json: caeff8eb3666002f3c01d12faf6e797153f1e8e0904b36c7d8d373e962708adb",
+    "data/raw/bindingdb/uniprot_Q92918_cutoff100000.json: b477711b3141d53427fc49c9d686b8d08162dd5265d2bc881ec8fb38fb304bc5",
+    "data/raw/bindingdb/uniprot_Q99558_cutoff100000.json: 9905f0b134f7299667f5638f39fde3f385a2d9e502a605feb1313f7519d2f940",
+    "data/raw/bindingdb/uniprot_Q9NWZ3_cutoff100000.json: 6c5a68986979305bd4a267575947b1441fb4f5292ef4a7e681798435eeed00e5"
+  ]
+}

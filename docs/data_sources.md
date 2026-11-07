@@ -63,6 +63,46 @@ sample activity pages, so three of the sixteen targets are `complete: false`; an
 API exposes no per-activity deposition date, so this table's `temporal` protocol uses the
 **publication year** of the source document instead of a deposition date (README §9).
 
+## 1c. Second external validation table (BindingDB kinase Ki)
+
+Retrieved on **2026-11-07 (UTC)** by `scripts/15_fetch_bindingdb.py`, from the BindingDB REST
+endpoint `https://www.bindingdb.org/rest/getLigandsByUniprots` — which is **open and needs no API
+key** (an earlier note in `13_fetch_chembl.py` claimed BindingDB required an emailed key; that was
+checked against the live service on 2026-11-07 and corrected) — plus the PubMed E-utilities
+`esummary` service (`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi`) for publication
+years. Raw probe evidence (homepage, API docs, a single-target JSON and its response headers) is
+committed under `results/bindingdb_probe/`.
+
+| item | value |
+|---|---|
+| panel | 16 human kinase targets, requested by UniProt accession, cutoff 100,000 nM, ≥ 50 usable Ki rows each |
+| pairs / ligands / targets / documents | 18,478 / 15,012 / 16 / 298 |
+| rows | 183,390 fetched → 24,110 kept (`Ki` only, censored bounds `</>/~` dropped, non-numeric excluded) |
+| row arithmetic | `183,390 − Σrow_filters_applied (159,280) = 24,110` exactly; the per-target `exact_ki_kept` sums to 24,117 because those 7 rows were still counted before the SMILES-parse step (`unparseable_smiles: 7`), i.e. the two totals differ by one documented filter, not by lost data |
+| label | pKi = 9 − log₁₀(median Ki / nM), median over a pair's exact Ki rows (n_rows / ki_iqr_nM carried for audit) |
+| ligand identity | standard InChIKey (RDKit) — two ChEMBL/monomer ids sharing a structure are one ligand, so a duplicate cannot straddle train/test |
+| target attribution | rows kept only when the response's `query` protein name equals the queried target (a single-UniProt response also carries off-target selectivity rows) |
+| pKi range | 4.00 – 12.24 (mean 8.173, sd 1.386) |
+| transferred | 41,948,907 bytes over 16 HTTP requests, 0 retries (budget 175 MB, authorised cap 200 MB recorded in `scripts/15_fetch_bindingdb.py`, `budget_exceeded: false`). The 16 requests are **14 target pages + 2 PubMed pages**, not "16 requests because 16 targets" — the other two target pages were served from cache (see "wire vs disk" below) |
+| raw page cache | `data/raw/bindingdb/` (git-ignored); 19 cached files = 16 target pages + 3 esummary pages, each sha256 in `data/processed/external_bindingdb/external_manifest.json → raw_cache_sha256` — all 19 recomputed on 2026-11-07 and every one matches. Re-check (only in the workspace that fetched them — the pages themselves are git-ignored, so a fresh clone gets the hashes but not the bytes): `python -c "import json,hashlib;M=json.load(open('data/processed/external_bindingdb/external_manifest.json'));print(all(hashlib.sha256(open(e.split(': ')[0],'rb').read()).hexdigest()==e.split(': ')[1] for e in M['raw_cache_sha256']))"` |
+| wire vs disk | the ledger counts **41,948,907 B downloaded on this run** while the cache holds **55,254,947 B**; the 13,306,040 B difference decomposes exactly: `uniprot_O60674` (7,282,973) + `uniprot_P23458` (5,920,535) were **cache re-reads** (`transfer.cached_responses_reused = 2`), and `esummary_e50cb9fa…` (102,532) is a **stale page from an earlier partial fetch** — it is not one of the two batches this run consumed, which are reproducible from the committed 298-pmid list at `--batch 200` (`esummary_191751fa…` = 200 ids, `esummary_800191f6…` = 98 ids; the third key does not appear at any batch size). `bytes_downloaded` therefore measures this run's network traffic and `raw_cache_bytes_on_disk` measures the whole pinned directory — different quantities, deliberately both recorded, and the manifest hashes every file in the directory rather than only the ones this run needed |
+
+The output tables and their sha256 are in
+`data/processed/external_bindingdb/external_manifest.json → files` (`bindingdb_ki.csv`,
+`ligands.csv`, `targets.csv`, `documents.csv`); derived features and the five splits carry their
+own manifests under the same tree.
+
+Two limits specific to this table, recorded in the manifest rather than hidden: BindingDB's REST
+endpoint exposes **no release version**, so this snapshot is pinned by fetch time + the 100,000 nM
+cutoff + per-page sha256; and its rows are mostly DOI-only with an empty `pmid`, so only
+**3,572 of 18,478 pairs (19.3 %)** resolve to a PubMed year — the `temporal` protocol runs on that
+dated subset (n_test 770), the same exclude-undated-and-count-them treatment ChEMBL uses (README
+§9b). The evaluation itself re-runs script 14's five stages through `scripts/15_external_bindingdb.py`
+(in-process, `jobs=1` because a spawned bootstrap child cannot inherit the path redirect);
+script 14 and the committed ChEMBL tree are byte-unchanged. That invariance is a command rather
+than an assertion: `git status --porcelain data/processed/external results/external_chembl scripts/14_external_chembl.py`
+prints nothing when run after the BindingDB grid, so no BindingDB stage touched either tree.
+
 ## 2. Structural arm (AutoDock Vina)
 
 Four REST endpoints, all cached under `data/raw/docking/` (66 MB, git-ignored) and reusable
