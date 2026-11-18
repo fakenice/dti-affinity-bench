@@ -1,0 +1,22 @@
+{
+  "title": "dti-affinity-bench: A protein-ligand affinity benchmark showing that the split protocol moves the number more than the model does",
+  "version": "v1.0",
+  "publication_date": "2026-11-18",
+  "upload_type": "software",
+  "language": "en",
+  "authors": [
+    {
+      "name": "Wu, Yiting"
+    }
+  ],
+  "description": "<p>DAVIS (30,056 rows) and KIBA (118,254 rows) scored under five split protocols with RMSE and both concordance calibres, plus an AutoDock Vina arm on the same compounds, and external replication on independently curated ChEMBL and BindingDB kinase Ki panels. Every table, figure and the generated leaderboard are reproducible from committed inputs with one command.</p>",
+  "keywords": [
+    "drug-target interaction",
+    "binding affinity",
+    "benchmark",
+    "split protocol",
+    "data leakage",
+    "conformal prediction",
+    "reproducibility"
+  ]
+}
