@@ -12,6 +12,19 @@ Every table and figure here is produced by the code in this repository from comm
 inputs — `results/report.md`, `results/summary.json` and
 `notebook/dti_affinity_bench.ipynb` (executed, with outputs) are the same numbers you see below.
 
+## Benchmark study
+
+| | |
+|---|---|
+| Task | protein–ligand affinity prediction (regression on pKd / KIBA consensus score) |
+| Datasets | DAVIS 30,056 rows, KIBA 118,254 rows; external replication on a 19,088-pair ChEMBL kinase Ki panel and an 18,478-pair BindingDB kinase Ki panel (§9) |
+| Arms | 4 learned models × 3 seeds + 3 null baselines × 5 split protocols; AutoDock Vina physics arm on the same compounds (§6) |
+| Metrics | RMSE, MAE, Pearson r, Spearman ρ, Harrell and all-pairs concordance calibres |
+| Leaderboard | [`results/leaderboard.md`](results/leaderboard.md) — generated, never hand-written: `python scripts/16_leaderboard.py` ranks seed-averaged RMSE **within** each dataset × protocol and re-runs byte-for-byte |
+| Headline | not a model ranking: the split protocol moves the number more than the model does (§Headline, §4, `11_variance_decomposition.py`) — cross-protocol ranks must not be read as model quality |
+| Run | `python run_all.py` (full) · `--offline` (no network) · `--quick` (smoke) — stages and measured timings in §7 |
+| Datasheet | `docs/data_sources.md`; provenance and licenses of every table |
+
 ## Headline
 
 Every number below is a key in `results/summary.json` or `results/readme_numbers.json`, so the
@@ -1069,3 +1082,66 @@ held-out fourth split so the conformal guarantee is real; ≥3 structures per ta
 side-chain ensembles, plus a second chemistry set (pKi, or METLI-style multi-target data)
 so the physics arm is not kinases-only; and pocket-level target features (residue identity
 in the box) so the two arms see comparable information.
+
+## 11. How to cite
+
+This repository is pinned for citation at GitHub Release v1.0; machine-readable metadata
+lives in `CITATION.cff` at the repo root (GitHub renders it in the sidebar). The headline
+claim is protocol sensitivity, not leaderboard position — when you cite a number, cite the
+protocol it was produced under. If a DOI is assigned later, prefer the DOI.
+
+```bibtex
+@software{wu2026dtiaffinitybench,
+  author  = {Wu, Yiting},
+  title   = {dti-affinity-bench: A protein-ligand affinity benchmark showing that the split protocol moves the number more than the model does},
+  url     = {https://github.com/fakenice/dti-affinity-bench},
+  version = {1.0},
+  date    = {2026-11-18}
+}
+```
+
+## 12. Artifact evaluation (AE-style checklist)
+
+Structured the way AECI artifact-evaluation appendices read, so a reviewer can check this
+artifact item by item. Every statement below is either a command you can run or a number
+already sourced above; nothing here asserts a verification this README cannot show.
+
+**Hardware and environment used to produce the artifact.** Python 3.13.7 on an Intel
+i7-9700 (8 cores) with 32 GB RAM; package versions pinned in `requirements.txt`. No GPU
+is required anywhere in the pipeline. Measured stage times: 69.8 min summed fit time for
+the model grid (stage 03, from the `seconds` column of `results/metrics.csv`), 82 min for
+the stage-12 bootstrap (4,936 s with 6 cells in parallel), 41.3 min wall-clock for all 140
+Vina dockings at 4 workers (a low production setting; §10).
+
+**Software outside this repository.** AutoDock Vina v1.2.7 (binary vendored under
+`tools/`, hash recorded in `docs/data_sources.md`); everything else is pip-installable
+from `requirements.txt`.
+
+**Public availability.** GitHub `main`, pinned as Release v1.0; machine-readable citation
+in `CITATION.cff`. DAVIS/KIBA/ChEMBL/BindingDB remain under their own terms — provenance
+and hashes of every raw file in `docs/data_sources.md`.
+
+**Execution.** One command: `python run_all.py` (add `--fetch` for raw re-download,
+`--offline` for zero network, `--quick` for a seconds-long smoke test). Stages run in
+dependency order; `--stage <name>` re-runs one.
+
+**Expected output and self-validation.**
+
+- `python run_all.py --stage report` re-renders `results/report.md`, `results/summary.json`
+  and `results/readme_numbers.json` from the committed CSVs — `readme_numbers.json` is the
+  machine-readable copy of every number the Headline block claims, so claim and evidence
+  stay one `jq` apart.
+- `python scripts/16_leaderboard.py` regenerates `results/leaderboard.md` from
+  `results/metrics.csv` with no timestamps; re-runs are byte-for-byte identical, and the
+  script aborts rather than publishing if its seed averages disagree with
+  `results/metrics_by_protocol.csv`.
+- `python -m unittest discover -s tests -v` runs the shipped unit tests (BindingDB
+  adapter and aggregation).
+
+**What a reviewer should NOT expect to reproduce bit-for-bit.** XGBoost and random-forest
+fits are seeded but not bit-reproducible across environments or library versions, and
+their seed spread (≤ 0.0909 / ≤ 0.0125 RMSE, §10) can exceed the within-protocol model
+differences the leaderboard shows; ridge seeds are bit-identical by construction. The
+conformal intervals calibrate on the validation block the models also used (§10), so
+coverage is measured, not guaranteed. These limits are §10's, restated here so they are
+not discovered mid-review.

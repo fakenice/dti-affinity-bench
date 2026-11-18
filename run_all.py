@@ -9,6 +9,8 @@
     python run_all.py --stage report       # re-render tables + figures from results/*.csv
     python run_all.py --stage notebook     # regenerate and EXECUTE notebook/*.ipynb
     python run_all.py --stage bootstrap    # intervals for all 150 fits (no refitting, CPU only)
+    python run_all.py --stage leaderboard  # re-render results/leaderboard.md from results/metrics.csv
+                                           # (CPU, seconds, byte-stable for the same input)
     python run_all.py --stage external     # external validation on a ChEMBL kinase Ki table
                                            # (network fetch + its own features/splits/grid)
 
@@ -44,6 +46,7 @@ STAGES = [
     ("bootstrap", "12_testset_bootstrap.py", "test-set bootstrap intervals over all 150 fits"),
     ("paired",    "10_paired_headtohead.py", "paired bootstraps for the Vina head-to-head"),
     ("report",    "07_report.py",         "figures + results/report.md + results/summary.json"),
+    ("leaderboard", "16_leaderboard.py",  "ranked results/leaderboard.md from results/metrics.csv (byte-stable)"),
     ("notebook",  "08_notebook.py",       "writes and executes notebook/dti_affinity_bench.ipynb"),
     ("sensitivity", "09_preproc_sensitivity.py", "three standardisation guards x models x protocols"),
     ("extfetch",   "13_fetch_chembl.py",   "download + hash-pin the ChEMBL kinase Ki panel (network)"),

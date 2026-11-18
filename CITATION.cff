@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: >-
+  If you use this repository or its published benchmark results, please cite it
+  using the metadata below (a BibTeX entry is also provided in the README).
+title: "dti-affinity-bench: A protein-ligand affinity benchmark showing that the split protocol moves the number more than the model does"
+authors:
+  - family-names: Wu
+    given-names: Yiting
+repository-code: "https://github.com/fakenice/dti-affinity-bench"
+url: "https://github.com/fakenice/dti-affinity-bench"
+version: "1.0"
+date-released: "2026-11-18"
