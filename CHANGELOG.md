@@ -9,6 +9,8 @@ dates and map 1:1 to `git log`.
   explicitly instead of dropped) — CPU only
 - Planned: external-baseline table with published numbers (Tafei, DeepDTA, and the
   Davis/KIBA re-benchmark papers), each row with source and protocol-caveat
+- 2026-11-18 Added `docs/DECISIONS.md`: caliber/protocol decisions logged only where
+  the repo itself carries written evidence (commit dates cited)
 
 ## [v1.0] - 2026-11-18
 
