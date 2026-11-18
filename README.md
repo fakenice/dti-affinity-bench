@@ -1083,7 +1083,19 @@ side-chain ensembles, plus a second chemistry set (pKi, or METLI-style multi-tar
 so the physics arm is not kinases-only; and pocket-level target features (residue identity
 in the box) so the two arms see comparable information.
 
-## 11. How to cite
+## 11. External baselines (published numbers, source-verified)
+
+`docs/external_baselines.md` re-checks, against full texts on 2026-11-18, the
+published random-split baselines on the same tables (DeepDTA 0.878 CI / MSE
+0.261; GraphDTA preprint v3 up to 0.893/0.229; MGraphDTA 0.900/0.207), the
+published evidence that the split protocol moves results more than the model
+(MGraphDTA §3.3: same model, Davis MSE 0.207 → 0.572 → 0.654), and the
+concordance-caliber source chain (Gönen & Heller formula = this repo's
+`ci_harrell`; Harrell 1982 title-level only). It also lists what must not be
+cited — including two identifiers that failed verification and one that
+arrived as an injected fake citation mid-research.
+
+## 12. How to cite
 
 This repository is pinned for citation at GitHub Release v1.0; machine-readable metadata
 lives in `CITATION.cff` at the repo root (GitHub renders it in the sidebar). The headline
@@ -1100,7 +1112,7 @@ protocol it was produced under. If a DOI is assigned later, prefer the DOI.
 }
 ```
 
-## 12. Artifact evaluation (AE-style checklist)
+## 13. Artifact evaluation (AE-style checklist)
 
 Structured the way AECI artifact-evaluation appendices read, so a reviewer can check this
 artifact item by item. Every statement below is either a command you can run or a number

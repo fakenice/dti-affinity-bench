@@ -7,8 +7,11 @@ dates and map 1:1 to `git log`.
 
 - Planned: Tobit/censored-likelihood baseline (DAVIS/KIBA label censoring handled
   explicitly instead of dropped) — CPU only
-- Planned: external-baseline table with published numbers (Tafei, DeepDTA, and the
-  Davis/KIBA re-benchmark papers), each row with source and protocol-caveat
+- 2026-11-18 Added `docs/external_baselines.md`: source-verified published
+  random-split baselines (DeepDTA/GraphDTA-preprint/MGraphDTA tables), external
+  protocol-sensitivity evidence (MGraphDTA 0.207→0.572→0.654 MSE), CI-caliber
+  source chain, and a do-not-cite register (unverifiable leads + injected fake
+  identifiers); README gained section 11 (later sections renumbered)
 - 2026-11-18 Added `docs/DECISIONS.md`: caliber/protocol decisions logged only where
   the repo itself carries written evidence (commit dates cited)
 
