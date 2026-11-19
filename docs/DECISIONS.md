@@ -38,3 +38,19 @@
 10. **leaderboard 生成、永不手写**：`scripts/16_leaderboard.py` 在每个
     dataset × protocol 内按 seed 平均 RMSE 排名，重跑逐字节一致
     （`README.md` §Leaderboard；`results/leaderboard.md`）。
+
+## 2026-11-19（Tobit 基线，把 §10 的一句"应该这么做"变成实测）
+
+11. **删失似然必须跑成基线，不许只写在局限里**：`scripts/17_tobit_baseline.py` 与
+    `03_models.py` 同特征、同 `standardize()` 守卫、同切分文件、同 `evaluate()`，
+    λ 只用 03 自己的 alpha 网格在 valid 段的删失 NLL 上选；结论写进 `README.md` §4b，
+    §10 原来的"this repo uses ordinary squared error and *reports* the consequence"
+    改为记录测得的量级（最多 0.0226 pKd，`cold_drug` 反而 +0.0220）。
+12. **基线不进 leaderboard**：`results/leaderboard.md` 仍只由 `results/metrics.csv`
+    生成，Tobit 行单独放 `results/metrics_tobit.csv`——它是单次确定性 MLE 拟合，与
+    3 seed 平均的 grid 行不是同一个重复口径，并表排名会造出一个假的可比性
+    （`README.md` §7 布局说明；决定 10 的"生成、永不手写"不变）。
+13. **超参影响写"量出来的"版本**：`tobit_baseline.json.lambda_sensitivity` 逐个 λ 记录
+    测试集 RMSE，因此"λ 选得对不对"是可数的（10/10 格 NLL 选出的 λ 恰为测试最优 λ，
+    后悔 ≤0.005 %），而不是用 valid NLL 的变化幅度做比率——该比率在最优 NLL 接近 0 时
+    （kiba `cold_drug` 最优 −0.036）会给出虚假的"λ 很敏感"读数，已弃用。

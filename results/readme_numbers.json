@@ -2752,5 +2752,115 @@
     "n_ci_rows": 1200,
     "n_model_rows": 800,
     "n_pair_rows": 8400
+  },
+  "tobit_baseline": {
+    "per_cell": {
+      "davis/random": {
+        "tobit_rmse": 0.7335,
+        "ridge_rmse": 0.7561,
+        "delta_rmse": -0.0226,
+        "delta_spearman": 0.0298
+      },
+      "davis/scaffold": {
+        "tobit_rmse": 0.8741,
+        "ridge_rmse": 0.8786,
+        "delta_rmse": -0.0046,
+        "delta_spearman": -0.023
+      },
+      "davis/cold_drug": {
+        "tobit_rmse": 0.8699,
+        "ridge_rmse": 0.8479,
+        "delta_rmse": 0.022,
+        "delta_spearman": -0.0628
+      },
+      "davis/cold_target": {
+        "tobit_rmse": 1.1227,
+        "ridge_rmse": 1.1393,
+        "delta_rmse": -0.0166,
+        "delta_spearman": 0.0859
+      },
+      "davis/temporal": {
+        "tobit_rmse": 1.0299,
+        "ridge_rmse": 1.0442,
+        "delta_rmse": -0.0143,
+        "delta_spearman": -0.0348
+      },
+      "kiba/random": {
+        "tobit_rmse": 0.6906,
+        "ridge_rmse": 0.6906,
+        "delta_rmse": 0.0,
+        "delta_spearman": -0.0
+      },
+      "kiba/scaffold": {
+        "tobit_rmse": 0.7252,
+        "ridge_rmse": 0.7252,
+        "delta_rmse": 0.0,
+        "delta_spearman": -0.0001
+      },
+      "kiba/cold_drug": {
+        "tobit_rmse": 0.6694,
+        "ridge_rmse": 0.6695,
+        "delta_rmse": -0.0001,
+        "delta_spearman": 0.0001
+      },
+      "kiba/cold_target": {
+        "tobit_rmse": 0.9262,
+        "ridge_rmse": 0.9241,
+        "delta_rmse": 0.0021,
+        "delta_spearman": -0.002
+      },
+      "kiba/temporal": {
+        "tobit_rmse": 0.9678,
+        "ridge_rmse": 0.9798,
+        "delta_rmse": -0.012,
+        "delta_spearman": 0.0053
+      }
+    },
+    "davis_protocols_where_tobit_rmse_is_better": 4,
+    "davis_protocols": 5,
+    "davis_best_rmse_gain": -0.0226,
+    "davis_worst_rmse_loss": 0.022,
+    "davis_spearman_up": 2,
+    "kiba_max_abs_rmse_gap_vs_ridge": 0.012,
+    "kiba_cells_within_0.0021": 4,
+    "lambda_selected_equals_lambda_test_optimal": "10 of 10",
+    "floor_recovery_share_range_davis": [
+      0.2669,
+      0.4751
+    ],
+    "lambda_sensitivity": {
+      "davis": {
+        "grid": [
+          1.0,
+          3.0,
+          10.0,
+          30.0,
+          100.0,
+          300.0
+        ],
+        "median_test_rmse_spread_across_grid_pct": 0.859,
+        "max_test_rmse_spread_across_grid_pct": 8.638,
+        "median_selection_regret_vs_test_optimal_lambda_pct": 0.0025,
+        "max_selection_regret_vs_test_optimal_lambda_pct": 0.0051,
+        "median_valid_nll_spread_nats_per_row": 0.02502,
+        "reading": "test RMSE barely moves across the lambda grid, so the selected lambda is not what separates this row from ridge"
+      },
+      "kiba": {
+        "grid": [
+          1.0,
+          3.0,
+          10.0,
+          30.0,
+          100.0,
+          300.0
+        ],
+        "median_test_rmse_spread_across_grid_pct": 0.432,
+        "max_test_rmse_spread_across_grid_pct": 10.128,
+        "median_selection_regret_vs_test_optimal_lambda_pct": -0.0002,
+        "max_selection_regret_vs_test_optimal_lambda_pct": 0.0041,
+        "median_valid_nll_spread_nats_per_row": 0.004201,
+        "reading": "test RMSE barely moves across the lambda grid, so the selected lambda is not what separates this row from ridge"
+      }
+    }
   }
 }

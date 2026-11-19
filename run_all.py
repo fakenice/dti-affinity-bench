@@ -13,6 +13,10 @@
                                            # (CPU, seconds, byte-stable for the same input)
     python run_all.py --stage external     # external validation on a ChEMBL kinase Ki table
                                            # (network fetch + its own features/splits/grid)
+    python run_all.py --stage tobit        # censored-likelihood (Tobit) baseline for the DAVIS
+                                           # assay floor (CPU, 11.2 min measured over the 10
+                                           # cells; needs stage `models` first -- its ridge
+                                           # control reads results/metrics.csv)
 
 Stages run in dependency order and each one is a separate script, so a failure tells you
 exactly which step broke. Wall time on an 8-core laptop: ~4 h for the full grid is an
@@ -39,6 +43,7 @@ STAGES = [
     ("features",  "01_features.py",       "ECFP4 fingerprints, protein composition, scaffolds"),
     ("splits",    "02_splits.py",         "5 protocols + leakage audit"),
     ("models",    "03_models.py",         "null baselines + 4 learned models x 3 seeds"),
+    ("tobit",     "17_tobit_baseline.py", "censored-likelihood (Tobit) baseline, the §10 next step"),
     ("intervals", "04_uncertainty.py",    "split-conformal intervals, measured coverage"),
     ("docking",   "05_docking.py",        "AutoDock Vina arm (panel + decoy control)"),
     ("dockstats", "06_docking_analysis.py", "Vina vs labels vs the 03 models on identical rows"),

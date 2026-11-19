@@ -394,6 +394,51 @@ def readme_numbers(m, cfwide, comp):
                       ("testset_bootstrap", RES / "testset_bootstrap.json")]:
         if path.exists():
             out[key] = json.loads(path.read_text(encoding="utf-8"))
+    # The Tobit baseline of §4b (script 17) is quoted the same way: the deltas against
+    # the ridge rows and the lambda-agreement counts are recomputed here, so README
+    # §4b cannot drift from results/metrics_tobit.csv.
+    tb_csv, tb_json = RES / "metrics_tobit.csv", RES / "tobit_baseline.json"
+    if tb_csv.exists() and m is not None and tb_json.exists():
+        t = pd.read_csv(tb_csv)
+        ridge = (m[m.model == "ridge"].groupby(["dataset", "protocol"])[["rmse", "spearman_rho"]]
+                 .mean())
+        per = {f"{r.dataset}/{r.protocol}": {
+            "tobit_rmse": round(float(r.rmse), 4),
+            "ridge_rmse": round(float(ridge.loc[(r.dataset, r.protocol), "rmse"]), 4),
+            "delta_rmse": round(float(r.rmse
+                                      - ridge.loc[(r.dataset, r.protocol), "rmse"]), 4),
+            "delta_spearman": round(float(r.spearman_rho
+                                          - ridge.loc[(r.dataset, r.protocol),
+                                                      "spearman_rho"]), 4)}
+            for r in t.itertuples()}
+        dv = {k: v for k, v in per.items() if k.startswith("davis/")}
+        kb = {k: v for k, v in per.items() if k.startswith("kiba/")}
+        lam = json.loads(tb_json.read_text(encoding="utf-8"))
+        agree = [int(v["lambda"]) == int(max(v["lambda_path"],
+                                             key=lambda e: -e["test_rmse"])["lambda"])
+                 for v in lam["per_cell"].values() if "lambda_path" in v]
+        out["tobit_baseline"] = {
+            "per_cell": per,
+            "davis_protocols_where_tobit_rmse_is_better":
+                sum(1 for v in dv.values() if v["delta_rmse"] < 0),
+            "davis_protocols": len(dv),
+            "davis_best_rmse_gain": round(min(v["delta_rmse"] for v in dv.values()), 4),
+            "davis_worst_rmse_loss": round(max(v["delta_rmse"] for v in dv.values()), 4),
+            "davis_spearman_up": sum(1 for v in dv.values() if v["delta_spearman"] > 0),
+            "kiba_max_abs_rmse_gap_vs_ridge":
+                round(max(abs(v["delta_rmse"]) for v in kb.values()), 4),
+            "kiba_cells_within_0.0021": sum(1 for v in kb.values()
+                                            if abs(v["delta_rmse"]) <= 0.0021),
+            "lambda_selected_equals_lambda_test_optimal": f"{sum(agree)} of {len(agree)}",
+            "floor_recovery_share_range_davis": [
+                round(min(v["floor_recovery_share"] for v in lam["per_cell"].values()
+                          if v.get("floor_recovery_share") is not None), 4),
+                round(max(v["floor_recovery_share"] for v in lam["per_cell"].values()
+                          if v.get("floor_recovery_share") is not None), 4)],
+            "lambda_sensitivity": {k: {kk: vv for kk, vv in v.items()
+                                       if kk != "per_protocol"}
+                                   for k, v in lam["lambda_sensitivity"].items()},
+        }
     return out
 
 

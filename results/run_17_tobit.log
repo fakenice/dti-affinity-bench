@@ -1,0 +1,22 @@
+Tobit gradient selftest: {"analytic_vs_numeric_max_rel_dev": 2.9736611580969416e-10}
+davis random      tobit        lambda    1.0 RMSE 0.7335 CI 0.8116 CI_sk 0.6600 (26.8s)
+davis scaffold    tobit        lambda  300.0 RMSE 0.8741 CI 0.7002 CI_sk 0.6054 (27.5s)
+davis cold_drug   tobit        lambda  300.0 RMSE 0.8699 CI 0.6534 CI_sk 0.5898 (27.5s)
+davis cold_target tobit        lambda  300.0 RMSE 1.1227 CI 0.7129 CI_sk 0.6354 (20.6s)
+davis temporal    tobit        lambda  300.0 RMSE 1.0299 CI 0.5211 CI_sk 0.5121 (19.0s)
+kiba  random      tobit        lambda  300.0 RMSE 0.6906 CI 0.7277 CI_sk 0.7149 (125.4s)
+kiba  scaffold    tobit        lambda  300.0 RMSE 0.7252 CI 0.7042 CI_sk 0.6916 (127.1s)
+kiba  cold_drug   tobit        lambda  300.0 RMSE 0.6694 CI 0.6775 CI_sk 0.6657 (117.9s)
+kiba  cold_target tobit        lambda  300.0 RMSE 0.9262 CI 0.6289 CI_sk 0.6224 (130.0s)
+kiba  temporal    tobit        lambda  300.0 RMSE 0.9678 CI 0.5664 CI_sk 0.5627 (52.4s)
+dataset    protocol model  seed  lambda  sigma  valid_nll_per_row  cens_frac_train  cens_frac_test  n_test     rmse      mae  pearson_r  spearman_rho  ci_harrell  ci_sklearn_like  label_tie_fraction  seconds
+  davis      random tobit     0     1.0 1.5332           0.546617           0.6971          0.6972    6011 0.733482 0.426185   0.607296      0.570660    0.811591         0.659988            0.938280     26.8
+  davis    scaffold tobit     0   300.0 1.5392           0.854855           0.6852          0.6876    5746 0.874055 0.595352   0.339184      0.381976    0.700192         0.605439            0.938914     27.5
+  davis   cold_drug tobit     0   300.0 1.5262           0.698767           0.7075          0.6432    5746 0.869886 0.575918   0.359117      0.309804    0.653385         0.589829            0.936652     27.5
+  davis cold_target tobit     0   300.0 1.4151           0.544025           0.7179          0.6028    5984 1.122742 0.663492   0.382164      0.452807    0.712889         0.635407            0.927807     20.6
+  davis    temporal tobit     0   300.0 1.6258           0.821487           0.7576          0.6527    5304 1.029858 0.637949   0.095662      0.037414    0.521052         0.512072            0.928733     19.0
+   kiba      random tobit     0   300.0 0.6892           0.113227           0.0000          0.0000   23651 0.690572 0.472179   0.561135      0.601331    0.727664         0.714883            0.956661    125.4
+   kiba    scaffold tobit     0   300.0 0.6915           0.155373           0.0000          0.0000   23651 0.725210 0.509272   0.514899      0.550172    0.704201         0.691591            0.970572    127.1
+   kiba   cold_drug tobit     0   300.0 0.7252          -0.036346           0.0000          0.0000   23651 0.669413 0.481273   0.424674      0.480848    0.677511         0.665697            0.974547    117.9
+   kiba cold_target tobit     0   300.0 0.6520           0.352022           0.0000          0.0000   23642 0.926176 0.694116   0.342258      0.358473    0.628937         0.622428            0.940276    130.0
+   kiba    temporal tobit     0   300.0 0.7945           0.596488           0.0000          0.0000    9018 0.967802 0.738107   0.218353      0.186381    0.566428         0.562654            0.963074     52.4

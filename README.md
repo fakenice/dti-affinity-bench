@@ -351,6 +351,76 @@ computed on a label distribution where ~two-thirds of the rows sit on the assay 
 **41.4–48.7 % of the pairs in the block are exact label ties**, so `ci_sklearn_like` for the
 same cell can sit ~0.18 away, and both are in the table.
 
+### 4b. The censored-likelihood (Tobit) baseline — the §10 next step, now measured
+
+§10 used to say that the statistically correct treatment of the DAVIS assay floor is a censored
+likelihood, and that this repo only *reports* the consequence instead of modelling it. That
+sentence is now a measurement: `scripts/17_tobit_baseline.py` fits a one-sided left Tobit by MLE
+on exactly the same features, the same `standardize()` guard, the same five split files and the
+same `evaluate()` scoring as `03_models.py`, and puts it next to the committed ridge rows.
+
+What is held fixed so the comparison is a like-for-like one:
+
+- likelihood: `y ~ N(x'b, sigma^2)` left-censored at the assay floor (pKd 5.0 for DAVIS, the
+  KIBA score floor for KIBA); analytic gradient verified against a finite difference in
+  `results/tobit_baseline.json` (`analytic_vs_numeric_max_rel_dev` 3.0e-10, asserted < 1e-4);
+- penalty: ridge penalty λ on `b` (intercept and log-sigma exempt) chosen on the **valid**
+  block's censored NLL over `(1, 3, 10, 30, 100, 300)` — the same grid `03` searches ridge α
+  over, so "which λ" is not a free parameter invented here;
+- point forecast: the conditional mean of the *observed* variable,
+  `E[y|x] = L·Φ(a) + μ·(1−Φ(a)) + σ·φ(a)`, which is the RMSE-optimal forecast under censoring;
+  both CI calibers are computed from that same vector;
+- MLE needs no data sampling, so this is one deterministic run per cell (11.2 min CPU for all
+  10 cells, `python run_all.py --stage tobit`).
+
+**DAVIS — Tobit vs the committed ridge row** (ridge is the 3-seed mean of §4; the ridge fit
+itself is deterministic, so all three seeds are the same numbers):
+
+| protocol | ridge RMSE | Tobit RMSE | ΔRMSE | ridge ρ | Tobit ρ | ridge CI_H | Tobit CI_H | floor-recovery | σ̂ |
+|---|---|---|---|---|---|---|---|---|---|
+| `random` | 0.7561 | **0.7335** | −0.0226 | 0.5409 | **0.5707** | 0.7949 | **0.8116** | 0.4751 | 1.533 |
+| `scaffold` | 0.8786 | **0.8741** | −0.0046 | 0.4049 | 0.3820 | 0.7127 | 0.7002 | 0.2696 | 1.539 |
+| `cold_drug` | 0.8479 | 0.8699 | +0.0220 | 0.3726 | 0.3098 | 0.6848 | 0.6534 | 0.3363 | 1.526 |
+| `cold_target` | 1.1393 | **1.1227** | −0.0166 | 0.3669 | **0.4528** | 0.6719 | **0.7129** | 0.4050 | 1.415 |
+| `temporal` | 1.0442 | **1.0299** | −0.0143 | 0.0723 | 0.0374 | 0.5387 | 0.5211 | 0.2669 | 1.626 |
+
+**KIBA is the negative control** (≈0 % censored, so the Tobit likelihood must collapse to
+ordinary squared error): the largest RMSE gap over the five protocols is **0.0120**
+(`temporal`), and four of the five are within **0.0021** of the ridge row. That is the check
+that the fit is not silently doing something else — if the censoring term were broken, KIBA
+would move too.
+
+Three readings, each traceable to `results/metrics_tobit.csv`, `results/tobit_baseline.json`
+and — as one recomputed key, `tobit_baseline` — the regenerated
+`results/readme_numbers.json`:
+
+1. **Modelling the floor does not rescue the ceiling problem.** RMSE improves in 4 of 5 DAVIS
+   protocols, by at most **0.0226 pKd** — about 0.03 label standard deviations, and an order of
+   magnitude smaller than the protocol effect of §4 (0.4823 pKd) or the ridge-to-XGBoost gap in
+   the same cell (0.1864). `cold_drug` gets *worse* (+0.0220). Ranking is a coin flip: Spearman
+   gains (+0.0298 on `random`, +0.0859 on `cold_target`) on the two protocols where the training
+   block still resembles the test block, and loses (−0.0230 `scaffold`, −0.0628 `cold_drug`,
+   −0.0348 `temporal`) where it does not. The
+   best learned row of §4 (XGBoost 0.5697 on `random`) is untouched by any of this.
+2. **The λ choice is not what moves these numbers** — measured, not assumed. In **10 of 10**
+   cells the λ picked on the valid-block NLL is also the λ with the best test RMSE, and the
+   selection regret against the test-optimal λ is at most **0.0051 %** of RMSE (DAVIS; 0.0041 %
+   on KIBA). Across the whole
+   grid the median test-RMSE spread is **0.86 % (DAVIS) / 0.43 % (KIBA)**; the maxima (8.6 % /
+   10.1 %) belong to the worst end of the grid, not to the selected value. So the Tobit row
+   above cannot be dismissed as an artefact of hyper-parameter luck, and equally cannot be
+   credited to it.
+3. **The conditional mean deliberately refuses the floor.** Among test rows observed *exactly*
+   at pKd 5.0, only **26.7–47.5 %** get an `E[y|x]` within 0.1 of it. That is not a bug to fix:
+   the `+ σ·φ(a)` term of the censored mean must sit above the detection limit because a censored
+   row's true value is above it by definition. Consequence for users of this table: the
+   ceiling-tie caveat of §1 stands unchanged, and a Tobit forecast is a worse "this compound is
+   inactive at 10 µM" detector than a constant, even while scoring better on RMSE.
+
+What this does **not** test: the two-stage classifier-then-regressor alternative named in §10,
+Tobit with heteroscedastic σ, or any censored likelihood combined with the conformal intervals
+of §5 (those intervals are still calibrated on squared-error residuals).
+
 
 ## 5. Uncertainty: split conformal with measured coverage
 
@@ -546,9 +616,21 @@ scripts/13, 14     the external table: fetch + hash-pin (13), then features/spli
                    grid/analyse on it (14); imported by the same modules, not re-implemented
 scripts/15_fetch, 15_external  the second external table (BindingDB): fetch + hash-pin, then an
                    adapter that re-runs script 14's five stages in-process on that tree
+scripts/16       the generated leaderboard (results/metrics.csv only — the Tobit row of §4b
+                   lives in results/metrics_tobit.csv and is deliberately not ranked against
+                   the 3-seed grid it is compared to)
+scripts/17       the censored-likelihood (Tobit) baseline of §4b: MLE with an analytic-gradient
+                   selftest, λ on the valid-block censored NLL, scored through the same
+                   evaluate() as every other row; results/metrics_tobit.csv +
+                   results/tobit_baseline.json + per-block prediction npz files
 tests/             test_bindingdb_aggregation.py (row filters, InChIKey de-duplication, pair
                    aggregation, year parsing) + test_bindingdb_adapter.py (that the redirect
-                   lands on the BindingDB tree and restores ChEMBL exactly); 25 tests, run with
+                   lands on the BindingDB tree and restores ChEMBL exactly) +
+                   test_tobit_baseline.py (that §4b is a real censored likelihood: hand-checked
+                   NLL and penalty exemptions, the no-censoring degeneration to least squares,
+                   the truncnorm construction of E[y|x], and the committed §4b numbers
+                   re-counted from results/tobit_baseline.json / results/readme_numbers.json);
+                   39 tests, run with
                    `python -m unittest discover -s tests -p "test_*.py"`
 run_all.py         one-command reproduction
 docs/data_sources.md  endpoints, sha256 of every raw file, vina binary hash, versions
@@ -952,15 +1034,19 @@ directory exactly as they do for ChEMBL, so a smoke run cannot overwrite the com
 
 ## 10. Known limitations / next steps
 
-**The label is censored, and nothing here fixes that.** 69.64 % of DAVIS pKd values sit on
-the assay ceiling (pKd 5.0 = "Kd ≥ 10 000 nM, the limit of detection"). A model that
-predicts the ceiling for everything therefore gets a respectable RMSE while having
+**The label is censored, and the censored likelihood changes almost nothing.** 69.64 % of DAVIS
+pKd values sit on the assay ceiling (pKd 5.0 = "Kd ≥ 10 000 nM, the limit of detection"). A model
+that predicts the ceiling for everything therefore gets a respectable RMSE while having
 concordance 0.5, and the residual distribution is a mixture of "true affinity" and
 "undetected", which is why constant-width conformal intervals over-cover. The statistically
-correct treatment is a censored (Tobit) likelihood or a two-stage classifier-then-regressor;
-this repo uses ordinary squared error and *reports* the consequence (both CI calibers, the three
-separate tie measures in §1 and `results/label_tie_measures.csv`, the ceiling share in §2)
-instead of modelling around it.
+correct treatment is a censored (Tobit) likelihood or a two-stage classifier-then-regressor; the
+Tobit option is no longer just named, it is fitted — **§4b** (`scripts/17_tobit_baseline.py`,
+`results/metrics_tobit.csv`). Its verdict is a negative result: the censored likelihood moves
+DAVIS RMSE by at most 0.0226 pKd, loses on one protocol, leaves KIBA within 0.012 of the ridge
+row it should match, and does not change the ceiling-tie caveat at all. The rest of this repo
+still uses ordinary squared error, now with the consequence measured rather than asserted (both
+CI calibers, the three separate tie measures in §1 and `results/label_tie_measures.csv`, the
+ceiling share in §2). The two-stage alternative is still untested.
 
 **Ligand identity is RDKit canonical SMILES only** (`canonical_smiles()` in
 `00_fetch_data.py`: `MolFromSmiles` → `MolToSmiles`). No tautomer, protonation-state or
@@ -1147,8 +1233,11 @@ dependency order; `--stage <name>` re-runs one.
   `results/metrics.csv` with no timestamps; re-runs are byte-for-byte identical, and the
   script aborts rather than publishing if its seed averages disagree with
   `results/metrics_by_protocol.csv`.
-- `python -m unittest discover -s tests -v` runs the shipped unit tests (BindingDB
-  adapter and aggregation).
+- `python -m unittest discover -s tests -v` runs the shipped unit tests (39: BindingDB
+  adapter and aggregation, and the §4b Tobit baseline — its likelihood and gradient
+  conventions, the degeneration to least squares when nothing is censored, the truncnorm
+  construction of the reported forecast, and the committed §4b numbers re-counted from
+  `results/tobit_baseline.json` and `results/readme_numbers.json`).
 
 **What a reviewer should NOT expect to reproduce bit-for-bit.** XGBoost and random-forest
 fits are seeded but not bit-reproducible across environments or library versions, and
